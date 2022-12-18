@@ -10,6 +10,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ISessionRepository, SessionRepository>();
         return services;
     }
 
@@ -17,6 +18,7 @@ public static class ServiceExtensions
     {
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ISessionService, SessionService>();
         return services;
     }
 }
