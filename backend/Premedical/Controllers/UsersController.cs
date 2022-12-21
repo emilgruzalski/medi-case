@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Premedical.DataTransferObjects;
+using Premedical.Extensions;
 using Premedical.Services.Interfaces;
 
 namespace Premedical.Controllers;
@@ -22,6 +24,12 @@ public class UsersController : ControllerBase
         return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
     }
 
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<ActionResult<UserDTO>> GetCurrentUser() =>
+        Ok(await _userService.GetByIdAsync(User.GetUserId()));
+
+    [Authorize]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<UserDTO>> GetUser(int id) =>
         Ok(await _userService.GetByIdAsync(id));

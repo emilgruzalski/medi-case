@@ -61,6 +61,22 @@ public class SessionService : ISessionService
         };
     }
 
+    public async Task<Session?> GetActiveSessionAsync(string token)
+    {
+        var session = await _sessionRepository.GetByTokenAsync(token);
+        return session is not null && session.ExpiresAt > DateTime.UtcNow ? session : null;
+    }
+
+    public async Task LogoutAsync(int sessionId)
+    {
+        var session = await _sessionRepository.GetByIdAsync(sessionId);
+        if (session is null)
+            return;
+
+        _sessionRepository.Remove(session);
+        await _sessionRepository.SaveChangesAsync();
+    }
+
     private string GenerateToken() =>
         Convert.ToHexString(RandomNumberGenerator.GetBytes(_options.TokenBytes));
 }

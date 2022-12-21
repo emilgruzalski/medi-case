@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using Premedical.Authentication;
 using Premedical.Extensions;
 using Premedical.Middleware;
 using Premedical.Models;
@@ -13,6 +15,9 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.Configure<SessionTokenOptions>(builder.Configuration.GetSection(SessionTokenOptions.SectionName));
 builder.Services.AddRepositories();
 builder.Services.AddApplicationServices();
+builder.Services.AddAuthentication(SessionAuthenticationDefaults.Scheme)
+    .AddScheme<AuthenticationSchemeOptions, SessionAuthenticationHandler>(SessionAuthenticationDefaults.Scheme, null);
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -32,6 +37,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

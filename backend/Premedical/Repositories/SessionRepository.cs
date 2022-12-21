@@ -13,6 +13,9 @@ public class SessionRepository : ISessionRepository
         _context = context;
     }
 
+    public Task<Session?> GetByIdAsync(int id) =>
+        _context.Sessions.FirstOrDefaultAsync(s => s.Id == id);
+
     public Task<Session?> GetByTokenAsync(string token) =>
         _context.Sessions
             .Include(s => s.User)

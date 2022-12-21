@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Premedical.DataTransferObjects;
+using Premedical.Extensions;
 using Premedical.Services.Interfaces;
 
 namespace Premedical.Controllers;
@@ -18,4 +20,12 @@ public class SessionsController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<SessionDTO>> Login(LoginDTO dto) =>
         Ok(await _sessionService.LoginAsync(dto));
+
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await _sessionService.LogoutAsync(User.GetSessionId());
+        return NoContent();
+    }
 }

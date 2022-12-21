@@ -4,6 +4,7 @@ namespace Premedical.Repositories.Interfaces;
 
 public interface ISessionRepository
 {
+    Task<Session?> GetByIdAsync(int id);
     Task<Session?> GetByTokenAsync(string token);
     void Add(Session session);
     void Remove(Session session);
