@@ -30,6 +30,19 @@ public class UsersController : ControllerBase
         Ok(await _userService.GetByIdAsync(User.GetUserId()));
 
     [Authorize]
+    [HttpPut("me")]
+    public async Task<ActionResult<UserDTO>> UpdateCurrentUser(UserUpdateDTO dto) =>
+        Ok(await _userService.UpdateProfileAsync(User.GetUserId(), dto));
+
+    [Authorize]
+    [HttpPut("me/password")]
+    public async Task<IActionResult> ChangePassword(UserPasswordDTO dto)
+    {
+        await _userService.ChangePasswordAsync(User.GetUserId(), dto);
+        return NoContent();
+    }
+
+    [Authorize]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<UserDTO>> GetUser(int id) =>
         Ok(await _userService.GetByIdAsync(id));
