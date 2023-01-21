@@ -50,6 +50,7 @@ public class SessionService : ISessionService
         };
         user.LastLoginAt = now;
 
+        _sessionRepository.RemoveRange(await _sessionRepository.GetExpiredAsync(user.Id, now));
         _sessionRepository.Add(session);
         await _sessionRepository.SaveChangesAsync();
 

@@ -21,9 +21,16 @@ public class SessionRepository : ISessionRepository
             .Include(s => s.User)
             .FirstOrDefaultAsync(s => s.Token == token);
 
+    public Task<List<Session>> GetExpiredAsync(int userId, DateTime now) =>
+        _context.Sessions
+            .Where(s => s.UserId == userId && s.ExpiresAt <= now)
+            .ToListAsync();
+
     public void Add(Session session) => _context.Sessions.Add(session);
 
     public void Remove(Session session) => _context.Sessions.Remove(session);
+
+    public void RemoveRange(IEnumerable<Session> sessions) => _context.Sessions.RemoveRange(sessions);
 
     public Task SaveChangesAsync() => _context.SaveChangesAsync();
 }
