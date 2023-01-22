@@ -1,8 +1,12 @@
 import { Link as RouterLink } from 'react-router-dom';
 import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import UserBar from './UserBar';
+import useStore from '../state/store';
 
 function Navbar() {
+  const isLoggedIn = useStore((state) => Boolean(state.token));
+
   return (
     <AppBar position="static" elevation={1}>
       <Toolbar>
@@ -11,12 +15,18 @@ function Navbar() {
           Premedical
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
-        <Button color="inherit" component={RouterLink} to="/login">
-          Zaloguj
-        </Button>
-        <Button color="inherit" component={RouterLink} to="/register">
-          Załóż konto
-        </Button>
+        {isLoggedIn ? (
+          <UserBar />
+        ) : (
+          <>
+            <Button color="inherit" component={RouterLink} to="/login">
+              Zaloguj
+            </Button>
+            <Button color="inherit" component={RouterLink} to="/register">
+              Załóż konto
+            </Button>
+          </>
+        )}
       </Toolbar>
     </AppBar>
   );

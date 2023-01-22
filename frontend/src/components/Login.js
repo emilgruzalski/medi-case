@@ -4,13 +4,14 @@ import { Alert, Box, Button, Link, TextField, Typography } from '@mui/material';
 import FormCard from './FormCard';
 import { isValidEmail } from '../lib/validation';
 import { getErrorMessage } from '../lib/errors';
-import { saveSession } from '../lib/session';
+import useStore from '../state/store';
 import { login } from '../network/lib/session';
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const setSession = useStore((state) => state.setSession);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,7 +26,7 @@ function Login() {
 
     setLoading(true);
     try {
-      saveSession(await login(form));
+      setSession(await login(form));
       navigate('/', { replace: true });
     } catch (err) {
       setError(getErrorMessage(err));
