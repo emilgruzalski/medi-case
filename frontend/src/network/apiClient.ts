@@ -7,13 +7,16 @@ const apiClient = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });
 
-apiClient.interceptors.request.use((config) => {
-  const { token } = useStore.getState();
+const applyToken = (token: string | null) => {
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    apiClient.defaults.headers.common.Authorization = `Bearer ${token}`;
+  } else {
+    delete apiClient.defaults.headers.common.Authorization;
   }
-  return config;
-});
+};
+
+applyToken(useStore.getState().token);
+useStore.subscribe((state) => applyToken(state.token));
 
 apiClient.interceptors.response.use(
   (response) => response,
