@@ -11,6 +11,7 @@ public static class ServiceExtensions
     {
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ISessionRepository, SessionRepository>();
+        services.AddScoped<IEntityTypeRepository, EntityTypeRepository>();
         return services;
     }
 
