@@ -12,6 +12,7 @@ public static class ServiceExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ISessionRepository, SessionRepository>();
         services.AddScoped<IEntityTypeRepository, EntityTypeRepository>();
+        services.AddScoped<IEntityLanguageRepository, EntityLanguageRepository>();
         return services;
     }
 
@@ -20,6 +21,7 @@ public static class ServiceExtensions
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ISessionService, SessionService>();
+        services.AddScoped<IEntityLanguageService, EntityLanguageService>();
         return services;
     }
 }

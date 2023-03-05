@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Premedical.Authentication;
 using Premedical.DataTransferObjects;
 using Premedical.Exceptions;
 using Premedical.Repositories.Interfaces;
@@ -9,7 +10,7 @@ namespace Premedical.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[Authorize(Roles = Roles.ModeratorOrAdmin)]
 public class EntityTypesController : ControllerBase
 {
     private readonly IEntityTypeRepository _entityTypeRepository;
