@@ -27,3 +27,9 @@ export interface RegisterRequest {
   firstName: string;
   lastName: string;
 }
+
+export interface Language {
+  id: number;
+  langValue: string;
+  name: string;
+}
