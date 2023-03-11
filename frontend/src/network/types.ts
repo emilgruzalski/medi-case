@@ -33,3 +33,11 @@ export interface Language {
   langValue: string;
   name: string;
 }
+
+export interface TreeNode {
+  id: string;
+  typeId: number;
+  title: string;
+  hasTranslation: boolean;
+  children: TreeNode[];
+}
