@@ -13,6 +13,7 @@ public static class ServiceExtensions
         services.AddScoped<ISessionRepository, SessionRepository>();
         services.AddScoped<IEntityTypeRepository, EntityTypeRepository>();
         services.AddScoped<IEntityLanguageRepository, EntityLanguageRepository>();
+        services.AddScoped<IEntityRepository, EntityRepository>();
         return services;
     }
 
