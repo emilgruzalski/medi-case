@@ -6,7 +6,7 @@ import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
-import { TreeNode } from '../network/types';
+import { Translation, TreeNode } from '../network/types';
 
 export const EntityTypes = {
   Category: 1,
@@ -41,6 +41,9 @@ const TYPE_ICONS: Record<number, ReactElement> = {
 export const typeLabel = (typeId: number) => TYPE_LABELS[typeId] ?? 'Element';
 
 export const typeIcon = (typeId: number) => TYPE_ICONS[typeId] ?? <ArticleOutlinedIcon fontSize="small" />;
+
+export const findTranslation = (translations: Translation[], langId: number | null) =>
+  translations.find((t) => t.langId === langId);
 
 export function findNode(nodes: TreeNode[], id: string | undefined): TreeNode | undefined {
   for (const node of nodes) {

@@ -41,3 +41,23 @@ export interface TreeNode {
   hasTranslation: boolean;
   children: TreeNode[];
 }
+
+export interface Translation {
+  id: string;
+  entityId: string;
+  langId: number;
+  langValue: string;
+  title: string;
+  content: string | null;
+  modifiedAt: string;
+}
+
+export interface Entity {
+  id: string;
+  typeId: number;
+  typeName: string;
+  parentId: string | null;
+  createdAt: string;
+  modifiedAt: string;
+  translations: Translation[];
+}
