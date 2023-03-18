@@ -16,7 +16,15 @@ function Navbar() {
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         {isLoggedIn ? (
-          <UserBar />
+          <>
+            <Button color="inherit" component={RouterLink} to="/learning">
+              Nauka
+            </Button>
+            <Button color="inherit" component={RouterLink} to="/moderator">
+              Moderator
+            </Button>
+            <UserBar />
+          </>
         ) : (
           <>
             <Button color="inherit" component={RouterLink} to="/login">

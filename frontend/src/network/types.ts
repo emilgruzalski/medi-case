@@ -61,3 +61,15 @@ export interface Entity {
   modifiedAt: string;
   translations: Translation[];
 }
+
+export interface TranslationContent {
+  langId: number;
+  title: string;
+  content?: string | null;
+}
+
+export interface CreateEntityRequest {
+  typeId: number;
+  parentId: string | null;
+  translations: TranslationContent[];
+}
