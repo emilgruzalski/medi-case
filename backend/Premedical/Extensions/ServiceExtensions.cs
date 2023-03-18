@@ -15,6 +15,7 @@ public static class ServiceExtensions
         services.AddScoped<IEntityLanguageRepository, EntityLanguageRepository>();
         services.AddScoped<IEntityRepository, EntityRepository>();
         services.AddScoped<IEntityTranslationsRepository, EntityTranslationsRepository>();
+        services.AddScoped<IEntityGraphDataRepository, EntityGraphDataRepository>();
         return services;
     }
 
