@@ -45,6 +45,9 @@ export const typeIcon = (typeId: number) => TYPE_ICONS[typeId] ?? <ArticleOutlin
 export const findTranslation = (translations: Translation[], langId: number | null) =>
   translations.find((t) => t.langId === langId);
 
+export const isBlankHtml = (html: string | null | undefined) =>
+  !html || html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() === '';
+
 export function findNode(nodes: TreeNode[], id: string | undefined): TreeNode | undefined {
   for (const node of nodes) {
     if (node.id === id) {

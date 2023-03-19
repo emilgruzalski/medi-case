@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Box, FormControl, Grid, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
 import ModeratorTree from './ModeratorTree';
+import ModeratorEditor from './ModeratorEditor';
 import useStore from '../state/store';
 import { getTree } from '../network/lib/entity';
 import { getLanguages } from '../network/lib/language';
@@ -66,7 +67,11 @@ function Moderator() {
             onSelect={(node) => setSelectedId(node.id)} onChanged={handleChanged} />
         </Grid>
         <Grid item xs={12} md={7} lg={8}>
-          {!selectedId && <Typography color="text.secondary">Wybierz element drzewa, aby go edytować.</Typography>}
+          {selectedId && moderatorLangId ? (
+            <ModeratorEditor entityId={selectedId} langId={moderatorLangId} onSaved={loadTree} />
+          ) : (
+            <Typography color="text.secondary">Wybierz element drzewa, aby go edytować.</Typography>
+          )}
         </Grid>
       </Grid>
     </Box>

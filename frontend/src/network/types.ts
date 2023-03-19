@@ -73,3 +73,7 @@ export interface CreateEntityRequest {
   parentId: string | null;
   translations: TranslationContent[];
 }
+
+export interface CreateTranslationRequest extends TranslationContent {
+  entityId: string;
+}
