@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Box, FormControl, Grid, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
+import { Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
 import ModeratorTree from './ModeratorTree';
 import ModeratorEditor from './ModeratorEditor';
+import LanguageList from './LanguageList';
 import useStore from '../state/store';
 import { getTree } from '../network/lib/entity';
 import { getLanguages } from '../network/lib/language';
@@ -13,17 +14,20 @@ function Moderator() {
   const [tree, setTree] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [error, setError] = useState('');
+  const [languagesOpen, setLanguagesOpen] = useState(false);
 
-  useEffect(() => {
+  const loadLanguages = useCallback(() => {
     getLanguages()
       .then((list) => {
         setLanguages(list);
-        if (!moderatorLangId && list.length > 0) {
+        if (!list.some((language) => language.id === moderatorLangId) && list.length > 0) {
           setModeratorLangId(list[0].id);
         }
       })
       .catch((err) => setError(getErrorMessage(err)));
   }, [moderatorLangId, setModeratorLangId]);
+
+  useEffect(loadLanguages, [loadLanguages]);
 
   const loadTree = useCallback(() => {
     if (!moderatorLangId) {
@@ -39,6 +43,13 @@ function Moderator() {
   const handleChanged = (newSelectedId) => {
     if (newSelectedId) {
       setSelectedId(newSelectedId);
+    }
+    loadTree();
+  };
+
+  const handleDeleted = (deletedId) => {
+    if (deletedId === selectedId) {
+      setSelectedId(null);
     }
     loadTree();
   };
@@ -59,12 +70,15 @@ function Moderator() {
             ))}
           </Select>
         </FormControl>
+        <Button variant="outlined" onClick={() => setLanguagesOpen(true)}>
+          Języki
+        </Button>
       </Stack>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <Grid container spacing={3}>
         <Grid item xs={12} md={5} lg={4}>
           <ModeratorTree tree={tree} langId={moderatorLangId} selectedId={selectedId}
-            onSelect={(node) => setSelectedId(node.id)} onChanged={handleChanged} />
+            onSelect={(node) => setSelectedId(node.id)} onChanged={handleChanged} onDeleted={handleDeleted} />
         </Grid>
         <Grid item xs={12} md={7} lg={8}>
           {selectedId && moderatorLangId ? (
@@ -74,6 +88,8 @@ function Moderator() {
           )}
         </Grid>
       </Grid>
+      <LanguageList open={languagesOpen} languages={languages} onClose={() => setLanguagesOpen(false)}
+        onChanged={loadLanguages} />
     </Box>
   );
 }

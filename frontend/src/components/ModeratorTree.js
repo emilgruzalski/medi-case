@@ -37,14 +37,14 @@ function TreeItem({ node, depth, selectedId, onSelect, onAdd, onDelete }) {
   );
 }
 
-function ModeratorTree({ tree, langId, selectedId, onSelect, onChanged }) {
+function ModeratorTree({ tree, langId, selectedId, onSelect, onChanged, onDeleted }) {
   const [addParent, setAddParent] = useState(undefined);
   const [toDelete, setToDelete] = useState(null);
 
   const handleDelete = async () => {
     await deleteEntity(toDelete.id);
     setToDelete(null);
-    onChanged();
+    onDeleted(toDelete.id);
   };
 
   return (
