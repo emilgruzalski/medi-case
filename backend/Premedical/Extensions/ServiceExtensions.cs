@@ -28,6 +28,7 @@ public static class ServiceExtensions
         services.AddScoped<IEntityLanguageService, EntityLanguageService>();
         services.AddScoped<IEntityTranslationService, EntityTranslationService>();
         services.AddScoped<IEntityDictionaryService, EntityDictionaryService>();
+        services.AddScoped<IEntityService, EntityService>();
         return services;
     }
 }

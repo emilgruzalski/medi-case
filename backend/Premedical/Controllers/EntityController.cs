@@ -1,10 +1,8 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Premedical.Authentication;
 using Premedical.DataTransferObjects;
-using Premedical.Exceptions;
-using Premedical.Repositories.Interfaces;
+using Premedical.Services.Interfaces;
 
 namespace Premedical.Controllers;
 
@@ -13,20 +11,21 @@ namespace Premedical.Controllers;
 [Authorize(Roles = Roles.ModeratorOrAdmin)]
 public class EntityController : ControllerBase
 {
-    private readonly IEntityRepository _entityRepository;
-    private readonly IMapper _mapper;
+    private readonly IEntityService _entityService;
 
-    public EntityController(IEntityRepository entityRepository, IMapper mapper)
+    public EntityController(IEntityService entityService)
     {
-        _entityRepository = entityRepository;
-        _mapper = mapper;
+        _entityService = entityService;
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<EntityDTO>> GetEntity(Guid id)
+    public async Task<ActionResult<EntityDTO>> GetEntity(Guid id) =>
+        Ok(await _entityService.GetByIdAsync(id));
+
+    [HttpPost]
+    public async Task<ActionResult<EntityDTO>> CreateEntity(EntityPostDTO dto)
     {
-        var entity = await _entityRepository.GetWithDetailsAsync(id)
-            ?? throw new NotFoundException($"Entity with id {id} was not found.");
-        return Ok(_mapper.Map<EntityDTO>(entity));
+        var entity = await _entityService.CreateAsync(dto);
+        return CreatedAtAction(nameof(GetEntity), new { id = entity.Id }, entity);
     }
 }

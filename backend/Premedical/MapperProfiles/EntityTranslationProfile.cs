@@ -12,5 +12,6 @@ public class EntityTranslationProfile : Profile
             .ForMember(d => d.LangValue, o => o.MapFrom(s => s.Lang.LangValue));
         CreateMap<EntityTranslationPostDTO, EntityTranslation>();
         CreateMap<EntityTranslationUpdateDTO, EntityTranslation>();
+        CreateMap<EntityTranslationContentDTO, EntityTranslation>();
     }
 }
