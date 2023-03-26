@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Divider, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import LogoutIcon from '@mui/icons-material/Logout';
 import useStore from '../state/store';
 import { logout } from '../network/lib/session';
@@ -32,6 +33,17 @@ function UserBar() {
           {user.email}
         </Typography>
         <Divider />
+        <MenuItem
+          onClick={() => {
+            setAnchorEl(null);
+            navigate('/profile');
+          }}
+        >
+          <ListItemIcon>
+            <PersonOutlineIcon fontSize="small" />
+          </ListItemIcon>
+          Profil
+        </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <LogoutIcon fontSize="small" />

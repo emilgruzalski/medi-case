@@ -7,6 +7,7 @@ import Register from './components/Register';
 import SetLanguage from './components/SetLanguage';
 import Learning from './components/Learning';
 import Moderator from './components/Moderator';
+import Profile from './components/Profile';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="learning" element={<Learning />} />
         <Route path="learning/:entityId" element={<Learning />} />
         <Route path="moderator" element={<Moderator />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
     </Routes>
   );
