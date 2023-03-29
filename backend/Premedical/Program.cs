@@ -5,6 +5,7 @@ using Premedical.Extensions;
 using Premedical.Middleware;
 using Premedical.Models;
 using Premedical.Options;
+using Premedical.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerWithSessionAuth();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    await scope.ServiceProvider.GetRequiredService<DataSeeder>().SeedAsync();
+}
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 

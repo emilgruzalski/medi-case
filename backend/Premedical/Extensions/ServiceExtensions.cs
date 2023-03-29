@@ -1,5 +1,6 @@
 using Premedical.Repositories;
 using Premedical.Repositories.Interfaces;
+using Premedical.Seeders;
 using Premedical.Services;
 using Premedical.Services.Interfaces;
 
@@ -29,6 +30,7 @@ public static class ServiceExtensions
         services.AddScoped<IEntityTranslationService, EntityTranslationService>();
         services.AddScoped<IEntityDictionaryService, EntityDictionaryService>();
         services.AddScoped<IEntityService, EntityService>();
+        services.AddScoped<DataSeeder>();
         return services;
     }
 }
