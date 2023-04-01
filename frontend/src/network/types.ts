@@ -77,3 +77,14 @@ export interface CreateEntityRequest {
 export interface CreateTranslationRequest extends TranslationContent {
   entityId: string;
 }
+
+export interface UpdateUserRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
