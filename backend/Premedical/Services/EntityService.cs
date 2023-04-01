@@ -12,17 +12,20 @@ public class EntityService : IEntityService
     private readonly IEntityRepository _entityRepository;
     private readonly IEntityTypeRepository _typeRepository;
     private readonly IEntityLanguageRepository _languageRepository;
+    private readonly IEntityGraphDataRepository _graphDataRepository;
     private readonly IMapper _mapper;
 
     public EntityService(
         IEntityRepository entityRepository,
         IEntityTypeRepository typeRepository,
         IEntityLanguageRepository languageRepository,
+        IEntityGraphDataRepository graphDataRepository,
         IMapper mapper)
     {
         _entityRepository = entityRepository;
         _typeRepository = typeRepository;
         _languageRepository = languageRepository;
+        _graphDataRepository = graphDataRepository;
         _mapper = mapper;
     }
 
@@ -69,6 +72,13 @@ public class EntityService : IEntityService
         await _entityRepository.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
+    }
+
+    public async Task<EntityWithTranslationDTO> GetWithChildrenAsync(Guid id, int langId)
+    {
+        var entities = await _graphDataRepository.GetEntitiesForTreeAsync();
+        return EntityTreeBuilder.BuildSubtree(entities, id, langId)
+            ?? throw new NotFoundException($"Entity with id {id} was not found.");
     }
 
     private async Task ValidateTranslationsAsync(IReadOnlyCollection<EntityTranslationContentDTO> translations)

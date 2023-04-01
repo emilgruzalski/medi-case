@@ -22,6 +22,10 @@ public class EntityController : ControllerBase
     public async Task<ActionResult<EntityDTO>> GetEntity(Guid id) =>
         Ok(await _entityService.GetByIdAsync(id));
 
+    [HttpGet("{id:guid}/children")]
+    public async Task<ActionResult<EntityWithTranslationDTO>> GetEntityWithChildren(Guid id, [FromQuery] int langId) =>
+        Ok(await _entityService.GetWithChildrenAsync(id, langId));
+
     [HttpPost]
     public async Task<ActionResult<EntityDTO>> CreateEntity(EntityPostDTO dto)
     {

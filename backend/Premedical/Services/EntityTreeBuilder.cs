@@ -9,34 +9,58 @@ public static class EntityTreeBuilder
 
     public static List<EntityGraphObjectDTO> Build(IReadOnlyCollection<Entity> entities, int langId)
     {
-        var nodes = entities.ToDictionary(e => e.Id, e => CreateNode(e, langId));
-        var roots = new List<EntityGraphObjectDTO>();
-
-        foreach (var entity in entities.OrderBy(e => e.CreatedAt))
-        {
-            var node = nodes[entity.Id];
-            var parentId = entity.ParentLink?.ParentId;
-
-            if (parentId is Guid id && nodes.TryGetValue(id, out var parent))
-                parent.Children.Add(node);
-            else
-                roots.Add(node);
-        }
-
-        return roots;
+        var children = ToChildrenLookup(entities);
+        return BuildGraphNodes(children, null, langId);
     }
 
-    private static EntityGraphObjectDTO CreateNode(Entity entity, int langId)
+    public static EntityWithTranslationDTO? BuildSubtree(IReadOnlyCollection<Entity> entities, Guid rootId, int langId)
     {
-        var translation = entity.EntityTranslations.FirstOrDefault(t => t.LangId == langId);
-        var fallback = entity.EntityTranslations.OrderBy(t => t.LangId).FirstOrDefault();
+        var root = entities.FirstOrDefault(e => e.Id == rootId);
+        return root is null ? null : BuildContentNode(root, ToChildrenLookup(entities), langId);
+    }
 
-        return new EntityGraphObjectDTO
+    private static ILookup<Guid?, Entity> ToChildrenLookup(IEnumerable<Entity> entities) =>
+        entities.ToLookup(e => e.ParentLink?.ParentId);
+
+    private static IEnumerable<Entity> Sorted(IEnumerable<Entity> entities) =>
+        entities.OrderBy(e => e.CreatedAt);
+
+    private static List<EntityGraphObjectDTO> BuildGraphNodes(ILookup<Guid?, Entity> children, Guid? parentId, int langId) =>
+        Sorted(children[parentId])
+            .Select(e =>
+            {
+                var (translation, title) = SelectTranslation(e, langId);
+                return new EntityGraphObjectDTO
+                {
+                    Id = e.Id,
+                    TypeId = e.TypeId,
+                    Title = title,
+                    HasTranslation = translation is not null,
+                    Children = BuildGraphNodes(children, e.Id, langId)
+                };
+            })
+            .ToList();
+
+    private static EntityWithTranslationDTO BuildContentNode(Entity entity, ILookup<Guid?, Entity> children, int langId)
+    {
+        var (translation, title) = SelectTranslation(entity, langId);
+        return new EntityWithTranslationDTO
         {
             Id = entity.Id,
             TypeId = entity.TypeId,
-            Title = translation?.Title ?? fallback?.Title ?? MissingTitle,
-            HasTranslation = translation is not null
+            LangId = langId,
+            TranslationId = translation?.Id,
+            Title = title,
+            Content = translation?.Content,
+            HasTranslation = translation is not null,
+            Children = Sorted(children[entity.Id]).Select(c => BuildContentNode(c, children, langId)).ToList()
         };
+    }
+
+    private static (EntityTranslation? Translation, string Title) SelectTranslation(Entity entity, int langId)
+    {
+        var translation = entity.EntityTranslations.FirstOrDefault(t => t.LangId == langId);
+        var fallback = entity.EntityTranslations.OrderBy(t => t.LangId).FirstOrDefault();
+        return (translation, translation?.Title ?? fallback?.Title ?? MissingTitle);
     }
 }
