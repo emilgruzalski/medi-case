@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Alert, Box, Button, Link, TextField, Typography } from '@mui/material';
-import FormCard from './FormCard';
-import { validateRegistration } from '../lib/validation';
-import { getErrorMessage } from '../lib/errors';
-import { register } from '../network/lib/user';
+import FormCard from '../common/FormCard';
+import { validateRegistration } from '../../lib/validation';
+import { getErrorMessage } from '../../lib/errors';
+import { register } from '../../network/lib/user';
 
 const EMPTY_FORM = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 

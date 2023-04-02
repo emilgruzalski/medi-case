@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Box, Divider, FormControlLabel, Paper, Switch, Typography } from '@mui/material';
 import Content from './Content';
-import useStore from '../state/store';
-import { findTranslation } from '../lib/utility';
+import useStore from '../../state/store';
+import { findTranslation } from '../../lib/utility';
 
 function ContentComponent({ entity }) {
   const { learningLangId, nativeLangId } = useStore();

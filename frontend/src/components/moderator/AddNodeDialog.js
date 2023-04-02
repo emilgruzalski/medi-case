@@ -3,9 +3,9 @@ import {
   Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Stack,
   TextField,
 } from '@mui/material';
-import { createEntity } from '../network/lib/entity';
-import { getErrorMessage } from '../lib/errors';
-import { EntityTypes, typeLabel } from '../lib/utility';
+import { createEntity } from '../../network/lib/entity';
+import { getErrorMessage } from '../../lib/errors';
+import { EntityTypes, typeLabel } from '../../lib/utility';
 
 function AddNodeDialog({ open, parent, langId, onClose, onCreated }) {
   const [typeId, setTypeId] = useState(EntityTypes.Category);

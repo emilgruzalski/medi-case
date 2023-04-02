@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Alert, Box, Button, Chip, CircularProgress, Container, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
 import ChangePassword from './ChangePassword';
-import useStore from '../state/store';
-import { getCurrentUser, updateCurrentUser } from '../network/lib/user';
-import { getErrorMessage } from '../lib/errors';
+import useStore from '../../state/store';
+import { getCurrentUser, updateCurrentUser } from '../../network/lib/user';
+import { getErrorMessage } from '../../lib/errors';
 
 const ROLE_LABELS = { User: 'Użytkownik', Moderator: 'Moderator', Admin: 'Administrator' };
 

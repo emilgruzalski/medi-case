@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, Paper } from '@mui/material';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { typeIcon } from '../lib/utility';
+import { typeIcon } from '../../lib/utility';
 
 const INDENT_STEP = 2;
 

@@ -3,10 +3,10 @@ import { Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, St
 import ModeratorTree from './ModeratorTree';
 import ModeratorEditor from './ModeratorEditor';
 import LanguageList from './LanguageList';
-import useStore from '../state/store';
-import { getTree } from '../network/lib/entity';
-import { getLanguages } from '../network/lib/language';
-import { getErrorMessage } from '../lib/errors';
+import useStore from '../../state/store';
+import { getTree } from '../../network/lib/entity';
+import { getLanguages } from '../../network/lib/language';
+import { getErrorMessage } from '../../lib/errors';
 
 function Moderator() {
   const { moderatorLangId, setModeratorLangId } = useStore();

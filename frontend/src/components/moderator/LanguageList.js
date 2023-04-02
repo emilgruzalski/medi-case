@@ -6,8 +6,8 @@ import {
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { createLanguage, deleteLanguage, updateLanguage } from '../network/lib/language';
-import { getErrorMessage } from '../lib/errors';
+import { createLanguage, deleteLanguage, updateLanguage } from '../../network/lib/language';
+import { getErrorMessage } from '../../lib/errors';
 
 const EMPTY_LANGUAGE = { langValue: '', name: '' };
 

@@ -3,9 +3,9 @@ import { Box, Button, IconButton, List, ListItemButton, ListItemIcon, ListItemTe
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddNodeDialog from './AddNodeDialog';
-import ConfirmDialog from './ConfirmDialog';
-import { deleteEntity } from '../network/lib/entity';
-import { typeIcon } from '../lib/utility';
+import ConfirmDialog from '../common/ConfirmDialog';
+import { deleteEntity } from '../../network/lib/entity';
+import { typeIcon } from '../../lib/utility';
 
 const INDENT_STEP = 2;
 

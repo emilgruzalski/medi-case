@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Alert, Box, Button, TextField, Typography } from '@mui/material';
-import { changePassword } from '../network/lib/user';
-import { getErrorMessage } from '../lib/errors';
-import { validatePassword } from '../lib/validation';
+import { changePassword } from '../../network/lib/user';
+import { getErrorMessage } from '../../lib/errors';
+import { validatePassword } from '../../lib/validation';
 
 const EMPTY_FORM = { currentPassword: '', newPassword: '', confirmPassword: '' };
 

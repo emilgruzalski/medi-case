@@ -4,8 +4,8 @@ import { Button, Divider, ListItemIcon, Menu, MenuItem, Typography } from '@mui/
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import LogoutIcon from '@mui/icons-material/Logout';
-import useStore from '../state/store';
-import { logout } from '../network/lib/session';
+import useStore from '../../state/store';
+import { logout } from '../../network/lib/session';
 
 function UserBar() {
   const user = useStore((state) => state.user);

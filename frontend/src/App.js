@@ -1,13 +1,13 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import Layout from './components/Layout';
-import Home from './components/Home';
-import Login from './components/Login';
-import Register from './components/Register';
-import SetLanguage from './components/SetLanguage';
-import Learning from './components/Learning';
-import Moderator from './components/Moderator';
-import Profile from './components/Profile';
+import Layout from './components/layout/Layout';
+import Home from './components/landing/Home';
+import Login from './components/user/Login';
+import Register from './components/user/Register';
+import SetLanguage from './components/user/SetLanguage';
+import Learning from './components/learning/Learning';
+import Moderator from './components/moderator/Moderator';
+import Profile from './components/user/Profile';
 
 function App() {
   return (

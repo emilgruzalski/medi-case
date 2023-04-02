@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Alert, Card, CardActionArea, CardContent, CircularProgress, Grid, Stack, Typography } from '@mui/material';
 import ContentComponent from './ContentComponent';
-import { getEntity } from '../network/lib/entity';
-import { getErrorMessage } from '../lib/errors';
-import { EntityTypes, typeIcon, typeLabel } from '../lib/utility';
+import { getEntity } from '../../network/lib/entity';
+import { getErrorMessage } from '../../lib/errors';
+import { EntityTypes, typeIcon, typeLabel } from '../../lib/utility';
 
 function CategoryView({ node }) {
   return (

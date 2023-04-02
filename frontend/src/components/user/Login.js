@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { Alert, Box, Button, Link, TextField, Typography } from '@mui/material';
-import FormCard from './FormCard';
-import { isValidEmail } from '../lib/validation';
-import { getErrorMessage } from '../lib/errors';
-import useStore from '../state/store';
-import { login } from '../network/lib/session';
+import FormCard from '../common/FormCard';
+import { isValidEmail } from '../../lib/validation';
+import { getErrorMessage } from '../../lib/errors';
+import useStore from '../../state/store';
+import { login } from '../../network/lib/session';
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' });

@@ -3,11 +3,11 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Alert, Box, Button, Chip, Paper, Snackbar, Stack, Tab, Tabs, TextField, Typography } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
-import Content from './Content';
-import { getEntity } from '../network/lib/entity';
-import { createTranslation, updateTranslation } from '../network/lib/translation';
-import { getErrorMessage } from '../lib/errors';
-import { findTranslation, isBlankHtml, typeLabel } from '../lib/utility';
+import Content from '../learning/Content';
+import { getEntity } from '../../network/lib/entity';
+import { createTranslation, updateTranslation } from '../../network/lib/translation';
+import { getErrorMessage } from '../../lib/errors';
+import { findTranslation, isBlankHtml, typeLabel } from '../../lib/utility';
 
 const QUILL_MODULES = {
   toolbar: [

@@ -3,10 +3,10 @@ import { Navigate, useParams } from 'react-router-dom';
 import { Alert, Box, CircularProgress, Grid, Typography } from '@mui/material';
 import Sidebar from './Sidebar';
 import ContentContainer from './ContentContainer';
-import useStore from '../state/store';
-import { getTree } from '../network/lib/entity';
-import { getErrorMessage } from '../lib/errors';
-import { findNode } from '../lib/utility';
+import useStore from '../../state/store';
+import { getTree } from '../../network/lib/entity';
+import { getErrorMessage } from '../../lib/errors';
+import { findNode } from '../../lib/utility';
 
 function Learning() {
   const { entityId } = useParams();
