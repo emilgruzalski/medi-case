@@ -27,7 +27,7 @@ function Login() {
     setLoading(true);
     try {
       setSession(await login(form));
-      navigate('/', { replace: true });
+      navigate('/learning', { replace: true });
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {
