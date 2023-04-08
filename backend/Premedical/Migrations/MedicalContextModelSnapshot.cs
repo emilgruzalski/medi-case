@@ -17,7 +17,7 @@ namespace Premedical.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -151,6 +151,43 @@ namespace Premedical.Migrations
                         .IsUnique();
 
                     b.ToTable("EntityTranslations");
+                });
+
+            modelBuilder.Entity("Premedical.Models.EntityTranslationFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("nvarchar(260)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("TranslationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TranslationId");
+
+                    b.ToTable("EntityTranslationFiles");
                 });
 
             modelBuilder.Entity("Premedical.Models.EntityType", b =>
@@ -309,6 +346,17 @@ namespace Premedical.Migrations
                     b.Navigation("Lang");
                 });
 
+            modelBuilder.Entity("Premedical.Models.EntityTranslationFile", b =>
+                {
+                    b.HasOne("Premedical.Models.EntityTranslation", "Translation")
+                        .WithMany("EntityTranslationFiles")
+                        .HasForeignKey("TranslationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Translation");
+                });
+
             modelBuilder.Entity("Premedical.Models.Session", b =>
                 {
                     b.HasOne("Premedical.Models.User", "User")
@@ -336,6 +384,11 @@ namespace Premedical.Migrations
                     b.Navigation("EntityDictionaries");
 
                     b.Navigation("EntityTranslations");
+                });
+
+            modelBuilder.Entity("Premedical.Models.EntityTranslation", b =>
+                {
+                    b.Navigation("EntityTranslationFiles");
                 });
 
             modelBuilder.Entity("Premedical.Models.EntityType", b =>

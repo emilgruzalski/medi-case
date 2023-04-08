@@ -11,4 +11,7 @@ public static class FieldLengths
     public const int Title = 300;
     public const int Term = 200;
     public const int Definition = 2000;
+    public const int FileName = 260;
+    public const int FilePath = 400;
+    public const int ContentType = 100;
 }

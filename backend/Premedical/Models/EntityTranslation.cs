@@ -17,4 +17,6 @@ public partial class EntityTranslation
     public virtual Entity Entity { get; set; } = null!;
 
     public virtual EntityLanguage Lang { get; set; } = null!;
+
+    public virtual ICollection<EntityTranslationFile> EntityTranslationFiles { get; set; } = new List<EntityTranslationFile>();
 }

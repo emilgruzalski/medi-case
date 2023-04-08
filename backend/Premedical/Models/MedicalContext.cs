@@ -19,6 +19,8 @@ public partial class MedicalContext : DbContext
 
     public virtual DbSet<EntityTranslation> EntityTranslations { get; set; }
 
+    public virtual DbSet<EntityTranslationFile> EntityTranslationFiles { get; set; }
+
     public virtual DbSet<EntityType> EntityTypes { get; set; }
 
     public virtual DbSet<Session> Sessions { get; set; }
@@ -85,6 +87,18 @@ public partial class MedicalContext : DbContext
             entity.HasOne(d => d.Lang).WithMany(p => p.EntityTranslations)
                 .HasForeignKey(d => d.LangId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+        });
+
+        modelBuilder.Entity<EntityTranslationFile>(entity =>
+        {
+            entity.Property(e => e.FileName).HasMaxLength(FieldLengths.FileName);
+            entity.Property(e => e.FilePath).HasMaxLength(FieldLengths.FilePath);
+            entity.Property(e => e.ContentType).HasMaxLength(FieldLengths.ContentType);
+            entity.Property(e => e.UploadedAt).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Translation).WithMany(p => p.EntityTranslationFiles)
+                .HasForeignKey(d => d.TranslationId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<EntityType>(entity =>
