@@ -88,3 +88,11 @@ export interface ChangePasswordRequest {
   currentPassword: string;
   newPassword: string;
 }
+
+export interface DictionaryEntry {
+  id: string;
+  entityId: string;
+  langId: number;
+  term: string;
+  definition: string;
+}
