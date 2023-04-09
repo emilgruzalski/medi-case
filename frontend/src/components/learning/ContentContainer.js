@@ -3,6 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Alert, Card, CardActionArea, CardContent, CircularProgress, Grid, Stack, Typography } from '@mui/material';
 import ContentComponent from './ContentComponent';
 import Glossary from './Glossary';
+import QuestionsList from './QuestionsList';
 import useStore from '../../state/store';
 import { getEntity } from '../../network/lib/entity';
 import { getErrorMessage } from '../../lib/errors';
@@ -52,6 +53,9 @@ function ContentContainer({ node }) {
 
   if (node.typeId === EntityTypes.Category) {
     return <CategoryView node={node} />;
+  }
+  if (node.typeId === EntityTypes.QuestionList) {
+    return <QuestionsList node={node} />;
   }
   if (error) {
     return <Alert severity="error">{error}</Alert>;

@@ -96,3 +96,14 @@ export interface DictionaryEntry {
   term: string;
   definition: string;
 }
+
+export interface EntityContent {
+  id: string;
+  typeId: number;
+  langId: number;
+  translationId: string | null;
+  title: string;
+  content: string | null;
+  hasTranslation: boolean;
+  children: EntityContent[];
+}
