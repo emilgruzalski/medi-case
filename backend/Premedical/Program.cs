@@ -14,6 +14,7 @@ builder.Services.AddDbContext<MedicalContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalDatabase")));
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.Configure<SessionTokenOptions>(builder.Configuration.GetSection(SessionTokenOptions.SectionName));
+builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection(FileStorageOptions.SectionName));
 builder.Services.AddRepositories();
 builder.Services.AddApplicationServices();
 builder.Services.AddAuthentication(SessionAuthenticationDefaults.Scheme)

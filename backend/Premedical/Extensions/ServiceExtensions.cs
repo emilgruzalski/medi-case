@@ -30,6 +30,7 @@ public static class ServiceExtensions
         services.AddScoped<IEntityTranslationService, EntityTranslationService>();
         services.AddScoped<IEntityDictionaryService, EntityDictionaryService>();
         services.AddScoped<IEntityService, EntityService>();
+        services.AddSingleton<IFileService, FileService>();
         services.AddScoped<DataSeeder>();
         return services;
     }
