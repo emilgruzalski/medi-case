@@ -21,6 +21,7 @@ public class EntityRepository : IEntityRepository
             .Include(e => e.Type)
             .Include(e => e.ParentLink)
             .Include(e => e.EntityTranslations).ThenInclude(t => t.Lang)
+            .Include(e => e.EntityTranslations).ThenInclude(t => t.EntityTranslationFiles)
             .AsSplitQuery()
             .FirstOrDefaultAsync(e => e.Id == id);
 

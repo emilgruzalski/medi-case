@@ -53,9 +53,20 @@ public static class EntityTreeBuilder
             Title = title,
             Content = translation?.Content,
             HasTranslation = translation is not null,
+            Files = translation?.EntityTranslationFiles.OrderBy(f => f.UploadedAt).Select(ToFileDto).ToList() ?? new(),
             Children = Sorted(children[entity.Id]).Select(c => BuildContentNode(c, children, langId)).ToList()
         };
     }
+
+    private static EntityTranslationFileDTO ToFileDto(EntityTranslationFile file) => new()
+    {
+        Id = file.Id,
+        TranslationId = file.TranslationId,
+        FileName = file.FileName,
+        ContentType = file.ContentType,
+        Size = file.Size,
+        UploadedAt = file.UploadedAt
+    };
 
     private static (EntityTranslation? Translation, string Title) SelectTranslation(Entity entity, int langId)
     {

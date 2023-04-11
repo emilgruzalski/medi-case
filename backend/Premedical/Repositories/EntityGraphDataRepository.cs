@@ -20,7 +20,7 @@ public class EntityGraphDataRepository : IEntityGraphDataRepository
         _context.Entities
             .AsNoTracking()
             .Include(e => e.ParentLink)
-            .Include(e => e.EntityTranslations)
+            .Include(e => e.EntityTranslations).ThenInclude(t => t.EntityTranslationFiles)
             .AsSplitQuery()
             .ToListAsync();
 }

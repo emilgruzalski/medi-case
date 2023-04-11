@@ -17,11 +17,13 @@ public class EntityTranslationsRepository : IEntityTranslationsRepository
         _context.EntityTranslations
             .Include(t => t.Lang)
             .Include(t => t.Entity)
+            .Include(t => t.EntityTranslationFiles)
             .FirstOrDefaultAsync(t => t.Id == id);
 
     public Task<List<EntityTranslation>> GetByEntityAsync(Guid entityId) =>
         _context.EntityTranslations
             .Include(t => t.Lang)
+            .Include(t => t.EntityTranslationFiles)
             .Where(t => t.EntityId == entityId)
             .OrderBy(t => t.LangId)
             .ToListAsync();

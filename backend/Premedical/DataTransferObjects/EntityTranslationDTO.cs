@@ -9,4 +9,5 @@ public class EntityTranslationDTO
     public string Title { get; set; } = null!;
     public string? Content { get; set; }
     public DateTime ModifiedAt { get; set; }
+    public List<EntityTranslationFileDTO> Files { get; set; } = new();
 }

@@ -9,5 +9,6 @@ public class EntityWithTranslationDTO
     public string Title { get; set; } = null!;
     public string? Content { get; set; }
     public bool HasTranslation { get; set; }
+    public List<EntityTranslationFileDTO> Files { get; set; } = new();
     public List<EntityWithTranslationDTO> Children { get; set; } = new();
 }

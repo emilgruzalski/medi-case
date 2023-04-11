@@ -18,6 +18,7 @@ public static class ServiceExtensions
         services.AddScoped<IEntityTranslationsRepository, EntityTranslationsRepository>();
         services.AddScoped<IEntityGraphDataRepository, EntityGraphDataRepository>();
         services.AddScoped<IEntityDictionaryRepository, EntityDictionaryRepository>();
+        services.AddScoped<IEntityTranslationFilesRepository, EntityTranslationFilesRepository>();
         return services;
     }
 
@@ -31,6 +32,7 @@ public static class ServiceExtensions
         services.AddScoped<IEntityDictionaryService, EntityDictionaryService>();
         services.AddScoped<IEntityService, EntityService>();
         services.AddSingleton<IFileService, FileService>();
+        services.AddScoped<IEntityTranslationFileService, EntityTranslationFileService>();
         services.AddScoped<DataSeeder>();
         return services;
     }
