@@ -40,8 +40,7 @@ public class EntityService : IEntityService
     {
         if (await _typeRepository.GetByIdAsync(dto.TypeId) is null)
             throw new BadRequestException($"Entity type with id {dto.TypeId} does not exist.");
-        if (dto.ParentId is Guid parentId && !await _entityRepository.ExistsAsync(parentId))
-            throw new BadRequestException($"Parent entity with id {parentId} does not exist.");
+        await ValidateParentAsync(dto.TypeId, dto.ParentId);
 
         await ValidateTranslationsAsync(dto.Translations);
 
@@ -79,6 +78,20 @@ public class EntityService : IEntityService
         var entities = await _graphDataRepository.GetEntitiesForTreeAsync();
         return EntityTreeBuilder.BuildSubtree(entities, id, langId)
             ?? throw new NotFoundException($"Entity with id {id} was not found.");
+    }
+
+    private async Task ValidateParentAsync(int typeId, Guid? parentId)
+    {
+        int? parentTypeId = null;
+        if (parentId is Guid id)
+        {
+            var parent = await _entityRepository.GetByIdAsync(id)
+                ?? throw new BadRequestException($"Parent entity with id {id} does not exist.");
+            parentTypeId = parent.TypeId;
+        }
+
+        if (!EntityTypeRules.CanBeChildOf(typeId, parentTypeId))
+            throw new BadRequestException("This entity type is not allowed in the selected place of the tree.");
     }
 
     private async Task ValidateTranslationsAsync(IReadOnlyCollection<EntityTranslationContentDTO> translations)
