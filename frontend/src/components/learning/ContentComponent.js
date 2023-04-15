@@ -1,27 +1,31 @@
 import { useState } from 'react';
-import { Box, Divider, FormControlLabel, Paper, Switch, Typography } from '@mui/material';
+import { Alert, Box, CircularProgress, Divider, FormControlLabel, Paper, Switch, Typography } from '@mui/material';
+import AudioPlayer from './AudioPlayer';
 import Content from './Content';
-import useStore from '../../state/store';
-import { findTranslation } from '../../lib/utility';
+import useEntityInLanguages from '../../lib/useEntityInLanguages';
 
-function ContentComponent({ entity }) {
-  const { learningLangId, nativeLangId } = useStore();
+function ContentComponent({ node }) {
+  const { learning, native, error } = useEntityInLanguages(node.id);
   const [showTranslation, setShowTranslation] = useState(false);
-  const translation = findTranslation(entity.translations, learningLangId);
-  const nativeTranslation = findTranslation(entity.translations, nativeLangId);
-  const canTranslate = nativeTranslation && nativeLangId !== learningLangId;
 
-  if (!translation) {
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
+  }
+  if (!learning) {
+    return <CircularProgress />;
+  }
+  if (!learning.hasTranslation) {
     return <Typography color="text.secondary">Ta treść nie jest jeszcze dostępna w wybranym języku.</Typography>;
   }
 
   return (
     <Paper sx={{ p: 3 }}>
       <Typography variant="h5" component="h2" gutterBottom>
-        {translation.title}
+        {learning.title}
       </Typography>
-      <Content html={translation.content} />
-      {canTranslate && (
+      <AudioPlayer files={learning.files} />
+      <Content html={learning.content} />
+      {native?.hasTranslation && (
         <>
           <FormControlLabel
             sx={{ mt: 2 }}
@@ -31,8 +35,9 @@ function ContentComponent({ entity }) {
           {showTranslation && (
             <Box sx={{ mt: 1, color: 'text.secondary' }}>
               <Divider sx={{ mb: 2 }} />
-              <Typography variant="h6">{nativeTranslation.title}</Typography>
-              <Content html={nativeTranslation.content} />
+              <Typography variant="h6">{native.title}</Typography>
+              <AudioPlayer files={native.files} />
+              <Content html={native.content} />
             </Box>
           )}
         </>

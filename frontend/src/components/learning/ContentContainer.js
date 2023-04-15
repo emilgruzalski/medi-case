@@ -1,12 +1,9 @@
-import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Alert, Card, CardActionArea, CardContent, CircularProgress, Grid, Stack, Typography } from '@mui/material';
+import { Card, CardActionArea, CardContent, Grid, Stack, Typography } from '@mui/material';
 import ContentComponent from './ContentComponent';
 import Glossary from './Glossary';
 import QuestionsList from './QuestionsList';
 import useStore from '../../state/store';
-import { getEntity } from '../../network/lib/entity';
-import { getErrorMessage } from '../../lib/errors';
 import { EntityTypes, typeIcon, typeLabel } from '../../lib/utility';
 
 function CategoryView({ node }) {
@@ -40,30 +37,14 @@ function CategoryView({ node }) {
 }
 
 function ContentContainer({ node }) {
-  const [entity, setEntity] = useState(null);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    setEntity(null);
-    setError('');
-    getEntity(node.id)
-      .then(setEntity)
-      .catch((err) => setError(getErrorMessage(err)));
-  }, [node.id]);
-
-  if (node.typeId === EntityTypes.Category) {
-    return <CategoryView node={node} />;
+  switch (node.typeId) {
+    case EntityTypes.Category:
+      return <CategoryView node={node} />;
+    case EntityTypes.QuestionList:
+      return <QuestionsList node={node} />;
+    default:
+      return <ContentComponent node={node} />;
   }
-  if (node.typeId === EntityTypes.QuestionList) {
-    return <QuestionsList node={node} />;
-  }
-  if (error) {
-    return <Alert severity="error">{error}</Alert>;
-  }
-  if (!entity) {
-    return <CircularProgress />;
-  }
-  return <ContentComponent entity={entity} />;
 }
 
 export default ContentContainer;

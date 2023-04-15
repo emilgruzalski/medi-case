@@ -42,6 +42,15 @@ export interface TreeNode {
   children: TreeNode[];
 }
 
+export interface TranslationFile {
+  id: string;
+  translationId: string;
+  fileName: string;
+  contentType: string;
+  size: number;
+  uploadedAt: string;
+}
+
 export interface Translation {
   id: string;
   entityId: string;
@@ -50,6 +59,7 @@ export interface Translation {
   title: string;
   content: string | null;
   modifiedAt: string;
+  files: TranslationFile[];
 }
 
 export interface Entity {
@@ -105,5 +115,6 @@ export interface EntityContent {
   title: string;
   content: string | null;
   hasTranslation: boolean;
+  files: TranslationFile[];
   children: EntityContent[];
 }
