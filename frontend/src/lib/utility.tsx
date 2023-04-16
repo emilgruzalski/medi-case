@@ -60,3 +60,16 @@ export function findNode(nodes: TreeNode[], id: string | undefined): TreeNode | 
   }
   return undefined;
 }
+
+export function findSiblings(nodes: TreeNode[], id: string | undefined): TreeNode[] | undefined {
+  if (nodes.some((node) => node.id === id)) {
+    return nodes;
+  }
+  for (const node of nodes) {
+    const siblings = findSiblings(node.children, id);
+    if (siblings) {
+      return siblings;
+    }
+  }
+  return undefined;
+}

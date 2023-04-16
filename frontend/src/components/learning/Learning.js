@@ -3,6 +3,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import { Alert, Box, CircularProgress, Grid, Typography } from '@mui/material';
 import Sidebar from './Sidebar';
 import ContentContainer from './ContentContainer';
+import ContentNavigation from './ContentNavigation';
 import useStore from '../../state/store';
 import { getTree } from '../../network/lib/entity';
 import { getErrorMessage } from '../../lib/errors';
@@ -40,7 +41,10 @@ function Learning() {
           </Grid>
           <Grid item xs={12} md={8} lg={9}>
             {node ? (
-              <ContentContainer node={node} />
+              <>
+                <ContentContainer node={node} />
+                <ContentNavigation tree={tree} node={node} />
+              </>
             ) : (
               <Typography color="text.secondary">Wybierz temat z listy po lewej stronie.</Typography>
             )}
