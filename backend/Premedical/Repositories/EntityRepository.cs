@@ -28,9 +28,24 @@ public class EntityRepository : IEntityRepository
     public Task<bool> ExistsAsync(Guid id) =>
         _context.Entities.AnyAsync(e => e.Id == id);
 
+    public Task<List<Entity>> GetByIdsAsync(IReadOnlyCollection<Guid> ids) =>
+        _context.Entities
+            .Include(e => e.ParentLink)
+            .Include(e => e.EntityTranslations).ThenInclude(t => t.EntityTranslationFiles)
+            .AsSplitQuery()
+            .Where(e => ids.Contains(e.Id))
+            .ToListAsync();
+
     public void Add(Entity entity) => _context.Entities.Add(entity);
 
     public void Remove(Entity entity) => _context.Entities.Remove(entity);
+
+    public void RemoveRange(IEnumerable<Entity> entities)
+    {
+        var list = entities.ToList();
+        _context.EntitiesGraphData.RemoveRange(list.Where(e => e.ParentLink != null).Select(e => e.ParentLink!));
+        _context.Entities.RemoveRange(list);
+    }
 
     public Task SaveChangesAsync() => _context.SaveChangesAsync();
 }

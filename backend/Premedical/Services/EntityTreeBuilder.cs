@@ -19,6 +19,24 @@ public static class EntityTreeBuilder
         return root is null ? null : BuildContentNode(root, ToChildrenLookup(entities), langId);
     }
 
+    public static List<Guid> CollectSubtreeIds(IEnumerable<EntitiesGraphDatum> edges, Guid rootId)
+    {
+        var children = edges.ToLookup(e => e.ParentId, e => e.ChildId);
+        var result = new List<Guid>();
+        var pending = new Stack<Guid>();
+        pending.Push(rootId);
+
+        while (pending.Count > 0)
+        {
+            var id = pending.Pop();
+            result.Add(id);
+            foreach (var childId in children[id])
+                pending.Push(childId);
+        }
+
+        return result;
+    }
+
     private static ILookup<Guid?, Entity> ToChildrenLookup(IEnumerable<Entity> entities) =>
         entities.ToLookup(e => e.ParentLink?.ParentId);
 

@@ -32,4 +32,11 @@ public class EntityController : ControllerBase
         var entity = await _entityService.CreateAsync(dto);
         return CreatedAtAction(nameof(GetEntity), new { id = entity.Id }, entity);
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteEntity(Guid id)
+    {
+        await _entityService.DeleteAsync(id);
+        return NoContent();
+    }
 }
