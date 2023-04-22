@@ -36,6 +36,16 @@ public class EntityRepository : IEntityRepository
             .Where(e => ids.Contains(e.Id))
             .ToListAsync();
 
+    public Task<Entity?> GetWithParentLinkAsync(Guid id) =>
+        _context.Entities
+            .Include(e => e.ParentLink)
+            .FirstOrDefaultAsync(e => e.Id == id);
+
+    public async Task<int> GetMaxChildOrderAsync(Guid? parentId) =>
+        await _context.EntitiesGraphData
+            .Where(g => g.ParentId == parentId)
+            .MaxAsync(g => (int?)g.Child.Order) ?? -1;
+
     public void Add(Entity entity) => _context.Entities.Add(entity);
 
     public void Remove(Entity entity) => _context.Entities.Remove(entity);

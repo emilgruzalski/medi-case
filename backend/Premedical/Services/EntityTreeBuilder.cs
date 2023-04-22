@@ -41,7 +41,7 @@ public static class EntityTreeBuilder
         entities.ToLookup(e => e.ParentLink?.ParentId);
 
     private static IEnumerable<Entity> Sorted(IEnumerable<Entity> entities) =>
-        entities.OrderBy(e => e.CreatedAt);
+        entities.OrderBy(e => e.Order).ThenBy(e => e.CreatedAt);
 
     private static List<EntityGraphObjectDTO> BuildGraphNodes(ILookup<Guid?, Entity> children, Guid? parentId, int langId) =>
         Sorted(children[parentId])
@@ -52,6 +52,7 @@ public static class EntityTreeBuilder
                 {
                     Id = e.Id,
                     TypeId = e.TypeId,
+                    Order = e.Order,
                     Title = title,
                     HasTranslation = translation is not null,
                     Children = BuildGraphNodes(children, e.Id, langId)
@@ -66,6 +67,8 @@ public static class EntityTreeBuilder
         {
             Id = entity.Id,
             TypeId = entity.TypeId,
+            Order = entity.Order,
+            IsCorrect = entity.IsCorrect,
             LangId = langId,
             TranslationId = translation?.Id,
             Title = title,

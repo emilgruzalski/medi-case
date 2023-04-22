@@ -6,6 +6,10 @@ public partial class Entity
 
     public int TypeId { get; set; }
 
+    public int Order { get; set; }
+
+    public bool IsCorrect { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     public DateTime ModifiedAt { get; set; }

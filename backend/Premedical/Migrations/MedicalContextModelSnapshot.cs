@@ -17,7 +17,7 @@ namespace Premedical.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -53,8 +53,14 @@ namespace Premedical.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
 
                     b.Property<int>("TypeId")
                         .HasColumnType("int");

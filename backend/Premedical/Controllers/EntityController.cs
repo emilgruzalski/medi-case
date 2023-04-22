@@ -33,6 +33,14 @@ public class EntityController : ControllerBase
         return CreatedAtAction(nameof(GetEntity), new { id = entity.Id }, entity);
     }
 
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult<EntityDTO>> UpdateEntity(Guid id, EntityUpdateDTO dto) =>
+        Ok(await _entityService.UpdateAsync(id, dto));
+
+    [HttpPut("{id:guid}/move")]
+    public async Task<ActionResult<EntityDTO>> MoveEntity(Guid id, EntityMoveDTO dto) =>
+        Ok(await _entityService.MoveAsync(id, dto));
+
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteEntity(Guid id)
     {

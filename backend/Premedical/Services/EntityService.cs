@@ -44,7 +44,7 @@ public class EntityService : IEntityService
         if (await _typeRepository.GetByIdAsync(dto.TypeId) is null)
             throw new BadRequestException($"Entity type with id {dto.TypeId} does not exist.");
         await ValidateParentAsync(dto.TypeId, dto.ParentId);
-
+        ValidateCorrectFlag(dto.TypeId, dto.IsCorrect);
         await ValidateTranslationsAsync(dto.Translations);
 
         var now = DateTime.UtcNow;
@@ -52,6 +52,8 @@ public class EntityService : IEntityService
         {
             Id = Guid.NewGuid(),
             TypeId = dto.TypeId,
+            Order = dto.Order ?? await _entityRepository.GetMaxChildOrderAsync(dto.ParentId) + 1,
+            IsCorrect = dto.IsCorrect,
             CreatedAt = now,
             ModifiedAt = now
         };
@@ -81,6 +83,41 @@ public class EntityService : IEntityService
         var entities = await _graphDataRepository.GetEntitiesForTreeAsync();
         return EntityTreeBuilder.BuildSubtree(entities, id, langId)
             ?? throw new NotFoundException($"Entity with id {id} was not found.");
+    }
+
+    public async Task<EntityDTO> UpdateAsync(Guid id, EntityUpdateDTO dto)
+    {
+        var entity = await _entityRepository.GetByIdAsync(id)
+            ?? throw new NotFoundException($"Entity with id {id} was not found.");
+        ValidateCorrectFlag(entity.TypeId, dto.IsCorrect);
+
+        entity.Order = dto.Order;
+        entity.IsCorrect = dto.IsCorrect;
+        entity.ModifiedAt = DateTime.UtcNow;
+        await _entityRepository.SaveChangesAsync();
+
+        return await GetByIdAsync(id);
+    }
+
+    public async Task<EntityDTO> MoveAsync(Guid id, EntityMoveDTO dto)
+    {
+        var entity = await _entityRepository.GetWithParentLinkAsync(id)
+            ?? throw new NotFoundException($"Entity with id {id} was not found.");
+
+        if (dto.ParentId is Guid parentId)
+        {
+            var subtreeIds = EntityTreeBuilder.CollectSubtreeIds(await _graphDataRepository.GetAllAsync(), id);
+            if (subtreeIds.Contains(parentId))
+                throw new BadRequestException("Entity cannot be moved into its own subtree.");
+        }
+        await ValidateParentAsync(entity.TypeId, dto.ParentId);
+
+        entity.Order = dto.Order ?? await _entityRepository.GetMaxChildOrderAsync(dto.ParentId) + 1;
+        entity.ParentLink!.ParentId = dto.ParentId;
+        entity.ModifiedAt = DateTime.UtcNow;
+        await _entityRepository.SaveChangesAsync();
+
+        return await GetByIdAsync(id);
     }
 
     public async Task DeleteAsync(Guid id)
@@ -115,6 +152,12 @@ public class EntityService : IEntityService
 
         if (!EntityTypeRules.CanBeChildOf(typeId, parentTypeId))
             throw new BadRequestException("This entity type is not allowed in the selected place of the tree.");
+    }
+
+    private static void ValidateCorrectFlag(int typeId, bool isCorrect)
+    {
+        if (isCorrect && typeId != EntityTypeIds.TestAnswer)
+            throw new BadRequestException("Only test answers can be marked as correct.");
     }
 
     private async Task ValidateTranslationsAsync(IReadOnlyCollection<EntityTranslationContentDTO> translations)
