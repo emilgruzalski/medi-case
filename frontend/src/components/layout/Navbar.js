@@ -25,7 +25,7 @@ function Navbar() {
       <Toolbar>
         <LocalHospitalIcon sx={{ mr: 1 }} />
         <Typography variant="h6" component={RouterLink} to="/" sx={{ color: 'inherit', textDecoration: 'none', mr: 3 }}>
-          Premedical
+          MediCase
         </Typography>
         {isLoggedIn && (
           <>

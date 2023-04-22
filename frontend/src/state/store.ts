@@ -29,7 +29,7 @@ const useStore = create<StoreState>()(
       setLanguages: (learningLangId, nativeLangId) => set({ learningLangId, nativeLangId }),
       setModeratorLangId: (moderatorLangId) => set({ moderatorLangId }),
     }),
-    { name: 'premedical' }
+    { name: 'medicase' }
   )
 );
 
