@@ -110,6 +110,8 @@ export interface DictionaryEntry {
 export interface EntityContent {
   id: string;
   typeId: number;
+  order: number;
+  isCorrect: boolean;
   langId: number;
   translationId: string | null;
   title: string;
