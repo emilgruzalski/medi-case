@@ -28,17 +28,20 @@ public class DataSeeder
     };
 
     private readonly MedicalContext _context;
+    private readonly IPublishedContextFactory _publishedContextFactory;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IConfiguration _configuration;
     private readonly ILogger<DataSeeder> _logger;
 
     public DataSeeder(
         MedicalContext context,
+        IPublishedContextFactory publishedContextFactory,
         IPasswordHasher passwordHasher,
         IConfiguration configuration,
         ILogger<DataSeeder> logger)
     {
         _context = context;
+        _publishedContextFactory = publishedContextFactory;
         _passwordHasher = passwordHasher;
         _configuration = configuration;
         _logger = logger;
@@ -46,31 +49,39 @@ public class DataSeeder
 
     public async Task SeedAsync()
     {
-        await _context.Database.MigrateAsync();
-        await SeedEntityTypesAsync();
-        await SeedLanguagesAsync();
+        await SeedStructureAsync(_context);
         await SeedAdminAsync();
+
+        await using var published = _publishedContextFactory.CreateDbContext();
+        await SeedStructureAsync(published);
     }
 
-    private async Task SeedEntityTypesAsync()
+    private static async Task SeedStructureAsync(MedicalContext context)
     {
-        var existingIds = await _context.EntityTypes.Select(t => t.Id).ToListAsync();
+        await context.Database.MigrateAsync();
+        await SeedEntityTypesAsync(context);
+        await SeedLanguagesAsync(context);
+    }
+
+    private static async Task SeedEntityTypesAsync(MedicalContext context)
+    {
+        var existingIds = await context.EntityTypes.Select(t => t.Id).ToListAsync();
         var missing = EntityTypes.Where(t => !existingIds.Contains(t.Id)).ToList();
         if (missing.Count == 0)
             return;
 
-        _context.EntityTypes.AddRange(missing.Select(t => new EntityType { Id = t.Id, Name = t.Name }));
-        await _context.SaveChangesAsync();
+        context.EntityTypes.AddRange(missing.Select(t => new EntityType { Id = t.Id, Name = t.Name }));
+        await context.SaveChangesAsync();
     }
 
-    private async Task SeedLanguagesAsync()
+    private static async Task SeedLanguagesAsync(MedicalContext context)
     {
-        if (await _context.EntityLanguages.AnyAsync())
+        if (await context.EntityLanguages.AnyAsync())
             return;
 
-        _context.EntityLanguages.AddRange(
+        context.EntityLanguages.AddRange(
             DefaultLanguages.Select(l => new EntityLanguage { Id = l.Id, LangValue = l.LangValue, Name = l.Name }));
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
     }
 
     private async Task SeedAdminAsync()
