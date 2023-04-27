@@ -1,15 +1,42 @@
-import { Container, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { Box, Button, Container, Stack, Typography } from '@mui/material';
+import Logo from '../common/Logo';
+import useStore from '../../state/store';
+
+const LOGO_SIZE = 120;
 
 function Home() {
+  const isLoggedIn = useStore((state) => Boolean(state.token));
+
   return (
-    <Container maxWidth="md" sx={{ py: 6, textAlign: 'center' }}>
-      <Typography variant="h3" component="h1" gutterBottom>
-        MediCase
-      </Typography>
-      <Typography variant="h6" color="text.secondary">
-        Nauka komunikacji z pacjentem w medycynie ratunkowej.
-      </Typography>
-    </Container>
+    <Box sx={{ background: 'linear-gradient(180deg, #ffffff 0%, #f5f6f8 100%)' }}>
+      <Container maxWidth="md" sx={{ py: 10, textAlign: 'center' }}>
+        <Stack alignItems="center" spacing={3}>
+          <Logo size={LOGO_SIZE} />
+          <Typography variant="h2" component="h1" fontWeight="bold">
+            MediCase
+          </Typography>
+          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 560 }}>
+            Ucz się rozmawiać z pacjentem w obcym języku. Treści z medycyny ratunkowej, nagrania wymowy, słownik i testy
+            w jednym miejscu.
+          </Typography>
+          {isLoggedIn ? (
+            <Button size="large" variant="contained" component={RouterLink} to="/learning">
+              Przejdź do nauki
+            </Button>
+          ) : (
+            <Stack direction="row" spacing={2}>
+              <Button size="large" variant="contained" component={RouterLink} to="/register">
+                Załóż konto
+              </Button>
+              <Button size="large" variant="outlined" component={RouterLink} to="/login">
+                Zaloguj się
+              </Button>
+            </Stack>
+          )}
+        </Stack>
+      </Container>
+    </Box>
   );
 }
 

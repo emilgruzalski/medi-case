@@ -1,8 +1,8 @@
 import { Link as RouterLink, NavLink } from 'react-router-dom';
 import { AppBar, Box, Button, IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import TranslateIcon from '@mui/icons-material/Translate';
 import UserBar from './UserBar';
+import Logo from '../common/Logo';
 import useStore from '../../state/store';
 import { canModerate } from '../../lib/roles';
 
@@ -23,7 +23,9 @@ function Navbar() {
   return (
     <AppBar position="sticky" elevation={1}>
       <Toolbar>
-        <LocalHospitalIcon sx={{ mr: 1 }} />
+        <Box sx={{ mr: 1 }}>
+          <Logo size={32} />
+        </Box>
         <Typography variant="h6" component={RouterLink} to="/" sx={{ color: 'inherit', textDecoration: 'none', mr: 3 }}>
           MediCase
         </Typography>
