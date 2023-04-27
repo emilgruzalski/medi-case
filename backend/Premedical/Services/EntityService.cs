@@ -80,6 +80,9 @@ public class EntityService : IEntityService
 
     public async Task<EntityWithTranslationDTO> GetWithChildrenAsync(Guid id, int langId)
     {
+        if (await _languageRepository.GetByIdAsync(langId) is null)
+            throw new BadRequestException($"Language with id {langId} does not exist.");
+
         var entities = await _graphDataRepository.GetEntitiesForTreeAsync();
         return EntityTreeBuilder.BuildSubtree(entities, id, langId)
             ?? throw new NotFoundException($"Entity with id {id} was not found.");
