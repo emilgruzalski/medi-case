@@ -33,6 +33,7 @@ public static class ServiceExtensions
         services.AddScoped<IEntityService, EntityService>();
         services.AddSingleton<IFileService, FileService>();
         services.AddScoped<IEntityTranslationFileService, EntityTranslationFileService>();
+        services.AddScoped<ISynchronizationService, SynchronizationService>();
         services.AddScoped<DataSeeder>();
         return services;
     }
