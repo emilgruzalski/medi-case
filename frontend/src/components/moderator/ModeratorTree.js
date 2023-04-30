@@ -15,10 +15,12 @@ function TreeItem({ node, depth, selectedId, onSelect, onAdd, onDelete }) {
     <>
       <ListItemButton selected={node.id === selectedId} sx={{ pl: 1 + depth * INDENT_STEP }} onClick={() => onSelect(node)}>
         <ListItemIcon sx={{ minWidth: 32 }}>{typeIcon(node.typeId)}</ListItemIcon>
-        <ListItemText
-          primary={node.title}
-          primaryTypographyProps={{ color: node.hasTranslation ? 'text.primary' : 'text.disabled' }}
-        />
+        <Tooltip title={node.hasTranslation ? '' : 'Brak tłumaczenia w wybranym języku'}>
+          <ListItemText
+            primary={node.title}
+            primaryTypographyProps={{ color: node.hasTranslation ? 'text.primary' : 'text.disabled', noWrap: true }}
+          />
+        </Tooltip>
         <Tooltip title="Dodaj element">
           <IconButton size="small" onClick={(e) => { e.stopPropagation(); onAdd(node); }}>
             <AddIcon fontSize="small" />

@@ -69,6 +69,9 @@ function ModeratorEditor({ entityId, langId, onSaved }) {
   return (
     <Paper sx={{ p: 3 }}>
       <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          {translation?.title ?? entity.translations[0]?.title ?? 'Bez tytułu'}
+        </Typography>
         <Chip label={typeLabel(entity.typeId)} size="small" />
         {!translation && <Chip label="Brak tłumaczenia" color="warning" size="small" />}
       </Stack>
