@@ -8,6 +8,7 @@ import { deleteEntity } from '../../network/lib/entity';
 import { typeIcon } from '../../lib/utility';
 
 const INDENT_STEP = 2;
+const TREE_MAX_HEIGHT = 'calc(100vh - 260px)';
 
 function TreeItem({ node, depth, selectedId, onSelect, onAdd, onDelete }) {
   return (
@@ -54,7 +55,7 @@ function ModeratorTree({ tree, langId, selectedId, onSelect, onChanged, onDelete
           Nowy dział
         </Button>
       </Box>
-      <List dense>
+      <List dense sx={{ maxHeight: TREE_MAX_HEIGHT, overflowY: 'auto' }}>
         {tree.map((node) => (
           <TreeItem key={node.id} node={node} depth={0} selectedId={selectedId}
             onSelect={onSelect} onAdd={setAddParent} onDelete={setToDelete} />

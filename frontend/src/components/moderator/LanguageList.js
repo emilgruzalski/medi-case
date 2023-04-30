@@ -10,6 +10,7 @@ import { createLanguage, deleteLanguage, updateLanguage } from '../../network/li
 import { getErrorMessage } from '../../lib/errors';
 
 const EMPTY_LANGUAGE = { langValue: '', name: '' };
+const LIST_MAX_HEIGHT = 320;
 
 function LanguageList({ open, languages, onClose, onChanged }) {
   const [editingId, setEditingId] = useState(null);
@@ -41,7 +42,7 @@ function LanguageList({ open, languages, onClose, onChanged }) {
       <DialogTitle>Języki treści</DialogTitle>
       <DialogContent>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-        <List dense>
+        <List dense sx={{ maxHeight: LIST_MAX_HEIGHT, overflowY: 'auto' }}>
           {languages.map((language) => (
             <ListItem
               key={language.id}
