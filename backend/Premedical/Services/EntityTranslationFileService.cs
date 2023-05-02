@@ -65,8 +65,8 @@ public class EntityTranslationFileService : IEntityTranslationFileService
         file.Translation.Entity.ModifiedAt = DateTime.UtcNow;
 
         _filesRepository.Remove(file);
+        // The physical file stays until the next synchronization, the published content may still use it.
         await _filesRepository.SaveChangesAsync();
-        _fileService.Delete(file.FilePath);
     }
 
     private async Task<EntityTranslationFile> GetFileOrThrowAsync(Guid id) =>

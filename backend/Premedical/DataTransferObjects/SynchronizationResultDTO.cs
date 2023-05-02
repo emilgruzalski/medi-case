@@ -8,4 +8,5 @@ public class SynchronizationResultDTO
     public int Translations { get; set; }
     public int Files { get; set; }
     public int DictionaryEntries { get; set; }
+    public int RemovedFiles { get; set; }
 }

@@ -13,7 +13,6 @@ public class EntityService : IEntityService
     private readonly IEntityTypeRepository _typeRepository;
     private readonly IEntityLanguageRepository _languageRepository;
     private readonly IEntityGraphDataRepository _graphDataRepository;
-    private readonly IFileService _fileService;
     private readonly IMapper _mapper;
 
     public EntityService(
@@ -21,14 +20,12 @@ public class EntityService : IEntityService
         IEntityTypeRepository typeRepository,
         IEntityLanguageRepository languageRepository,
         IEntityGraphDataRepository graphDataRepository,
-        IFileService fileService,
         IMapper mapper)
     {
         _entityRepository = entityRepository;
         _typeRepository = typeRepository;
         _languageRepository = languageRepository;
         _graphDataRepository = graphDataRepository;
-        _fileService = fileService;
         _mapper = mapper;
     }
 
@@ -130,17 +127,10 @@ public class EntityService : IEntityService
 
         var subtreeIds = EntityTreeBuilder.CollectSubtreeIds(await _graphDataRepository.GetAllAsync(), id);
         var entities = await _entityRepository.GetByIdsAsync(subtreeIds);
-        var filePaths = entities
-            .SelectMany(e => e.EntityTranslations)
-            .SelectMany(t => t.EntityTranslationFiles)
-            .Select(f => f.FilePath)
-            .ToList();
 
+        // Uploaded files are removed from disk by the synchronization once nothing references them.
         _entityRepository.RemoveRange(entities);
         await _entityRepository.SaveChangesAsync();
-
-        foreach (var path in filePaths)
-            _fileService.Delete(path);
     }
 
     private async Task ValidateParentAsync(int typeId, Guid? parentId)

@@ -62,6 +62,21 @@ public class FileService : IFileService
             File.Delete(fullPath);
     }
 
+    public int DeleteUnusedFiles(IReadOnlySet<string> usedPaths)
+    {
+        // Recently written files may belong to an upload that is not saved in the database yet.
+        var threshold = DateTime.UtcNow.AddMinutes(-_options.UnusedFileGracePeriodMinutes);
+        var unused = new DirectoryInfo(_rootPath)
+            .EnumerateFiles()
+            .Where(f => f.LastWriteTimeUtc < threshold && !usedPaths.Contains(f.Name))
+            .ToList();
+
+        foreach (var file in unused)
+            file.Delete();
+
+        return unused.Count;
+    }
+
     private string ResolvePath(string relativePath)
     {
         var fullPath = Path.GetFullPath(Path.Combine(_rootPath, relativePath));
