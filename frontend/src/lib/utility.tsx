@@ -45,6 +45,13 @@ export const typeIcon = (typeId: number) => TYPE_ICONS[typeId] ?? <ArticleOutlin
 export const findTranslation = (translations: Translation[], langId: number | null) =>
   translations.find((t) => t.langId === langId);
 
+const BYTES_IN_KILOBYTE = 1024;
+
+export const formatFileSize = (bytes: number) =>
+  bytes < BYTES_IN_KILOBYTE * BYTES_IN_KILOBYTE
+    ? `${Math.ceil(bytes / BYTES_IN_KILOBYTE)} KB`
+    : `${(bytes / (BYTES_IN_KILOBYTE * BYTES_IN_KILOBYTE)).toFixed(1)} MB`;
+
 export const isBlankHtml = (html: string | null | undefined) =>
   !html || html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() === '';
 

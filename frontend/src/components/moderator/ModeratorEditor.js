@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Alert, Box, Button, Chip, Paper, Snackbar, Stack, Tab, Tabs, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Chip, Divider, Paper, Snackbar, Stack, Tab, Tabs, TextField, Typography } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import Content from '../learning/Content';
+import FileManager from './FileManager';
 import { getEntity } from '../../network/lib/entity';
 import { createTranslation, updateTranslation } from '../../network/lib/translation';
 import { getErrorMessage } from '../../lib/errors';
@@ -91,6 +92,12 @@ function ModeratorEditor({ entityId, langId, onSaved }) {
       <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave} disabled={!title.trim()} sx={{ mt: 2 }}>
         Zapisz
       </Button>
+      {translation && (
+        <>
+          <Divider sx={{ my: 3 }} />
+          <FileManager translation={translation} onChanged={load} />
+        </>
+      )}
       <Snackbar open={saved} autoHideDuration={3000} onClose={() => setSaved(false)} message="Zapisano" />
     </Paper>
   );
