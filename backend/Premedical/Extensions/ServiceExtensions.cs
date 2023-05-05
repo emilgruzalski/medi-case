@@ -34,6 +34,7 @@ public static class ServiceExtensions
         services.AddSingleton<IFileService, FileService>();
         services.AddScoped<IEntityTranslationFileService, EntityTranslationFileService>();
         services.AddScoped<ISynchronizationService, SynchronizationService>();
+        services.AddScoped<ILearningService, LearningService>();
         services.AddScoped<DataSeeder>();
         return services;
     }
