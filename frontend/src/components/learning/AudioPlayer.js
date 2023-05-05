@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, Stack } from '@mui/material';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import { getFileObjectUrl } from '../../network/lib/files';
+import { getLearningFileObjectUrl } from '../../network/lib/learning';
 
-function AudioFile({ file }) {
+function AudioFile({ file, loadUrl }) {
   const [url, setUrl] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -12,7 +12,7 @@ function AudioFile({ file }) {
   const handlePlay = async () => {
     setLoading(true);
     try {
-      setUrl(await getFileObjectUrl(file.id));
+      setUrl(await loadUrl(file.id));
     } finally {
       setLoading(false);
     }
@@ -28,7 +28,7 @@ function AudioFile({ file }) {
   );
 }
 
-function AudioPlayer({ files }) {
+function AudioPlayer({ files, loadUrl = getLearningFileObjectUrl }) {
   const audioFiles = (files ?? []).filter((file) => file.contentType.startsWith('audio/'));
   if (audioFiles.length === 0) {
     return null;
@@ -37,7 +37,7 @@ function AudioPlayer({ files }) {
   return (
     <Stack direction="row" spacing={1} sx={{ my: 1 }} flexWrap="wrap">
       {audioFiles.map((file) => (
-        <AudioFile key={file.id} file={file} />
+        <AudioFile key={file.id} file={file} loadUrl={loadUrl} />
       ))}
     </Stack>
   );

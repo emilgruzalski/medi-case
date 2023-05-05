@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Alert, Button, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
 import FormCard from '../common/FormCard';
 import useStore from '../../state/store';
-import { getLanguages } from '../../network/lib/language';
+import { getLearningLanguages } from '../../network/lib/learning';
 import { getErrorMessage } from '../../lib/errors';
 
 function LanguageSelect({ label, value, languages, onChange }) {
@@ -30,7 +30,7 @@ function SetLanguage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getLanguages()
+    getLearningLanguages()
       .then(setLanguageList)
       .catch((err) => setError(getErrorMessage(err)));
   }, []);

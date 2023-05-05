@@ -5,7 +5,7 @@ import Sidebar from './Sidebar';
 import ContentContainer from './ContentContainer';
 import ContentNavigation from './ContentNavigation';
 import useStore from '../../state/store';
-import { getTree } from '../../network/lib/entity';
+import { getLearningTree } from '../../network/lib/learning';
 import { getErrorMessage } from '../../lib/errors';
 import { findNode } from '../../lib/utility';
 
@@ -19,7 +19,7 @@ function Learning() {
     if (!learningLangId) {
       return;
     }
-    getTree(learningLangId)
+    getLearningTree(learningLangId)
       .then(setTree)
       .catch((err) => setError(getErrorMessage(err)));
   }, [learningLangId]);

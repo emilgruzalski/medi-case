@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, List, ListItem, ListItemText, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
-import { getDictionary } from '../../network/lib/dictionary';
+import { getLearningDictionary } from '../../network/lib/learning';
 
 function Glossary({ entityId, langId }) {
   const [entries, setEntries] = useState([]);
 
   useEffect(() => {
-    getDictionary(entityId, langId)
+    getLearningDictionary(entityId, langId)
       .then(setEntries)
       .catch(() => setEntries([]));
   }, [entityId, langId]);

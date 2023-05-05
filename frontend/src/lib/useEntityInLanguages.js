@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useStore from '../state/store';
-import { getEntityWithChildren } from '../network/lib/entity';
+import { getLearningEntity } from '../network/lib/learning';
 import { getErrorMessage } from './errors';
 
 /**
@@ -16,8 +16,8 @@ export default function useEntityInLanguages(entityId) {
     setState({ learning: null, native: null, error: '' });
 
     Promise.all([
-      getEntityWithChildren(entityId, learningLangId),
-      needsNative ? getEntityWithChildren(entityId, nativeLangId) : Promise.resolve(null),
+      getLearningEntity(entityId, learningLangId),
+      needsNative ? getLearningEntity(entityId, nativeLangId) : Promise.resolve(null),
     ])
       .then(([learning, native]) => active && setState({ learning, native, error: '' }))
       .catch((err) => active && setState({ learning: null, native: null, error: getErrorMessage(err) }));

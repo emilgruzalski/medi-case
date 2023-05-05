@@ -5,7 +5,7 @@ import AudioFileOutlinedIcon from '@mui/icons-material/AudioFileOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import AudioPlayer from '../learning/AudioPlayer';
-import { deleteFile, uploadFile } from '../../network/lib/files';
+import { deleteFile, getFileObjectUrl, uploadFile } from '../../network/lib/files';
 import { getErrorMessage } from '../../lib/errors';
 import { formatFileSize } from '../../lib/utility';
 
@@ -49,7 +49,7 @@ function FileManager({ translation, onChanged }) {
         Pliki
       </Typography>
       {error && <Alert severity="error" sx={{ mb: 1 }}>{error}</Alert>}
-      <AudioPlayer files={translation.files} />
+      <AudioPlayer files={translation.files} loadUrl={getFileObjectUrl} />
       <List dense>
         {translation.files.map((file) => (
           <ListItem key={file.id} secondaryAction={
