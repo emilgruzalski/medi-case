@@ -1,3 +1,4 @@
+using Amazon.Runtime;
 using Premedical.DataTransferObjects;
 using Premedical.Exceptions;
 
@@ -6,6 +7,7 @@ namespace Premedical.Middleware;
 public class ErrorHandlingMiddleware
 {
     private const string InternalErrorMessage = "Internal server error.";
+    private const string ExternalServiceMessage = "The AI service is not available. Check the AWS configuration.";
 
     private readonly RequestDelegate _next;
     private readonly ILogger<ErrorHandlingMiddleware> _logger;
@@ -26,6 +28,11 @@ public class ErrorHandlingMiddleware
         {
             _logger.LogWarning("{Path}: {Message}", context.Request.Path, ex.Message);
             await WriteErrorAsync(context, ex.StatusCode, ex.Message);
+        }
+        catch (Exception ex) when (ex is AmazonServiceException or AmazonClientException)
+        {
+            _logger.LogWarning(ex, "AWS request failed for {Path}", context.Request.Path);
+            await WriteErrorAsync(context, StatusCodes.Status502BadGateway, ExternalServiceMessage);
         }
         catch (Exception ex)
         {

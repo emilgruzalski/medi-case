@@ -1,3 +1,4 @@
+using Amazon.Translate;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Premedical.Authentication;
@@ -21,6 +22,8 @@ builder.Services.Configure<SessionTokenOptions>(builder.Configuration.GetSection
 builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection(FileStorageOptions.SectionName));
 builder.Services.AddRepositories();
 builder.Services.AddApplicationServices();
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<IAmazonTranslate>();
 builder.Services.AddAuthentication(SessionAuthenticationDefaults.Scheme)
     .AddScheme<AuthenticationSchemeOptions, SessionAuthenticationHandler>(SessionAuthenticationDefaults.Scheme, null);
 builder.Services.AddAuthorization();

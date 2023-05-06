@@ -35,6 +35,8 @@ public static class ServiceExtensions
         services.AddScoped<IEntityTranslationFileService, EntityTranslationFileService>();
         services.AddScoped<ISynchronizationService, SynchronizationService>();
         services.AddScoped<ILearningService, LearningService>();
+        services.AddScoped<ITextTranslator, AwsTextTranslator>();
+        services.AddScoped<IAiContentService, AiContentService>();
         services.AddScoped<DataSeeder>();
         return services;
     }
