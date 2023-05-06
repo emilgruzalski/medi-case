@@ -5,10 +5,11 @@ import { Alert, Box, Button, Chip, Divider, Paper, Snackbar, Stack, Tab, Tabs, T
 import SaveIcon from '@mui/icons-material/Save';
 import Content from '../learning/Content';
 import FileManager from './FileManager';
+import DictionaryEditor from './DictionaryEditor';
 import { getEntity } from '../../network/lib/entity';
 import { createTranslation, updateTranslation } from '../../network/lib/translation';
 import { getErrorMessage } from '../../lib/errors';
-import { findTranslation, isBlankHtml, typeLabel } from '../../lib/utility';
+import { EntityTypes, findTranslation, isBlankHtml, typeLabel } from '../../lib/utility';
 
 const QUILL_MODULES = {
   toolbar: [
@@ -96,6 +97,12 @@ function ModeratorEditor({ entityId, langId, onSaved }) {
         <>
           <Divider sx={{ my: 3 }} />
           <FileManager translation={translation} onChanged={load} />
+        </>
+      )}
+      {entity.typeId === EntityTypes.Category && (
+        <>
+          <Divider sx={{ my: 3 }} />
+          <DictionaryEditor entityId={entity.id} langId={langId} />
         </>
       )}
       <Snackbar open={saved} autoHideDuration={3000} onClose={() => setSaved(false)} message="Zapisano" />
