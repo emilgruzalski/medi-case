@@ -1,3 +1,4 @@
+using Amazon.Polly;
 using Amazon.Translate;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
@@ -20,10 +21,12 @@ builder.Services.AddSingleton<IPublishedContextFactory>(
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.Configure<SessionTokenOptions>(builder.Configuration.GetSection(SessionTokenOptions.SectionName));
 builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection(FileStorageOptions.SectionName));
+builder.Services.Configure<SpeechOptions>(builder.Configuration.GetSection(SpeechOptions.SectionName));
 builder.Services.AddRepositories();
 builder.Services.AddApplicationServices();
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSService<IAmazonTranslate>();
+builder.Services.AddAWSService<IAmazonPolly>();
 builder.Services.AddAuthentication(SessionAuthenticationDefaults.Scheme)
     .AddScheme<AuthenticationSchemeOptions, SessionAuthenticationHandler>(SessionAuthenticationDefaults.Scheme, null);
 builder.Services.AddAuthorization();

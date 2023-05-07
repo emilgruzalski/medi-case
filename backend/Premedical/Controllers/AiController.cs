@@ -21,4 +21,8 @@ public class AiController : ControllerBase
     [HttpPost("translate")]
     public async Task<ActionResult<EntityTranslationDTO>> Translate(AiTranslationPostDTO dto) =>
         Ok(await _aiContentService.TranslateAsync(dto));
+
+    [HttpPost("speech/{translationId:guid}")]
+    public async Task<ActionResult<EntityTranslationFileDTO>> GenerateSpeech(Guid translationId) =>
+        Ok(await _aiContentService.GenerateSpeechAsync(translationId));
 }
