@@ -6,6 +6,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import Content from '../learning/Content';
 import FileManager from './FileManager';
 import DictionaryEditor from './DictionaryEditor';
+import TranslateAIButton from './TranslateAIButton';
 import { getEntity } from '../../network/lib/entity';
 import { createTranslation, updateTranslation } from '../../network/lib/translation';
 import { getErrorMessage } from '../../lib/errors';
@@ -24,7 +25,7 @@ const QUILL_MODULES = {
 const EDIT_TAB = 0;
 const PREVIEW_TAB = 1;
 
-function ModeratorEditor({ entityId, langId, onSaved }) {
+function ModeratorEditor({ entityId, langId, languages, onSaved }) {
   const [entity, setEntity] = useState(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -76,6 +77,10 @@ function ModeratorEditor({ entityId, langId, onSaved }) {
         </Typography>
         <Chip label={typeLabel(entity.typeId)} size="small" />
         {!translation && <Chip label="Brak tłumaczenia" color="warning" size="small" />}
+      </Stack>
+      <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+        <TranslateAIButton entity={entity} langId={langId} languages={languages}
+          onDone={() => { load(); onSaved(); }} />
       </Stack>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <TextField label="Tytuł" value={title} onChange={(e) => setTitle(e.target.value)} fullWidth sx={{ mb: 2 }} />

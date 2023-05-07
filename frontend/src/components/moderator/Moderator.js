@@ -82,7 +82,7 @@ function Moderator() {
         </Grid>
         <Grid item xs={12} md={7} lg={8}>
           {selectedId && moderatorLangId ? (
-            <ModeratorEditor entityId={selectedId} langId={moderatorLangId} onSaved={loadTree} />
+            <ModeratorEditor entityId={selectedId} langId={moderatorLangId} languages={languages} onSaved={loadTree} />
           ) : (
             <Typography color="text.secondary">Wybierz element drzewa, aby go edytować.</Typography>
           )}
