@@ -7,6 +7,7 @@ import Content from '../learning/Content';
 import FileManager from './FileManager';
 import DictionaryEditor from './DictionaryEditor';
 import TranslateAIButton from './TranslateAIButton';
+import SoundAIButton from './SoundAIButton';
 import { getEntity } from '../../network/lib/entity';
 import { createTranslation, updateTranslation } from '../../network/lib/translation';
 import { getErrorMessage } from '../../lib/errors';
@@ -81,6 +82,7 @@ function ModeratorEditor({ entityId, langId, languages, onSaved }) {
       <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
         <TranslateAIButton entity={entity} langId={langId} languages={languages}
           onDone={() => { load(); onSaved(); }} />
+        <SoundAIButton translation={translation} onDone={load} />
       </Stack>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <TextField label="Tytuł" value={title} onChange={(e) => setTitle(e.target.value)} fullWidth sx={{ mb: 2 }} />
