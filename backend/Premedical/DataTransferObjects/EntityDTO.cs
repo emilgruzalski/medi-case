@@ -6,6 +6,7 @@ public class EntityDTO
     public int TypeId { get; set; }
     public int Order { get; set; }
     public bool IsCorrect { get; set; }
+    public bool IsBlocked { get; set; }
     public string TypeName { get; set; } = null!;
     public Guid? ParentId { get; set; }
     public DateTime CreatedAt { get; set; }

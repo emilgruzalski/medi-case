@@ -93,6 +93,7 @@ public class EntityService : IEntityService
 
         entity.Order = dto.Order;
         entity.IsCorrect = dto.IsCorrect;
+        entity.IsBlocked = dto.IsBlocked;
         entity.ModifiedAt = DateTime.UtcNow;
         await _entityRepository.SaveChangesAsync();
 

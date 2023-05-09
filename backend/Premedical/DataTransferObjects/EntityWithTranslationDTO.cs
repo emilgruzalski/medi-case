@@ -6,6 +6,7 @@ public class EntityWithTranslationDTO
     public int TypeId { get; set; }
     public int Order { get; set; }
     public bool IsCorrect { get; set; }
+    public bool IsBlocked { get; set; }
     public int LangId { get; set; }
     public Guid? TranslationId { get; set; }
     public string Title { get; set; } = null!;

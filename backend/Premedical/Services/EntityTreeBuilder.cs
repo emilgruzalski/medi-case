@@ -7,16 +7,29 @@ public static class EntityTreeBuilder
 {
     public const string MissingTitle = "(no title)";
 
-    public static List<EntityGraphObjectDTO> Build(IReadOnlyCollection<Entity> entities, int langId)
+    public static List<EntityGraphObjectDTO> Build(IReadOnlyCollection<Entity> entities, int langId, bool includeBlocked = true)
     {
-        var children = ToChildrenLookup(entities);
+        var children = ToChildrenLookup(includeBlocked ? entities : WithoutBlocked(entities));
         return BuildGraphNodes(children, null, langId);
     }
 
-    public static EntityWithTranslationDTO? BuildSubtree(IReadOnlyCollection<Entity> entities, Guid rootId, int langId)
+    public static EntityWithTranslationDTO? BuildSubtree(
+        IReadOnlyCollection<Entity> entities, Guid rootId, int langId, bool includeBlocked = true)
     {
-        var root = entities.FirstOrDefault(e => e.Id == rootId);
-        return root is null ? null : BuildContentNode(root, ToChildrenLookup(entities), langId);
+        var visible = includeBlocked ? entities : WithoutBlocked(entities);
+        var root = visible.FirstOrDefault(e => e.Id == rootId);
+        return root is null ? null : BuildContentNode(root, ToChildrenLookup(visible), langId);
+    }
+
+    /// <summary>Removes blocked entities together with everything below them.</summary>
+    public static IReadOnlyCollection<Entity> WithoutBlocked(IReadOnlyCollection<Entity> entities)
+    {
+        var edges = entities.Where(e => e.ParentLink != null).Select(e => e.ParentLink!).ToList();
+        var hidden = entities
+            .Where(e => e.IsBlocked)
+            .SelectMany(e => CollectSubtreeIds(edges, e.Id))
+            .ToHashSet();
+        return entities.Where(e => !hidden.Contains(e.Id)).ToList();
     }
 
     public static List<Guid> CollectSubtreeIds(IEnumerable<EntitiesGraphDatum> edges, Guid rootId)
@@ -53,6 +66,7 @@ public static class EntityTreeBuilder
                     Id = e.Id,
                     TypeId = e.TypeId,
                     Order = e.Order,
+                    IsBlocked = e.IsBlocked,
                     Title = title,
                     HasTranslation = translation is not null,
                     Children = BuildGraphNodes(children, e.Id, langId)
@@ -69,6 +83,7 @@ public static class EntityTreeBuilder
             TypeId = entity.TypeId,
             Order = entity.Order,
             IsCorrect = entity.IsCorrect,
+            IsBlocked = entity.IsBlocked,
             LangId = langId,
             TranslationId = translation?.Id,
             Title = title,

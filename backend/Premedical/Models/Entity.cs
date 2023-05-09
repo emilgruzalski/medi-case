@@ -10,6 +10,8 @@ public partial class Entity
 
     public bool IsCorrect { get; set; }
 
+    public bool IsBlocked { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     public DateTime ModifiedAt { get; set; }

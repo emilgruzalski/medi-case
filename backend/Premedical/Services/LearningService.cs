@@ -37,7 +37,7 @@ public class LearningService : ILearningService
         await EnsureLanguageExistsAsync(context, langId);
 
         var entities = await new EntityGraphDataRepository(context).GetEntitiesForTreeAsync();
-        return EntityTreeBuilder.Build(entities, langId);
+        return EntityTreeBuilder.Build(entities, langId, includeBlocked: false);
     }
 
     public async Task<EntityWithTranslationDTO> GetEntityAsync(Guid id, int langId)
@@ -46,7 +46,7 @@ public class LearningService : ILearningService
         await EnsureLanguageExistsAsync(context, langId);
 
         var entities = await new EntityGraphDataRepository(context).GetEntitiesForTreeAsync();
-        return EntityTreeBuilder.BuildSubtree(entities, id, langId)
+        return EntityTreeBuilder.BuildSubtree(entities, id, langId, includeBlocked: false)
             ?? throw new NotFoundException($"Entity with id {id} was not found.");
     }
 
