@@ -37,6 +37,8 @@ export interface Language {
 export interface TreeNode {
   id: string;
   typeId: number;
+  order: number;
+  isBlocked: boolean;
   title: string;
   hasTranslation: boolean;
   children: TreeNode[];
@@ -65,6 +67,9 @@ export interface Translation {
 export interface Entity {
   id: string;
   typeId: number;
+  order: number;
+  isCorrect: boolean;
+  isBlocked: boolean;
   typeName: string;
   parentId: string | null;
   createdAt: string;
@@ -119,4 +124,10 @@ export interface EntityContent {
   hasTranslation: boolean;
   files: TranslationFile[];
   children: EntityContent[];
+}
+
+export interface UpdateEntityRequest {
+  order: number;
+  isCorrect: boolean;
+  isBlocked: boolean;
 }

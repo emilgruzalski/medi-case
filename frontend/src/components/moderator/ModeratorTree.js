@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Button, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Paper, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import AddNodeDialog from './AddNodeDialog';
 import ConfirmDialog from '../common/ConfirmDialog';
 import { deleteEntity } from '../../network/lib/entity';
@@ -21,6 +22,11 @@ function TreeItem({ node, depth, selectedId, onSelect, onAdd, onDelete }) {
             primaryTypographyProps={{ color: node.hasTranslation ? 'text.primary' : 'text.disabled', noWrap: true }}
           />
         </Tooltip>
+        {node.isBlocked && (
+          <Tooltip title="Ukryte dla uczniów">
+            <VisibilityOffOutlinedIcon fontSize="small" color="action" sx={{ mx: 0.5 }} />
+          </Tooltip>
+        )}
         <Tooltip title="Dodaj element">
           <IconButton size="small" onClick={(e) => { e.stopPropagation(); onAdd(node); }}>
             <AddIcon fontSize="small" />
