@@ -9,6 +9,7 @@ public class DataSeeder
 {
     private const string AdminEmailKey = "Seed:AdminEmail";
     private const string AdminPasswordKey = "Seed:AdminPassword";
+    private const string SampleContentKey = "Seed:SampleContent";
 
     private static readonly EntityType[] EntityTypes =
     {
@@ -23,13 +24,15 @@ public class DataSeeder
 
     private static readonly EntityLanguage[] DefaultLanguages =
     {
-        new() { Id = 1, LangValue = "pl", Name = "Polski" },
-        new() { Id = 2, LangValue = "en", Name = "English" }
+        new() { Id = DefaultLanguageIds.Polish, LangValue = "pl", Name = "Polski" },
+        new() { Id = DefaultLanguageIds.English, LangValue = "en", Name = "English" }
     };
 
     private readonly MedicalContext _context;
     private readonly IPublishedContextFactory _publishedContextFactory;
     private readonly IPasswordHasher _passwordHasher;
+    private readonly SampleContentSeeder _sampleContentSeeder;
+    private readonly ISynchronizationService _synchronizationService;
     private readonly IConfiguration _configuration;
     private readonly ILogger<DataSeeder> _logger;
 
@@ -37,12 +40,16 @@ public class DataSeeder
         MedicalContext context,
         IPublishedContextFactory publishedContextFactory,
         IPasswordHasher passwordHasher,
+        SampleContentSeeder sampleContentSeeder,
+        ISynchronizationService synchronizationService,
         IConfiguration configuration,
         ILogger<DataSeeder> logger)
     {
         _context = context;
         _publishedContextFactory = publishedContextFactory;
         _passwordHasher = passwordHasher;
+        _sampleContentSeeder = sampleContentSeeder;
+        _synchronizationService = synchronizationService;
         _configuration = configuration;
         _logger = logger;
     }
@@ -54,6 +61,12 @@ public class DataSeeder
 
         await using var published = _publishedContextFactory.CreateDbContext();
         await SeedStructureAsync(published);
+
+        if (_configuration.GetValue<bool>(SampleContentKey) && await _sampleContentSeeder.SeedAsync())
+        {
+            await _synchronizationService.SynchronizeAsync();
+            _logger.LogInformation("Seeded and published sample content");
+        }
     }
 
     private static async Task SeedStructureAsync(MedicalContext context)

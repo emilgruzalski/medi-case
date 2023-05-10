@@ -39,6 +39,7 @@ public static class ServiceExtensions
         services.AddScoped<ISpeechSynthesizer, AwsSpeechSynthesizer>();
         services.AddScoped<IAiContentService, AiContentService>();
         services.AddScoped<DataSeeder>();
+        services.AddScoped<SampleContentSeeder>();
         return services;
     }
 }
