@@ -20,3 +20,8 @@ code {
 .content-html p:first-child {
   margin-top: 0;
 }
+
+.content-html {
+  overflow-wrap: break-word;
+  line-height: 1.6;
+}

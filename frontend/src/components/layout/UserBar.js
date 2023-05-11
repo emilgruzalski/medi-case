@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Divider, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, Button, Divider, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -25,8 +25,11 @@ function UserBar() {
 
   return (
     <>
-      <Button color="inherit" startIcon={<AccountCircleIcon />} onClick={(e) => setAnchorEl(e.currentTarget)}>
-        {user.firstName} {user.lastName}
+      <Button color="inherit" startIcon={<AccountCircleIcon />} onClick={(e) => setAnchorEl(e.currentTarget)}
+        sx={{ minWidth: 0 }}>
+        <Box component="span" sx={{ display: { xs: 'none', md: 'inline' } }}>
+          {user.firstName} {user.lastName}
+        </Box>
       </Button>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
         <Typography variant="body2" color="text.secondary" sx={{ px: 2, py: 1 }}>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import { Alert, Box, CircularProgress, Grid, Typography } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, Drawer, Grid, Typography, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import MenuIcon from '@mui/icons-material/Menu';
 import Sidebar from './Sidebar';
 import ContentContainer from './ContentContainer';
 import ContentNavigation from './ContentNavigation';
@@ -14,6 +16,9 @@ function Learning() {
   const learningLangId = useStore((state) => state.learningLangId);
   const [tree, setTree] = useState(null);
   const [error, setError] = useState('');
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     if (!learningLangId) {
@@ -31,14 +36,27 @@ function Learning() {
   const node = tree ? findNode(tree, entityId) : undefined;
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: { xs: 2, md: 3 } }}>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       {!tree && !error && <CircularProgress />}
       {tree && (
         <Grid container spacing={3}>
-          <Grid item xs={12} md={4} lg={3}>
-            <Sidebar tree={tree} selectedId={entityId} />
-          </Grid>
+          {isMobile ? (
+            <Grid item xs={12}>
+              <Button startIcon={<MenuIcon />} variant="outlined" onClick={() => setDrawerOpen(true)}>
+                Spis treści
+              </Button>
+              <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onClick={() => setDrawerOpen(false)}>
+                <Box sx={{ width: 300 }}>
+                  <Sidebar tree={tree} selectedId={entityId} />
+                </Box>
+              </Drawer>
+            </Grid>
+          ) : (
+            <Grid item md={4} lg={3}>
+              <Sidebar tree={tree} selectedId={entityId} />
+            </Grid>
+          )}
           <Grid item xs={12} md={8} lg={9}>
             {node ? (
               <>

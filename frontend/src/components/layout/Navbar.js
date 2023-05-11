@@ -26,7 +26,8 @@ function Navbar() {
         <Box sx={{ mr: 1 }}>
           <Logo size={32} />
         </Box>
-        <Typography variant="h6" component={RouterLink} to="/" sx={{ color: 'inherit', textDecoration: 'none', mr: 3 }}>
+        <Typography variant="h6" component={RouterLink} to="/"
+          sx={{ color: 'inherit', textDecoration: 'none', mr: 3, display: { xs: 'none', sm: 'block' } }}>
           MediCase
         </Typography>
         {isLoggedIn && (
