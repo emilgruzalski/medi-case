@@ -23,6 +23,8 @@ public partial class MedicalContext : DbContext
 
     public virtual DbSet<EntityType> EntityTypes { get; set; }
 
+    public virtual DbSet<Group> Groups { get; set; }
+
     public virtual DbSet<Session> Sessions { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -105,6 +107,25 @@ public partial class MedicalContext : DbContext
         {
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Name).HasMaxLength(FieldLengths.Name);
+        });
+
+        modelBuilder.Entity<Group>(entity =>
+        {
+            entity.HasIndex(e => e.Name).IsUnique();
+            entity.Property(e => e.Name).HasMaxLength(FieldLengths.GroupName);
+            entity.Property(e => e.Description).HasMaxLength(FieldLengths.GroupDescription);
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+            entity.HasMany(d => d.Users).WithMany(p => p.Groups)
+                .UsingEntity<Dictionary<string, object>>(
+                    "UserGroup",
+                    r => r.HasOne<User>().WithMany().HasForeignKey("UserId"),
+                    l => l.HasOne<Group>().WithMany().HasForeignKey("GroupId"),
+                    j =>
+                    {
+                        j.HasKey("GroupId", "UserId");
+                        j.ToTable("UserGroups");
+                    });
         });
 
         modelBuilder.Entity<Session>(entity =>

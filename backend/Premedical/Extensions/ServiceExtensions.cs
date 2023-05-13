@@ -19,6 +19,7 @@ public static class ServiceExtensions
         services.AddScoped<IEntityGraphDataRepository, EntityGraphDataRepository>();
         services.AddScoped<IEntityDictionaryRepository, EntityDictionaryRepository>();
         services.AddScoped<IEntityTranslationFilesRepository, EntityTranslationFilesRepository>();
+        services.AddScoped<IGroupRepository, GroupRepository>();
         return services;
     }
 
@@ -38,6 +39,7 @@ public static class ServiceExtensions
         services.AddScoped<ITextTranslator, AwsTextTranslator>();
         services.AddScoped<ISpeechSynthesizer, AwsSpeechSynthesizer>();
         services.AddScoped<IAiContentService, AiContentService>();
+        services.AddScoped<IGroupService, GroupService>();
         services.AddScoped<DataSeeder>();
         services.AddScoped<SampleContentSeeder>();
         return services;

@@ -18,5 +18,7 @@ public partial class User
 
     public DateTime? LastLoginAt { get; set; }
 
+    public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
+
     public virtual ICollection<Session> Sessions { get; set; } = new List<Session>();
 }

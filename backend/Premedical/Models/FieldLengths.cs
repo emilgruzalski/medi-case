@@ -14,4 +14,6 @@ public static class FieldLengths
     public const int FileName = 260;
     public const int FilePath = 400;
     public const int ContentType = 100;
+    public const int GroupName = 100;
+    public const int GroupDescription = 500;
 }
