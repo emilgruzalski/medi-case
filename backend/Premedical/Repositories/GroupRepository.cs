@@ -17,7 +17,7 @@ public class GroupRepository : IGroupRepository
         _context.Groups.AsNoTracking().Include(g => g.Users).OrderBy(g => g.Name).ToListAsync();
 
     public Task<Group?> GetByIdAsync(int id) =>
-        _context.Groups.Include(g => g.Users).FirstOrDefaultAsync(g => g.Id == id);
+        _context.Groups.Include(g => g.Users).ThenInclude(u => u.Groups).FirstOrDefaultAsync(g => g.Id == id);
 
     public Task<List<Group>> GetByIdsAsync(IReadOnlyCollection<int> ids) =>
         _context.Groups.Where(g => ids.Contains(g.Id)).ToListAsync();

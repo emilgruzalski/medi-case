@@ -14,10 +14,10 @@ public class UserRepository : IUserRepository
     }
 
     public Task<User?> GetByIdAsync(int id) =>
-        _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        _context.Users.Include(u => u.Groups).FirstOrDefaultAsync(u => u.Id == id);
 
     public Task<User?> GetByEmailAsync(string email) =>
-        _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        _context.Users.Include(u => u.Groups).FirstOrDefaultAsync(u => u.Email == email);
 
     public Task<bool> EmailExistsAsync(string email) =>
         _context.Users.AnyAsync(u => u.Email == email);

@@ -9,4 +9,5 @@ public class UserDTO
     public string Role { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
     public DateTime? LastLoginAt { get; set; }
+    public List<GroupSummaryDTO> Groups { get; set; } = new();
 }
