@@ -4,7 +4,7 @@ import TranslateIcon from '@mui/icons-material/Translate';
 import UserBar from './UserBar';
 import Logo from '../common/Logo';
 import useStore from '../../state/store';
-import { canModerate } from '../../lib/roles';
+import { canModerate, isAdmin } from '../../lib/roles';
 
 const ACTIVE_LINK_STYLE = { '&.active': { bgcolor: 'rgba(255, 255, 255, 0.15)' } };
 
@@ -34,6 +34,7 @@ function Navbar() {
           <>
             <NavButton to="/learning">Nauka</NavButton>
             {canModerate(user) && <NavButton to="/moderator">Moderator</NavButton>}
+            {isAdmin(user) && <NavButton to="/admin">Administracja</NavButton>}
           </>
         )}
         <Box sx={{ flexGrow: 1 }} />

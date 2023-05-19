@@ -8,6 +8,12 @@ export interface User {
   role: Role;
   createdAt: string;
   lastLoginAt: string | null;
+  groups: GroupSummary[];
+}
+
+export interface GroupSummary {
+  id: number;
+  name: string;
 }
 
 export interface Session {
@@ -130,4 +136,18 @@ export interface UpdateEntityRequest {
   order: number;
   isCorrect: boolean;
   isBlocked: boolean;
+}
+
+export interface PagedResult<T> {
+  items: T[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface PagingParams {
+  page: number;
+  pageSize: number;
+  search?: string;
 }

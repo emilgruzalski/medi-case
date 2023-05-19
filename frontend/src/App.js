@@ -9,7 +9,8 @@ import SetLanguage from './components/user/SetLanguage';
 import Profile from './components/user/Profile';
 import Learning from './components/learning/Learning';
 import Moderator from './components/moderator/Moderator';
-import { canModerate } from './lib/roles';
+import BoardAdmin from './components/admin/BoardAdmin';
+import { canModerate, isAdmin } from './lib/roles';
 
 function App() {
   return (
@@ -26,6 +27,9 @@ function App() {
         </Route>
         <Route element={<ProtectedRoute allow={canModerate} />}>
           <Route path="moderator" element={<Moderator />} />
+        </Route>
+        <Route element={<ProtectedRoute allow={isAdmin} />}>
+          <Route path="admin" element={<BoardAdmin />} />
         </Route>
       </Route>
     </Routes>
