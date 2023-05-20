@@ -13,6 +13,13 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    public Task<List<User>> GetAllAsync() =>
+        _context.Users
+            .AsNoTracking()
+            .Include(u => u.Groups)
+            .OrderBy(u => u.LastName).ThenBy(u => u.FirstName)
+            .ToListAsync();
+
     public Task<User?> GetByIdAsync(int id) =>
         _context.Users.Include(u => u.Groups).FirstOrDefaultAsync(u => u.Id == id);
 

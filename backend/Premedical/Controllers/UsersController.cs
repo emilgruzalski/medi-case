@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Premedical.Authentication;
 using Premedical.DataTransferObjects;
 using Premedical.Extensions;
 using Premedical.Services.Interfaces;
@@ -42,8 +43,34 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    [Authorize]
+    [Authorize(Roles = Roles.Admin)]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers() =>
+        Ok(await _userService.GetAllAsync());
+
+    [Authorize(Roles = Roles.Admin)]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<UserDTO>> GetUser(int id) =>
         Ok(await _userService.GetByIdAsync(id));
+
+    [Authorize(Roles = Roles.Admin)]
+    [HttpPost]
+    public async Task<ActionResult<UserDTO>> CreateUser(UserAdminPostDTO dto)
+    {
+        var user = await _userService.CreateAsync(dto);
+        return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+    }
+
+    [Authorize(Roles = Roles.Admin)]
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<UserDTO>> UpdateUser(int id, UserAdminUpdateDTO dto) =>
+        Ok(await _userService.UpdateAsync(id, dto));
+
+    [Authorize(Roles = Roles.Admin)]
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteUser(int id)
+    {
+        await _userService.DeleteAsync(id, User.GetUserId());
+        return NoContent();
+    }
 }
