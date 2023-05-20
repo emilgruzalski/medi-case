@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { Box, Paper, Tab, Tabs, Typography } from '@mui/material';
 import UserList from './UserList';
+import GroupList from './GroupList';
 
-const TABS = [{ label: 'Użytkownicy', component: <UserList /> }];
+const TABS = [
+  { label: 'Użytkownicy', component: <UserList /> },
+  { label: 'Grupy', component: <GroupList /> },
+];
 
 function BoardAdmin() {
   const [tab, setTab] = useState(0);

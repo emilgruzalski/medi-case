@@ -151,3 +151,11 @@ export interface PagingParams {
   pageSize: number;
   search?: string;
 }
+
+export interface Group {
+  id: number;
+  name: string;
+  description: string | null;
+  createdAt: string;
+  usersCount: number;
+}
