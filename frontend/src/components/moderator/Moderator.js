@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
+import {
+  Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Stack, ToggleButton, ToggleButtonGroup, Typography,
+  useMediaQuery,
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import ModeratorTree from './ModeratorTree';
 import ModeratorEditor from './ModeratorEditor';
 import LanguageList from './LanguageList';
@@ -8,6 +12,9 @@ import { getTree } from '../../network/lib/entity';
 import { getLanguages } from '../../network/lib/language';
 import { getErrorMessage } from '../../lib/errors';
 
+const TREE_VIEW = 'tree';
+const EDITOR_VIEW = 'editor';
+
 function Moderator() {
   const { moderatorLangId, setModeratorLangId } = useStore();
   const [languages, setLanguages] = useState([]);
@@ -15,6 +22,11 @@ function Moderator() {
   const [selectedId, setSelectedId] = useState(null);
   const [error, setError] = useState('');
   const [languagesOpen, setLanguagesOpen] = useState(false);
+  const [mobileView, setMobileView] = useState(TREE_VIEW);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const showTree = !isMobile || mobileView === TREE_VIEW;
+  const showEditor = !isMobile || mobileView === EDITOR_VIEW;
 
   const loadLanguages = useCallback(() => {
     getLanguages()
@@ -47,6 +59,11 @@ function Moderator() {
     loadTree();
   };
 
+  const handleSelect = (node) => {
+    setSelectedId(node.id);
+    setMobileView(EDITOR_VIEW);
+  };
+
   const handleDeleted = (deletedId) => {
     if (deletedId === selectedId) {
       setSelectedId(null);
@@ -55,8 +72,8 @@ function Moderator() {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 3 }}>
+    <Box sx={{ p: { xs: 2, md: 3 } }}>
+      <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 3, rowGap: 1 }} flexWrap="wrap">
         <Typography variant="h5" component="h1" sx={{ flexGrow: 1 }}>
           Zarządzanie treścią
         </Typography>
@@ -75,18 +92,29 @@ function Moderator() {
         </Button>
       </Stack>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      {isMobile && (
+        <ToggleButtonGroup exclusive fullWidth size="small" value={mobileView} sx={{ mb: 2 }}
+          onChange={(e, value) => value && setMobileView(value)}>
+          <ToggleButton value={TREE_VIEW}>Drzewo</ToggleButton>
+          <ToggleButton value={EDITOR_VIEW} disabled={!selectedId}>Edycja</ToggleButton>
+        </ToggleButtonGroup>
+      )}
       <Grid container spacing={3}>
-        <Grid item xs={12} md={5} lg={4}>
-          <ModeratorTree tree={tree} langId={moderatorLangId} selectedId={selectedId}
-            onSelect={(node) => setSelectedId(node.id)} onChanged={handleChanged} onDeleted={handleDeleted} />
-        </Grid>
-        <Grid item xs={12} md={7} lg={8}>
-          {selectedId && moderatorLangId ? (
-            <ModeratorEditor entityId={selectedId} langId={moderatorLangId} languages={languages} onSaved={loadTree} />
-          ) : (
-            <Typography color="text.secondary">Wybierz element drzewa, aby go edytować.</Typography>
-          )}
-        </Grid>
+        {showTree && (
+          <Grid item xs={12} md={5} lg={4}>
+            <ModeratorTree tree={tree} langId={moderatorLangId} selectedId={selectedId}
+              onSelect={handleSelect} onChanged={handleChanged} onDeleted={handleDeleted} />
+          </Grid>
+        )}
+        {showEditor && (
+          <Grid item xs={12} md={7} lg={8}>
+            {selectedId && moderatorLangId ? (
+              <ModeratorEditor entityId={selectedId} langId={moderatorLangId} languages={languages} onSaved={loadTree} />
+            ) : (
+              <Typography color="text.secondary">Wybierz element drzewa, aby go edytować.</Typography>
+            )}
+          </Grid>
+        )}
       </Grid>
       <LanguageList open={languagesOpen} languages={languages} onClose={() => setLanguagesOpen(false)}
         onChanged={loadLanguages} />
