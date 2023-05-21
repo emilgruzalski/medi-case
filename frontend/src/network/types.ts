@@ -159,3 +159,17 @@ export interface Group {
   createdAt: string;
   usersCount: number;
 }
+
+export interface UserAdminRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: Role;
+  groupIds: number[];
+  password?: string;
+}
+
+export interface GroupRequest {
+  name: string;
+  description: string | null;
+}

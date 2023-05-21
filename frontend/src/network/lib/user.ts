@@ -1,5 +1,7 @@
 import apiClient from '../apiClient';
-import { ChangePasswordRequest, PagedResult, PagingParams, RegisterRequest, UpdateUserRequest, User } from '../types';
+import {
+  ChangePasswordRequest, PagedResult, PagingParams, RegisterRequest, UpdateUserRequest, User, UserAdminRequest,
+} from '../types';
 
 export const register = (user: RegisterRequest) =>
   apiClient.post<User>('/Users/register', user).then((r) => r.data);
@@ -13,3 +15,10 @@ export const changePassword = (request: ChangePasswordRequest) => apiClient.put(
 
 export const getUsers = (params: PagingParams) =>
   apiClient.get<PagedResult<User>>('/Users', { params }).then((r) => r.data);
+
+export const createUser = (user: UserAdminRequest) => apiClient.post<User>('/Users', user).then((r) => r.data);
+
+export const updateUser = (id: number, user: UserAdminRequest) =>
+  apiClient.put<User>(`/Users/${id}`, user).then((r) => r.data);
+
+export const deleteUser = (id: number) => apiClient.delete(`/Users/${id}`);
