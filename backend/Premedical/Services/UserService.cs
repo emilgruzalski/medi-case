@@ -50,8 +50,13 @@ public class UserService : IUserService
         return _mapper.Map<UserDTO>(user);
     }
 
-    public async Task<IEnumerable<UserDTO>> GetAllAsync() =>
-        _mapper.Map<IEnumerable<UserDTO>>(await _userRepository.GetAllAsync());
+    public async Task<PagedResultDTO<UserDTO>> GetPageAsync(PagingParameters parameters)
+    {
+        var search = parameters.NormalizedSearch;
+        var users = await _userRepository.GetPageAsync(search, parameters.Skip, parameters.PageSize);
+        var total = await _userRepository.CountAsync(search);
+        return new PagedResultDTO<UserDTO>(_mapper.Map<IEnumerable<UserDTO>>(users), total, parameters);
+    }
 
     public async Task<UserDTO> CreateAsync(UserAdminPostDTO dto)
     {

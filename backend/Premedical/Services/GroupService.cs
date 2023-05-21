@@ -20,8 +20,13 @@ public class GroupService : IGroupService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<GroupDTO>> GetAllAsync() =>
-        _mapper.Map<IEnumerable<GroupDTO>>(await _groupRepository.GetAllAsync());
+    public async Task<PagedResultDTO<GroupDTO>> GetPageAsync(PagingParameters parameters)
+    {
+        var search = parameters.NormalizedSearch;
+        var groups = await _groupRepository.GetPageAsync(search, parameters.Skip, parameters.PageSize);
+        var total = await _groupRepository.CountAsync(search);
+        return new PagedResultDTO<GroupDTO>(_mapper.Map<IEnumerable<GroupDTO>>(groups), total, parameters);
+    }
 
     public async Task<GroupDTO> GetByIdAsync(int id) =>
         _mapper.Map<GroupDTO>(await GetGroupOrThrowAsync(id));

@@ -19,8 +19,8 @@ public class GroupsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GroupDTO>>> GetGroups() =>
-        Ok(await _groupService.GetAllAsync());
+    public async Task<ActionResult<PagedResultDTO<GroupDTO>>> GetGroups([FromQuery] PagingParameters parameters) =>
+        Ok(await _groupService.GetPageAsync(parameters));
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<GroupDTO>> GetGroup(int id) =>

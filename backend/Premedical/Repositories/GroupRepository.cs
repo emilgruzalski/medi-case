@@ -13,8 +13,16 @@ public class GroupRepository : IGroupRepository
         _context = context;
     }
 
-    public Task<List<Group>> GetAllAsync() =>
-        _context.Groups.AsNoTracking().Include(g => g.Users).OrderBy(g => g.Name).ToListAsync();
+    public Task<List<Group>> GetPageAsync(string? search, int skip, int take) =>
+        Filter(search)
+            .AsNoTracking()
+            .Include(g => g.Users)
+            .OrderBy(g => g.Name)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync();
+
+    public Task<int> CountAsync(string? search) => Filter(search).CountAsync();
 
     public Task<Group?> GetByIdAsync(int id) =>
         _context.Groups.Include(g => g.Users).ThenInclude(u => u.Groups).FirstOrDefaultAsync(g => g.Id == id);
@@ -30,4 +38,7 @@ public class GroupRepository : IGroupRepository
     public void Remove(Group group) => _context.Groups.Remove(group);
 
     public Task SaveChangesAsync() => _context.SaveChangesAsync();
+
+    private IQueryable<Group> Filter(string? search) =>
+        search is null ? _context.Groups : _context.Groups.Where(g => g.Name.Contains(search));
 }

@@ -45,8 +45,8 @@ public class UsersController : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers() =>
-        Ok(await _userService.GetAllAsync());
+    public async Task<ActionResult<PagedResultDTO<UserDTO>>> GetUsers([FromQuery] PagingParameters parameters) =>
+        Ok(await _userService.GetPageAsync(parameters));
 
     [Authorize(Roles = Roles.Admin)]
     [HttpGet("{id:int}")]

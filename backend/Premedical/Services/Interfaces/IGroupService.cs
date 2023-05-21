@@ -4,7 +4,7 @@ namespace Premedical.Services.Interfaces;
 
 public interface IGroupService
 {
-    Task<IEnumerable<GroupDTO>> GetAllAsync();
+    Task<PagedResultDTO<GroupDTO>> GetPageAsync(PagingParameters parameters);
     Task<GroupDTO> GetByIdAsync(int id);
     Task<IEnumerable<UserDTO>> GetUsersAsync(int id);
     Task<GroupDTO> CreateAsync(GroupPostDTO dto);
