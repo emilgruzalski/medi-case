@@ -49,6 +49,13 @@ public class SynchronizationService : ISynchronizationService
         return result;
     }
 
+    public async Task<PendingChangesDTO> GetPendingChangesAsync(int langId)
+    {
+        var moderator = await ContentSnapshot.LoadAsync(_moderatorContext);
+        await using var published = _publishedContextFactory.CreateDbContext();
+        return PendingChangesCalculator.Calculate(moderator, await ContentSnapshot.LoadAsync(published), langId);
+    }
+
     private async Task<int> RemoveUnusedFilesAsync(ContentSnapshot snapshot)
     {
         // Files added by moderators after the snapshot was taken must stay on disk as well.

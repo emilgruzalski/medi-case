@@ -18,6 +18,10 @@ public class SynchronizationController : ControllerBase
         _synchronizationService = synchronizationService;
     }
 
+    [HttpGet("changes")]
+    public async Task<ActionResult<PendingChangesDTO>> GetPendingChanges([FromQuery] int langId) =>
+        Ok(await _synchronizationService.GetPendingChangesAsync(langId));
+
     [HttpPost]
     public async Task<ActionResult<SynchronizationResultDTO>> Publish() =>
         Ok(await _synchronizationService.SynchronizeAsync());
