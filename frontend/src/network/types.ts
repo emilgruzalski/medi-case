@@ -173,3 +173,29 @@ export interface GroupRequest {
   name: string;
   description: string | null;
 }
+
+export type PendingChangeType = 'Added' | 'Modified' | 'Removed';
+
+export interface PendingEntityChange {
+  entityId: string;
+  typeId: number;
+  title: string;
+  changeType: PendingChangeType;
+  modifiedAt: string;
+}
+
+export interface PendingChanges {
+  languagesChanged: boolean;
+  hasChanges: boolean;
+  entities: PendingEntityChange[];
+}
+
+export interface SynchronizationResult {
+  publishedAt: string;
+  languages: number;
+  entities: number;
+  translations: number;
+  files: number;
+  dictionaryEntries: number;
+  removedFiles: number;
+}

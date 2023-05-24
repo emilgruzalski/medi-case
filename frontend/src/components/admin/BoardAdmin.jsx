@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Box, Paper, Tab, Tabs, Typography } from '@mui/material';
 import UserList from './UserList';
 import GroupList from './GroupList';
+import ModeratorReview from '../user/ModeratorReview';
 
 const TABS = [
   { label: 'Użytkownicy', component: <UserList /> },
   { label: 'Grupy', component: <GroupList /> },
+  { label: 'Publikacja', component: <ModeratorReview /> },
 ];
 
 function BoardAdmin() {
