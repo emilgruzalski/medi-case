@@ -1,5 +1,5 @@
 import apiClient from '../apiClient';
-import { DictionaryEntry, EntityContent, Language, TreeNode } from '../types';
+import { DictionaryEntry, EntityContent, EntitySearchResult, Language, TreeNode } from '../types';
 
 // Learners read only the published content.
 
@@ -18,3 +18,6 @@ export const getLearningDictionary = (entityId: string, langId: number) =>
 
 export const getLearningFileObjectUrl = (fileId: string) =>
   apiClient.get<Blob>(`/Learning/files/${fileId}`, { responseType: 'blob' }).then((r) => URL.createObjectURL(r.data));
+
+export const searchLearning = (query: string, langId: number) =>
+  apiClient.get<EntitySearchResult[]>('/Learning/search', { params: { query, langId } }).then((r) => r.data);

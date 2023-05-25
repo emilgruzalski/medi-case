@@ -199,3 +199,11 @@ export interface SynchronizationResult {
   dictionaryEntries: number;
   removedFiles: number;
 }
+
+export interface EntitySearchResult {
+  entityId: string;
+  typeId: number;
+  title: string;
+  pathIds: string[];
+  path: string[];
+}

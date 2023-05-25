@@ -6,6 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Sidebar from './Sidebar';
 import ContentContainer from './ContentContainer';
 import ContentNavigation from './ContentNavigation';
+import SearchBox from './SearchBox';
 import useStore from '../../state/store';
 import { getLearningTree } from '../../network/lib/learning';
 import { getErrorMessage } from '../../lib/errors';
@@ -46,14 +47,18 @@ function Learning() {
               <Button startIcon={<MenuIcon />} variant="outlined" onClick={() => setDrawerOpen(true)}>
                 Spis treści
               </Button>
-              <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onClick={() => setDrawerOpen(false)}>
-                <Box sx={{ width: 300 }}>
-                  <Sidebar tree={tree} selectedId={entityId} />
+              <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+                <Box sx={{ width: 300, p: 1 }}>
+                  <SearchBox onSelected={() => setDrawerOpen(false)} />
+                  <Box onClick={() => setDrawerOpen(false)}>
+                    <Sidebar tree={tree} selectedId={entityId} />
+                  </Box>
                 </Box>
               </Drawer>
             </Grid>
           ) : (
             <Grid item md={4} lg={3}>
+              <SearchBox />
               <Sidebar tree={tree} selectedId={entityId} />
             </Grid>
           )}
