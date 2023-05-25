@@ -10,4 +10,5 @@ public interface IEntityService
     Task<EntityDTO> UpdateAsync(Guid id, EntityUpdateDTO dto);
     Task<EntityDTO> MoveAsync(Guid id, EntityMoveDTO dto);
     Task DeleteAsync(Guid id);
+    Task<IEnumerable<EntitySearchResultDTO>> SearchAsync(string? query, int langId);
 }

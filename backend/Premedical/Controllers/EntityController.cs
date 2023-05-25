@@ -22,6 +22,10 @@ public class EntityController : ControllerBase
     public async Task<ActionResult<EntityDTO>> GetEntity(Guid id) =>
         Ok(await _entityService.GetByIdAsync(id));
 
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<EntitySearchResultDTO>>> Search([FromQuery] string? query, [FromQuery] int langId) =>
+        Ok(await _entityService.SearchAsync(query, langId));
+
     [HttpGet("{id:guid}/children")]
     public async Task<ActionResult<EntityWithTranslationDTO>> GetEntityWithChildren(Guid id, [FromQuery] int langId) =>
         Ok(await _entityService.GetWithChildrenAsync(id, langId));

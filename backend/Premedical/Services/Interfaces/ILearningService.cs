@@ -9,4 +9,5 @@ public interface ILearningService
     Task<EntityWithTranslationDTO> GetEntityAsync(Guid id, int langId);
     Task<IEnumerable<EntityDictionaryMainDTO>> GetDictionaryAsync(Guid entityId, int langId);
     Task<FileDownload> DownloadFileAsync(Guid fileId);
+    Task<IEnumerable<EntitySearchResultDTO>> SearchAsync(string? query, int langId);
 }

@@ -134,6 +134,9 @@ public class EntityService : IEntityService
         await _entityRepository.SaveChangesAsync();
     }
 
+    public async Task<IEnumerable<EntitySearchResultDTO>> SearchAsync(string? query, int langId) =>
+        EntitySearch.Search(await _graphDataRepository.GetEntitiesForTreeAsync(), query, langId);
+
     private async Task ValidateParentAsync(int typeId, Guid? parentId)
     {
         int? parentTypeId = null;

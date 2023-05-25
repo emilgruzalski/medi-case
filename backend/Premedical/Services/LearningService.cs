@@ -66,6 +66,13 @@ public class LearningService : ILearningService
         return new FileDownload(_fileService.OpenRead(file.FilePath), file.ContentType, file.FileName);
     }
 
+    public async Task<IEnumerable<EntitySearchResultDTO>> SearchAsync(string? query, int langId)
+    {
+        await using var context = _publishedContextFactory.CreateDbContext();
+        var entities = await new EntityGraphDataRepository(context).GetEntitiesForTreeAsync();
+        return EntitySearch.Search(EntityTreeBuilder.WithoutBlocked(entities), query, langId);
+    }
+
     private static async Task EnsureLanguageExistsAsync(MedicalContext context, int langId)
     {
         if (!await context.EntityLanguages.AnyAsync(l => l.Id == langId))

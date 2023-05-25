@@ -25,6 +25,10 @@ public class LearningController : ControllerBase
     public async Task<ActionResult<IEnumerable<EntityGraphObjectDTO>>> GetTree([FromQuery] int langId) =>
         Ok(await _learningService.GetTreeAsync(langId));
 
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<EntitySearchResultDTO>>> Search([FromQuery] string? query, [FromQuery] int langId) =>
+        Ok(await _learningService.SearchAsync(query, langId));
+
     [HttpGet("entity/{id:guid}")]
     public async Task<ActionResult<EntityWithTranslationDTO>> GetEntity(Guid id, [FromQuery] int langId) =>
         Ok(await _learningService.GetEntityAsync(id, langId));
