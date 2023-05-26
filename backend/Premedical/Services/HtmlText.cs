@@ -6,6 +6,7 @@ namespace Premedical.Services;
 public static class HtmlText
 {
     private static readonly Regex TagPattern = new("(<[^>]+>)", RegexOptions.Compiled);
+    private static readonly Regex BlockTagPattern = new(@"</?(p|br|li|ol|ul|div|h[1-6])\b[^>]*>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     private static readonly Regex WhitespacePattern = new(@"\s+", RegexOptions.Compiled);
 
     /// <summary>Splits HTML into tags and text segments, keeping both.</summary>
@@ -23,7 +24,8 @@ public static class HtmlText
         if (string.IsNullOrWhiteSpace(html))
             return string.Empty;
 
-        var withoutTags = TagPattern.Replace(html, " ");
+        // Block elements separate words, inline elements (bold, italic) do not.
+        var withoutTags = TagPattern.Replace(BlockTagPattern.Replace(html, " "), string.Empty);
         return WhitespacePattern.Replace(Decode(withoutTags), " ").Trim();
     }
 }
