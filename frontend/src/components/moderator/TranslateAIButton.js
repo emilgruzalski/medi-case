@@ -1,15 +1,13 @@
 import { useState } from 'react';
-import { Button, CircularProgress, Menu, MenuItem, Snackbar } from '@mui/material';
+import { Button, CircularProgress, Menu, MenuItem } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ConfirmDialog from '../common/ConfirmDialog';
 import { translateWithAi } from '../../network/lib/ai';
-import { getErrorMessage } from '../../lib/errors';
 
-function TranslateAIButton({ entity, langId, languages, onDone }) {
+function TranslateAIButton({ entity, langId, languages, onDone, onError }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [source, setSource] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const sources = entity.translations.filter((translation) => translation.langId !== langId);
   const hasTarget = entity.translations.some((translation) => translation.langId === langId);
@@ -22,7 +20,7 @@ function TranslateAIButton({ entity, langId, languages, onDone }) {
       await translateWithAi(translation.id, langId);
       onDone();
     } catch (err) {
-      setError(getErrorMessage(err));
+      onError(err);
     } finally {
       setLoading(false);
     }
@@ -54,7 +52,6 @@ function TranslateAIButton({ entity, langId, languages, onDone }) {
       <ConfirmDialog open={Boolean(source)} title="Nadpisać tłumaczenie?" confirmLabel="Nadpisz"
         message="Obecny tytuł i treść w tym języku zostaną zastąpione tłumaczeniem wygenerowanym przez AI."
         onConfirm={() => translate(source)} onClose={() => setSource(null)} />
-      <Snackbar open={Boolean(error)} autoHideDuration={5000} onClose={() => setError('')} message={error} />
     </>
   );
 }

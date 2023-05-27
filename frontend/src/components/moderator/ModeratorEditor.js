@@ -11,7 +11,7 @@ import SoundAIButton from './SoundAIButton';
 import EntitySettings from './EntitySettings';
 import { getEntity } from '../../network/lib/entity';
 import { createTranslation, updateTranslation } from '../../network/lib/translation';
-import { getErrorMessage } from '../../lib/errors';
+import { getAiErrorMessage, getErrorMessage } from '../../lib/errors';
 import { EntityTypes, findTranslation, isBlankHtml, typeLabel } from '../../lib/utility';
 
 const QUILL_MODULES = {
@@ -34,6 +34,7 @@ function ModeratorEditor({ entityId, langId, languages, onSaved }) {
   const [tab, setTab] = useState(EDIT_TAB);
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
+  const [aiError, setAiError] = useState('');
 
   const load = useCallback(() => {
     getEntity(entityId)
@@ -82,9 +83,15 @@ function ModeratorEditor({ entityId, langId, languages, onSaved }) {
       </Stack>
       <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
         <TranslateAIButton entity={entity} langId={langId} languages={languages}
-          onDone={() => { load(); onSaved(); }} />
-        <SoundAIButton translation={translation} onDone={load} />
+          onDone={() => { setAiError(''); load(); onSaved(); }} onError={(err) => setAiError(getAiErrorMessage(err))} />
+        <SoundAIButton translation={translation} onDone={() => { setAiError(''); load(); }}
+          onError={(err) => setAiError(getAiErrorMessage(err))} />
       </Stack>
+      {aiError && (
+        <Alert severity="warning" sx={{ mb: 2 }} onClose={() => setAiError('')}>
+          {aiError}
+        </Alert>
+      )}
       <EntitySettings entity={entity} onChanged={() => { load(); onSaved(); }}
         onError={(err) => setError(getErrorMessage(err))} />
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
