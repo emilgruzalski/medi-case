@@ -10,6 +10,7 @@ import LanguageList from './LanguageList';
 import useStore from '../../state/store';
 import { getTree } from '../../network/lib/entity';
 import { getLanguages } from '../../network/lib/language';
+import { getEntityTypes } from '../../network/lib/entityType';
 import { getErrorMessage } from '../../lib/errors';
 
 const TREE_VIEW = 'tree';
@@ -19,6 +20,7 @@ function Moderator() {
   const { moderatorLangId, setModeratorLangId } = useStore();
   const [languages, setLanguages] = useState([]);
   const [tree, setTree] = useState([]);
+  const [types, setTypes] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [error, setError] = useState('');
   const [languagesOpen, setLanguagesOpen] = useState(false);
@@ -40,6 +42,12 @@ function Moderator() {
   }, [moderatorLangId, setModeratorLangId]);
 
   useEffect(loadLanguages, [loadLanguages]);
+
+  useEffect(() => {
+    getEntityTypes()
+      .then(setTypes)
+      .catch((err) => setError(getErrorMessage(err)));
+  }, []);
 
   const loadTree = useCallback(() => {
     if (!moderatorLangId) {
@@ -102,7 +110,7 @@ function Moderator() {
       <Grid container spacing={3}>
         {showTree && (
           <Grid item xs={12} md={5} lg={4}>
-            <ModeratorTree tree={tree} langId={moderatorLangId} selectedId={selectedId}
+            <ModeratorTree tree={tree} types={types} langId={moderatorLangId} selectedId={selectedId}
               onSelect={handleSelect} onChanged={handleChanged} onDeleted={handleDeleted} />
           </Grid>
         )}

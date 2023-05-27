@@ -6,12 +6,14 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import AddNodeDialog from './AddNodeDialog';
 import ConfirmDialog from '../common/ConfirmDialog';
 import { deleteEntity } from '../../network/lib/entity';
-import { typeIcon } from '../../lib/utility';
+import { allowedChildTypes, typeIcon } from '../../lib/utility';
 
 const INDENT_STEP = 2;
 const TREE_MAX_HEIGHT = 'calc(100vh - 260px)';
 
-function TreeItem({ node, depth, selectedId, onSelect, onAdd, onDelete }) {
+function TreeItem({ node, depth, selectedId, types, onSelect, onAdd, onDelete }) {
+  const canHaveChildren = allowedChildTypes(types, node.typeId).length > 0;
+
   return (
     <>
       <ListItemButton selected={node.id === selectedId} sx={{ pl: 1 + depth * INDENT_STEP }} onClick={() => onSelect(node)}>
@@ -27,11 +29,13 @@ function TreeItem({ node, depth, selectedId, onSelect, onAdd, onDelete }) {
             <VisibilityOffOutlinedIcon fontSize="small" color="action" sx={{ mx: 0.5 }} />
           </Tooltip>
         )}
-        <Tooltip title="Dodaj element">
-          <IconButton size="small" onClick={(e) => { e.stopPropagation(); onAdd(node); }}>
-            <AddIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
+        {canHaveChildren && (
+          <Tooltip title="Dodaj element">
+            <IconButton size="small" onClick={(e) => { e.stopPropagation(); onAdd(node); }}>
+              <AddIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
         <Tooltip title="Usuń">
           <IconButton size="small" onClick={(e) => { e.stopPropagation(); onDelete(node); }}>
             <DeleteOutlineIcon fontSize="small" />
@@ -39,14 +43,14 @@ function TreeItem({ node, depth, selectedId, onSelect, onAdd, onDelete }) {
         </Tooltip>
       </ListItemButton>
       {node.children.map((child) => (
-        <TreeItem key={child.id} node={child} depth={depth + 1} selectedId={selectedId}
+        <TreeItem key={child.id} node={child} depth={depth + 1} selectedId={selectedId} types={types}
           onSelect={onSelect} onAdd={onAdd} onDelete={onDelete} />
       ))}
     </>
   );
 }
 
-function ModeratorTree({ tree, langId, selectedId, onSelect, onChanged, onDeleted }) {
+function ModeratorTree({ tree, types, langId, selectedId, onSelect, onChanged, onDeleted }) {
   const [addParent, setAddParent] = useState(undefined);
   const [toDelete, setToDelete] = useState(null);
 
@@ -65,7 +69,7 @@ function ModeratorTree({ tree, langId, selectedId, onSelect, onChanged, onDelete
       </Box>
       <List dense sx={{ maxHeight: TREE_MAX_HEIGHT, overflowY: 'auto' }}>
         {tree.map((node) => (
-          <TreeItem key={node.id} node={node} depth={0} selectedId={selectedId}
+          <TreeItem key={node.id} node={node} depth={0} selectedId={selectedId} types={types}
             onSelect={onSelect} onAdd={setAddParent} onDelete={setToDelete} />
         ))}
       </List>
@@ -73,6 +77,7 @@ function ModeratorTree({ tree, langId, selectedId, onSelect, onChanged, onDelete
         open={addParent !== undefined}
         parent={addParent}
         langId={langId}
+        allowedTypeIds={allowedChildTypes(types, addParent?.typeId ?? null)}
         onClose={() => setAddParent(undefined)}
         onCreated={(entity) => {
           setAddParent(undefined);

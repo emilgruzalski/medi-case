@@ -207,3 +207,10 @@ export interface EntitySearchResult {
   pathIds: string[];
   path: string[];
 }
+
+export interface EntityType {
+  id: number;
+  name: string;
+  canBeRoot: boolean;
+  allowedChildTypeIds: number[];
+}

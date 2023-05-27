@@ -6,7 +6,7 @@ import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
-import { Translation, TreeNode } from '../network/types';
+import { EntityType, Translation, TreeNode } from '../network/types';
 
 export const EntityTypes = {
   Category: 1,
@@ -80,3 +80,8 @@ export function findSiblings(nodes: TreeNode[], id: string | undefined): TreeNod
   }
   return undefined;
 }
+
+export const allowedChildTypes = (types: EntityType[], parentTypeId: number | null) =>
+  parentTypeId === null
+    ? types.filter((type) => type.canBeRoot).map((type) => type.id)
+    : types.find((type) => type.id === parentTypeId)?.allowedChildTypeIds ?? [];
