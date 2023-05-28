@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+
+  api:
+    build: .
+    depends_on:
+      - db
+    # The API exits when the database is not ready yet, so let Docker start it again.
+    restart: on-failure
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__MedicalDatabase: "Server=db;Database=MediCase;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True"
+      ConnectionStrings__PublishedDatabase: "Server=db;Database=MediCasePublished;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True"
+      Seed__AdminEmail: admin@medicase.local
+      Seed__AdminPassword: ${ADMIN_PASSWORD}
+      Seed__SampleContent: ${SEED_SAMPLE_CONTENT:-true}
+      Cors__AllowedOrigins__0: ${FRONTEND_ORIGIN:-http://localhost:3000}
+      FileStorage__RootPath: /app/data/files
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+    ports:
+      - "8080:8080"
+    volumes:
+      - files:/app/data/files
+
+volumes:
+  sqldata:
+  files:

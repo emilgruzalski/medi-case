@@ -478,3 +478,6 @@ $RECYCLE.BIN/
 
 # Uploaded files
 MediCaseAPI/Files/
+
+# Local environment variables
+.env
