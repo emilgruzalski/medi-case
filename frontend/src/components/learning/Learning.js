@@ -69,7 +69,9 @@ function Learning() {
                 <ContentNavigation tree={tree} node={node} />
               </>
             ) : (
-              <Typography color="text.secondary">Wybierz temat z listy po lewej stronie.</Typography>
+              <Typography color="text.secondary">
+                {isMobile ? 'Otwórz spis treści, aby wybrać temat.' : 'Wybierz temat z listy po lewej stronie.'}
+              </Typography>
             )}
           </Grid>
         </Grid>

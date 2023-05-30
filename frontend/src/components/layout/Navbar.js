@@ -1,7 +1,9 @@
 import { Link as RouterLink, NavLink } from 'react-router-dom';
-import { AppBar, Box, Button, IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
+import { AppBar, Box, Button, IconButton, Toolbar, Tooltip, Typography, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import TranslateIcon from '@mui/icons-material/Translate';
 import UserBar from './UserBar';
+import NavMenu from './NavMenu';
 import Logo from '../common/Logo';
 import useStore from '../../state/store';
 import { canModerate, isAdmin } from '../../lib/roles';
@@ -19,6 +21,14 @@ function NavButton({ to, children }) {
 function Navbar() {
   const user = useStore((state) => state.user);
   const isLoggedIn = useStore((state) => Boolean(state.token));
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const links = [
+    { to: '/learning', label: 'Nauka' },
+    canModerate(user) && { to: '/moderator', label: 'Moderator' },
+    isAdmin(user) && { to: '/admin', label: 'Administracja' },
+  ].filter(Boolean);
 
   return (
     <AppBar position="sticky" elevation={1}>
@@ -30,13 +40,8 @@ function Navbar() {
           sx={{ color: 'inherit', textDecoration: 'none', mr: 3, display: { xs: 'none', sm: 'block' } }}>
           MediCase
         </Typography>
-        {isLoggedIn && (
-          <>
-            <NavButton to="/learning">Nauka</NavButton>
-            {canModerate(user) && <NavButton to="/moderator">Moderator</NavButton>}
-            {isAdmin(user) && <NavButton to="/admin">Administracja</NavButton>}
-          </>
-        )}
+        {isLoggedIn && isMobile && <NavMenu links={links} />}
+        {isLoggedIn && !isMobile && links.map((link) => <NavButton key={link.to} to={link.to}>{link.label}</NavButton>)}
         <Box sx={{ flexGrow: 1 }} />
         {isLoggedIn ? (
           <>
