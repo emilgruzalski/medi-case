@@ -14,9 +14,8 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
-        ISystemClock clock,
         ISessionService sessionService)
-        : base(options, logger, encoder, clock)
+        : base(options, logger, encoder)
     {
         _sessionService = sessionService;
     }
