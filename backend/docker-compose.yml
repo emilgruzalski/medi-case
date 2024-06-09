@@ -23,13 +23,13 @@ services:
       Seed__AdminPassword: ${ADMIN_PASSWORD}
       Seed__SampleContent: ${SEED_SAMPLE_CONTENT:-true}
       Cors__AllowedOrigins__0: ${FRONTEND_ORIGIN:-http://localhost:3000}
-      FileStorage__RootPath: /app/data/files
+      FileStorage__RootPath: /home/app/files
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
     ports:
       - "8080:8080"
     volumes:
-      - files:/app/data/files
+      - files:/home/app/files
 
 volumes:
   sqldata:
