@@ -30,6 +30,8 @@ builder.Services.AddAWSService<IAmazonPolly>();
 builder.Services.AddAuthentication(SessionAuthenticationDefaults.Scheme)
     .AddScheme<AuthenticationSchemeOptions, SessionAuthenticationHandler>(SessionAuthenticationDefaults.Scheme, null);
 builder.Services.AddAuthorization();
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<MedicalContext>();
 builder.Services.AddCors(options =>
     options.AddPolicy(FrontendCorsPolicy, policy => policy
         .WithOrigins(builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>())
@@ -65,5 +67,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();
