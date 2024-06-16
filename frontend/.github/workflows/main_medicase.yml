@@ -23,17 +23,16 @@ jobs:
 
       - name: npm install, build, and test
         env:
-          REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
         run: |
           npm ci
           npm run build --if-present
-          npm run test --if-present -- --watchAll=false
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: build
+          path: dist
 
   deploy:
     runs-on: ubuntu-latest

@@ -4,7 +4,7 @@ import useStore from '../state/store';
 const HTTP_UNAUTHORIZED = 401;
 
 const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 const applyToken = (token: string | null) => {
