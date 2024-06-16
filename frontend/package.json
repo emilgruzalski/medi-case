@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -22,16 +23,17 @@
     "zustand": "^4.3.2"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/dompurify": "^2.4.0",
-    "@types/jest": "^29.4.0",
     "@types/node": "^18.14.1",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^4.3.1",
+    "jsdom": "^24.1.0",
     "typescript": "~5.4.5",
-    "vite": "^5.3.1"
+    "vite": "^5.3.1",
+    "vitest": "^1.6.0"
   }
 }
