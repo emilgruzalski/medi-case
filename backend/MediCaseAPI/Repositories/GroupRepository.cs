@@ -40,5 +40,5 @@ public class GroupRepository : IGroupRepository
     public Task SaveChangesAsync() => _context.SaveChangesAsync();
 
     private IQueryable<Group> Filter(string? search) =>
-        search is null ? _context.Groups : _context.Groups.Where(g => g.Name.Contains(search));
+        search is null ? _context.Groups : _context.Groups.Where(g => EF.Functions.ILike(g.Name, $"%{search}%"));
 }

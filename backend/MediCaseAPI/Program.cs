@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<MedicalContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalDatabase")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("MedicalDatabase")));
 builder.Services.AddSingleton<IPublishedContextFactory>(
     new PublishedContextFactory(builder.Configuration.GetConnectionString("PublishedDatabase")!));
 builder.Services.AddAutoMapper(typeof(Program));

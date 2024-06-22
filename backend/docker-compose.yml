@@ -1,13 +1,14 @@
 services:
   db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: postgres:16.3
     environment:
-      ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: medicase
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: medicase
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - sqldata:/var/opt/mssql
+      - pgdata:/var/lib/postgresql/data
 
   api:
     build: .
@@ -17,8 +18,8 @@ services:
     restart: on-failure
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__MedicalDatabase: "Server=db;Database=MediCase;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True"
-      ConnectionStrings__PublishedDatabase: "Server=db;Database=MediCasePublished;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True"
+      ConnectionStrings__MedicalDatabase: "Host=db;Database=medicase;Username=medicase;Password=${DB_PASSWORD}"
+      ConnectionStrings__PublishedDatabase: "Host=db;Database=medicase_published;Username=medicase;Password=${DB_PASSWORD}"
       Seed__AdminEmail: admin@medicase.local
       Seed__AdminPassword: ${ADMIN_PASSWORD}
       Seed__SampleContent: ${SEED_SAMPLE_CONTENT:-true}
@@ -32,5 +33,5 @@ services:
       - files:/home/app/files
 
 volumes:
-  sqldata:
+  pgdata:
   files:

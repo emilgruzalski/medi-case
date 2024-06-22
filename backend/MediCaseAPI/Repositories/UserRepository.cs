@@ -43,5 +43,7 @@ public class UserRepository : IUserRepository
         search is null
             ? _context.Users
             : _context.Users.Where(u =>
-                u.Email.Contains(search) || u.FirstName.Contains(search) || u.LastName.Contains(search));
+                EF.Functions.ILike(u.Email, $"%{search}%") ||
+                EF.Functions.ILike(u.FirstName, $"%{search}%") ||
+                EF.Functions.ILike(u.LastName, $"%{search}%"));
 }

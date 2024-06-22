@@ -9,7 +9,7 @@ public class PublishedContextFactory : IPublishedContextFactory
     public PublishedContextFactory(string connectionString)
     {
         _options = new DbContextOptionsBuilder<MedicalContext>()
-            .UseSqlServer(connectionString)
+            .UseNpgsql(connectionString)
             .Options;
     }
 

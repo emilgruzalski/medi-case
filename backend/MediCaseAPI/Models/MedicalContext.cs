@@ -46,8 +46,6 @@ public partial class MedicalContext : DbContext
 
         modelBuilder.Entity<Entity>(entity =>
         {
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
-            entity.Property(e => e.ModifiedAt).HasColumnType("datetime");
 
             entity.HasOne(d => d.Type).WithMany(p => p.Entities)
                 .HasForeignKey(d => d.TypeId)
@@ -80,7 +78,6 @@ public partial class MedicalContext : DbContext
         {
             entity.HasIndex(e => new { e.EntityId, e.LangId }).IsUnique();
             entity.Property(e => e.Title).HasMaxLength(FieldLengths.Title);
-            entity.Property(e => e.ModifiedAt).HasColumnType("datetime");
 
             entity.HasOne(d => d.Entity).WithMany(p => p.EntityTranslations)
                 .HasForeignKey(d => d.EntityId)
@@ -96,7 +93,6 @@ public partial class MedicalContext : DbContext
             entity.Property(e => e.FileName).HasMaxLength(FieldLengths.FileName);
             entity.Property(e => e.FilePath).HasMaxLength(FieldLengths.FilePath);
             entity.Property(e => e.ContentType).HasMaxLength(FieldLengths.ContentType);
-            entity.Property(e => e.UploadedAt).HasColumnType("datetime");
 
             entity.HasOne(d => d.Translation).WithMany(p => p.EntityTranslationFiles)
                 .HasForeignKey(d => d.TranslationId)
@@ -114,7 +110,6 @@ public partial class MedicalContext : DbContext
             entity.HasIndex(e => e.Name).IsUnique();
             entity.Property(e => e.Name).HasMaxLength(FieldLengths.GroupName);
             entity.Property(e => e.Description).HasMaxLength(FieldLengths.GroupDescription);
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
             entity.HasMany(d => d.Users).WithMany(p => p.Groups)
                 .UsingEntity<Dictionary<string, object>>(
@@ -132,8 +127,6 @@ public partial class MedicalContext : DbContext
         {
             entity.HasIndex(e => e.Token).IsUnique();
             entity.Property(e => e.Token).HasMaxLength(FieldLengths.SessionToken);
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
-            entity.Property(e => e.ExpiresAt).HasColumnType("datetime");
 
             entity.HasOne(d => d.User).WithMany(p => p.Sessions)
                 .HasForeignKey(d => d.UserId)
@@ -147,8 +140,6 @@ public partial class MedicalContext : DbContext
             entity.Property(e => e.FirstName).HasMaxLength(FieldLengths.PersonName);
             entity.Property(e => e.LastName).HasMaxLength(FieldLengths.PersonName);
             entity.Property(e => e.Role).HasMaxLength(FieldLengths.Role);
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
-            entity.Property(e => e.LastLoginAt).HasColumnType("datetime");
         });
 
         OnModelCreatingPartial(modelBuilder);
