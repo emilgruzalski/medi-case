@@ -13,7 +13,7 @@ public class SynchronizationServiceTests
     private readonly TestPublishedContextFactory _published = new();
 
     private SynchronizationService CreateService() =>
-        new(_moderator, _published, new FakeFileService(), NullLogger<SynchronizationService>.Instance);
+        new(_moderator, _published, new FakeFileStorage(), NullLogger<SynchronizationService>.Instance);
 
     [Fact]
     public async Task SynchronizeAsync_CopiesContentToPublishedDatabase()

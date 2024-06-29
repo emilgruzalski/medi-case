@@ -12,18 +12,18 @@ public class SynchronizationService : ISynchronizationService
 {
     private readonly MedicalContext _moderatorContext;
     private readonly IPublishedContextFactory _publishedContextFactory;
-    private readonly IFileService _fileService;
+    private readonly IFileStorage _fileStorage;
     private readonly ILogger<SynchronizationService> _logger;
 
     public SynchronizationService(
         MedicalContext moderatorContext,
         IPublishedContextFactory publishedContextFactory,
-        IFileService fileService,
+        IFileStorage fileStorage,
         ILogger<SynchronizationService> logger)
     {
         _moderatorContext = moderatorContext;
         _publishedContextFactory = publishedContextFactory;
-        _fileService = fileService;
+        _fileStorage = fileStorage;
         _logger = logger;
     }
 
@@ -61,7 +61,7 @@ public class SynchronizationService : ISynchronizationService
         // Files added by moderators after the snapshot was taken must stay on disk as well.
         var moderatorPaths = await _moderatorContext.EntityTranslationFiles.Select(f => f.FilePath).ToListAsync();
         var usedPaths = snapshot.Files.Select(f => f.FilePath).Concat(moderatorPaths).ToHashSet();
-        return _fileService.DeleteUnusedFiles(usedPaths);
+        return await _fileStorage.DeleteUnusedFilesAsync(usedPaths);
     }
 
     private static async Task ClearContentAsync(MedicalContext context)

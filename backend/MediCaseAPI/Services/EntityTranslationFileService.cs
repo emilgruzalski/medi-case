@@ -11,18 +11,21 @@ public class EntityTranslationFileService : IEntityTranslationFileService
 {
     private readonly IEntityTranslationFilesRepository _filesRepository;
     private readonly IEntityTranslationsRepository _translationsRepository;
-    private readonly IFileService _fileService;
+    private readonly IFileStorage _fileStorage;
+    private readonly FileUploadValidator _uploadValidator;
     private readonly IMapper _mapper;
 
     public EntityTranslationFileService(
         IEntityTranslationFilesRepository filesRepository,
         IEntityTranslationsRepository translationsRepository,
-        IFileService fileService,
+        IFileStorage fileStorage,
+        FileUploadValidator uploadValidator,
         IMapper mapper)
     {
         _filesRepository = filesRepository;
         _translationsRepository = translationsRepository;
-        _fileService = fileService;
+        _fileStorage = fileStorage;
+        _uploadValidator = uploadValidator;
         _mapper = mapper;
     }
 
@@ -34,7 +37,13 @@ public class EntityTranslationFileService : IEntityTranslationFileService
         var translation = await _translationsRepository.GetByIdAsync(dto.TranslationId)
             ?? throw new NotFoundException($"Translation with id {dto.TranslationId} was not found.");
 
-        var stored = await _fileService.SaveAsync(dto.File);
+        _uploadValidator.Validate(dto.File);
+        StoredFile stored;
+        await using (var content = dto.File.OpenReadStream())
+        {
+            stored = await _fileStorage.SaveAsync(content, Path.GetExtension(dto.File.FileName), dto.File.ContentType);
+        }
+
         var file = new EntityTranslationFile
         {
             Id = Guid.NewGuid(),
@@ -56,7 +65,7 @@ public class EntityTranslationFileService : IEntityTranslationFileService
     public async Task<FileDownload> DownloadAsync(Guid id)
     {
         var file = await GetFileOrThrowAsync(id);
-        return new FileDownload(_fileService.OpenRead(file.FilePath), file.ContentType, file.FileName);
+        return new FileDownload(await _fileStorage.OpenReadAsync(file.FilePath), file.ContentType, file.FileName);
     }
 
     public async Task DeleteAsync(Guid id)

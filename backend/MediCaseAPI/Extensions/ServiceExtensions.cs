@@ -32,7 +32,8 @@ public static class ServiceExtensions
         services.AddScoped<IEntityTranslationService, EntityTranslationService>();
         services.AddScoped<IEntityDictionaryService, EntityDictionaryService>();
         services.AddScoped<IEntityService, EntityService>();
-        services.AddSingleton<IFileService, FileService>();
+        services.AddSingleton<IFileStorage, LocalFileStorage>();
+        services.AddSingleton<FileUploadValidator>();
         services.AddScoped<IEntityTranslationFileService, EntityTranslationFileService>();
         services.AddScoped<ISynchronizationService, SynchronizationService>();
         services.AddScoped<ILearningService, LearningService>();

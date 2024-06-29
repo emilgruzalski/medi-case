@@ -17,7 +17,7 @@ public class AiContentService : IAiContentService
     private readonly ITextTranslator _translator;
     private readonly ISpeechSynthesizer _speechSynthesizer;
     private readonly IEntityTranslationFilesRepository _filesRepository;
-    private readonly IFileService _fileService;
+    private readonly IFileStorage _fileStorage;
     private readonly IMapper _mapper;
 
     public AiContentService(
@@ -26,7 +26,7 @@ public class AiContentService : IAiContentService
         ITextTranslator translator,
         ISpeechSynthesizer speechSynthesizer,
         IEntityTranslationFilesRepository filesRepository,
-        IFileService fileService,
+        IFileStorage fileStorage,
         IMapper mapper)
     {
         _translationsRepository = translationsRepository;
@@ -34,7 +34,7 @@ public class AiContentService : IAiContentService
         _translator = translator;
         _speechSynthesizer = speechSynthesizer;
         _filesRepository = filesRepository;
-        _fileService = fileService;
+        _fileStorage = fileStorage;
         _mapper = mapper;
     }
 
@@ -75,7 +75,7 @@ public class AiContentService : IAiContentService
         var text = string.IsNullOrEmpty(plainContent) ? translation.Title : $"{translation.Title}. {plainContent}";
 
         await using var audio = await _speechSynthesizer.SynthesizeAsync(text, translation.Lang.LangValue);
-        var stored = await _fileService.SaveAsync(audio, SpeechExtension);
+        var stored = await _fileStorage.SaveAsync(audio, SpeechExtension, SpeechContentType);
 
         var file = new EntityTranslationFile
         {

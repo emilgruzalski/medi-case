@@ -14,13 +14,13 @@ namespace MediCaseAPI.Services;
 public class LearningService : ILearningService
 {
     private readonly IPublishedContextFactory _publishedContextFactory;
-    private readonly IFileService _fileService;
+    private readonly IFileStorage _fileStorage;
     private readonly IMapper _mapper;
 
-    public LearningService(IPublishedContextFactory publishedContextFactory, IFileService fileService, IMapper mapper)
+    public LearningService(IPublishedContextFactory publishedContextFactory, IFileStorage fileStorage, IMapper mapper)
     {
         _publishedContextFactory = publishedContextFactory;
-        _fileService = fileService;
+        _fileStorage = fileStorage;
         _mapper = mapper;
     }
 
@@ -63,7 +63,7 @@ public class LearningService : ILearningService
         var file = await context.EntityTranslationFiles.AsNoTracking().FirstOrDefaultAsync(f => f.Id == fileId)
             ?? throw new NotFoundException($"File with id {fileId} was not found.");
 
-        return new FileDownload(_fileService.OpenRead(file.FilePath), file.ContentType, file.FileName);
+        return new FileDownload(await _fileStorage.OpenReadAsync(file.FilePath), file.ContentType, file.FileName);
     }
 
     public async Task<IEnumerable<EntitySearchResultDTO>> SearchAsync(string? query, int langId)
