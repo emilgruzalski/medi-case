@@ -26,8 +26,8 @@ function Register() {
 
     setLoading(true);
     try {
-      const { confirmPassword, ...user } = form;
-      await register(user);
+      const { email, password, firstName, lastName } = form;
+      await register({ email, password, firstName, lastName });
       navigate('/login', { state: { registered: true } });
     } catch (err) {
       setError(getErrorMessage(err));

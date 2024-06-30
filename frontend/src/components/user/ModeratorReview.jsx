@@ -10,7 +10,8 @@ import EntityPreview from './EntityPreview';
 import { getLanguages } from '../../network/lib/language';
 import { getPendingChanges, publish } from '../../network/lib/sync';
 import { getErrorMessage } from '../../lib/errors';
-import { typeIcon, typeLabel } from '../../lib/utility';
+import { typeLabel } from '../../lib/utility';
+import TypeIcon from '../common/TypeIcon';
 
 const CHANGE_LABELS = { Added: 'Nowe', Modified: 'Zmienione', Removed: 'Usunięte' };
 const CHANGE_COLORS = { Added: 'success', Modified: 'warning', Removed: 'error' };
@@ -89,7 +90,7 @@ function ModeratorReview() {
                 </Button>
               )
             }>
-              <ListItemIcon sx={{ minWidth: 32 }}>{typeIcon(change.typeId)}</ListItemIcon>
+              <ListItemIcon sx={{ minWidth: 32 }}><TypeIcon typeId={change.typeId} /></ListItemIcon>
               <ListItemText primary={change.title}
                 secondary={`${typeLabel(change.typeId)} · ${new Date(change.modifiedAt).toLocaleString('pl-PL')}`} />
               <Chip size="small" sx={{ mr: 12 }} label={CHANGE_LABELS[change.changeType]}

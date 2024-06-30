@@ -5,7 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import useStore from '../../state/store';
 import useDebouncedValue from '../../lib/useDebouncedValue';
 import { searchLearning } from '../../network/lib/learning';
-import { typeIcon } from '../../lib/utility';
+import TypeIcon from '../common/TypeIcon';
 
 const MIN_QUERY_LENGTH = 2;
 
@@ -44,7 +44,7 @@ function SearchBox({ onSelected }) {
           )}
           {results.map((result) => (
             <ListItemButton key={result.entityId} onClick={() => handleSelect(result)}>
-              <ListItemIcon sx={{ minWidth: 32 }}>{typeIcon(result.typeId)}</ListItemIcon>
+              <ListItemIcon sx={{ minWidth: 32 }}><TypeIcon typeId={result.typeId} /></ListItemIcon>
               <ListItemText primary={result.title} secondary={result.path.join(' › ')} />
             </ListItemButton>
           ))}

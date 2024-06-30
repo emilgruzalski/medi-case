@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper } from '@mui/material';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { typeIcon } from '../../lib/utility';
+import TypeIcon from '../common/TypeIcon';
 
 const INDENT_STEP = 2;
 const SIDEBAR_MAX_HEIGHT = 'calc(100vh - 140px)';
@@ -30,7 +30,7 @@ function SidebarItem({ node, depth, selectedId }) {
           sx={{ pl: 2 + depth * INDENT_STEP }}
           onClick={() => navigate(`/learning/${node.id}`)}
         >
-          <ListItemIcon sx={{ minWidth: 32 }}>{typeIcon(node.typeId)}</ListItemIcon>
+          <ListItemIcon sx={{ minWidth: 32 }}><TypeIcon typeId={node.typeId} /></ListItemIcon>
           <ListItemText primary={node.title} />
         </ListItemButton>
       </ListItem>

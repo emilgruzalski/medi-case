@@ -1,11 +1,3 @@
-import { ReactElement } from 'react';
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
-import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
 import { EntityType, Translation, TreeNode } from '../network/types';
 
 export const EntityTypes = {
@@ -28,19 +20,7 @@ const TYPE_LABELS: Record<number, string> = {
   [EntityTypes.TestAnswer]: 'Odpowiedź',
 };
 
-const TYPE_ICONS: Record<number, ReactElement> = {
-  [EntityTypes.Category]: <FolderOutlinedIcon fontSize="small" />,
-  [EntityTypes.Content]: <ArticleOutlinedIcon fontSize="small" />,
-  [EntityTypes.QuestionList]: <ForumOutlinedIcon fontSize="small" />,
-  [EntityTypes.Question]: <ChatBubbleOutlineIcon fontSize="small" />,
-  [EntityTypes.Test]: <QuizOutlinedIcon fontSize="small" />,
-  [EntityTypes.TestQuestion]: <HelpOutlineIcon fontSize="small" />,
-  [EntityTypes.TestAnswer]: <CheckCircleOutlineIcon fontSize="small" />,
-};
-
 export const typeLabel = (typeId: number) => TYPE_LABELS[typeId] ?? 'Element';
-
-export const typeIcon = (typeId: number) => TYPE_ICONS[typeId] ?? <ArticleOutlinedIcon fontSize="small" />;
 
 export const findTranslation = (translations: Translation[], langId: number | null) =>
   translations.find((t) => t.langId === langId);

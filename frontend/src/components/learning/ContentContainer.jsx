@@ -6,7 +6,8 @@ import QuestionsList from './QuestionsList';
 import LanguageTest from './LanguageTest';
 import useEntityInLanguages from '../../lib/useEntityInLanguages';
 import useStore from '../../state/store';
-import { EntityTypes, typeIcon, typeLabel } from '../../lib/utility';
+import { EntityTypes, typeLabel } from '../../lib/utility';
+import TypeIcon from '../common/TypeIcon';
 
 function CategoryView({ node }) {
   const learningLangId = useStore((state) => state.learningLangId);
@@ -23,7 +24,7 @@ function CategoryView({ node }) {
               <CardActionArea component={RouterLink} to={`/learning/${child.id}`}>
                 <CardContent>
                   <Stack direction="row" spacing={1} alignItems="center" color="text.secondary">
-                    {typeIcon(child.typeId)}
+                    <TypeIcon typeId={child.typeId} />
                     <Typography variant="caption">{typeLabel(child.typeId)}</Typography>
                   </Stack>
                   <Typography variant="h6">{child.title}</Typography>

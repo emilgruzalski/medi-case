@@ -6,7 +6,8 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import AddNodeDialog from './AddNodeDialog';
 import ConfirmDialog from '../common/ConfirmDialog';
 import { deleteEntity } from '../../network/lib/entity';
-import { allowedChildTypes, typeIcon } from '../../lib/utility';
+import { allowedChildTypes } from '../../lib/utility';
+import TypeIcon from '../common/TypeIcon';
 
 const INDENT_STEP = 2;
 const TREE_MAX_HEIGHT = 'calc(100vh - 260px)';
@@ -17,7 +18,7 @@ function TreeItem({ node, depth, selectedId, types, onSelect, onAdd, onDelete })
   return (
     <>
       <ListItemButton selected={node.id === selectedId} sx={{ pl: 1 + depth * INDENT_STEP }} onClick={() => onSelect(node)}>
-        <ListItemIcon sx={{ minWidth: 32 }}>{typeIcon(node.typeId)}</ListItemIcon>
+        <ListItemIcon sx={{ minWidth: 32 }}><TypeIcon typeId={node.typeId} /></ListItemIcon>
         <Tooltip title={node.hasTranslation ? '' : 'Brak tłumaczenia w wybranym języku'}>
           <ListItemText
             primary={node.title}
