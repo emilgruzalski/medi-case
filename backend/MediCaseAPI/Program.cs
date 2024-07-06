@@ -27,6 +27,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSService<IAmazonTranslate>();
 builder.Services.AddAWSService<IAmazonPolly>();
+builder.Services.AddFileStorage(builder.Configuration);
 builder.Services.AddAuthentication(SessionAuthenticationDefaults.Scheme)
     .AddScheme<AuthenticationSchemeOptions, SessionAuthenticationHandler>(SessionAuthenticationDefaults.Scheme, null);
 builder.Services.AddAuthorization();
