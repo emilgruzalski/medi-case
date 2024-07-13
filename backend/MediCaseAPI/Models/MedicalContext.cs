@@ -136,6 +136,8 @@ public partial class MedicalContext : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasIndex(e => e.Email).IsUnique();
+            entity.HasIndex(e => e.CognitoUsername).IsUnique();
+            entity.Property(e => e.CognitoUsername).HasMaxLength(FieldLengths.CognitoUsername);
             entity.Property(e => e.Email).HasMaxLength(FieldLengths.Email);
             entity.Property(e => e.FirstName).HasMaxLength(FieldLengths.PersonName);
             entity.Property(e => e.LastName).HasMaxLength(FieldLengths.PersonName);

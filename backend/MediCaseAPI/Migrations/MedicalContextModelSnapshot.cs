@@ -282,6 +282,10 @@ namespace MediCaseAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CognitoUsername")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -304,7 +308,6 @@ namespace MediCaseAPI.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Role")
@@ -313,6 +316,9 @@ namespace MediCaseAPI.Migrations
                         .HasColumnType("character varying(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CognitoUsername")
+                        .IsUnique();
 
                     b.HasIndex("Email")
                         .IsUnique();

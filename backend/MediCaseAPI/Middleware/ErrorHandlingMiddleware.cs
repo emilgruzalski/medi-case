@@ -7,7 +7,7 @@ namespace MediCaseAPI.Middleware;
 public class ErrorHandlingMiddleware
 {
     private const string InternalErrorMessage = "Internal server error.";
-    private const string ExternalServiceMessage = "The AI service is not available. Check the AWS configuration.";
+    private const string ExternalServiceMessage = "An AWS service is not available. Check the AWS configuration.";
 
     private readonly RequestDelegate _next;
     private readonly ILogger<ErrorHandlingMiddleware> _logger;

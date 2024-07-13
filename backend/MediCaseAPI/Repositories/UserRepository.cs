@@ -30,6 +30,9 @@ public class UserRepository : IUserRepository
     public Task<User?> GetByEmailAsync(string email) =>
         _context.Users.Include(u => u.Groups).FirstOrDefaultAsync(u => u.Email == email);
 
+    public Task<User?> GetByCognitoUsernameAsync(string username) =>
+        _context.Users.Include(u => u.Groups).FirstOrDefaultAsync(u => u.CognitoUsername == username);
+
     public Task<bool> EmailExistsAsync(string email) =>
         _context.Users.AnyAsync(u => u.Email == email);
 

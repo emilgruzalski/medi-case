@@ -2,13 +2,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MediCaseAPI.Authentication;
 using MediCaseAPI.DataTransferObjects;
-using MediCaseAPI.Extensions;
 using MediCaseAPI.Services.Interfaces;
 
 namespace MediCaseAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -18,30 +18,13 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
-    [HttpPost("register")]
-    public async Task<ActionResult<UserDTO>> Register(UserRegisterDTO dto)
-    {
-        var user = await _userService.RegisterAsync(dto);
-        return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
-    }
-
-    [Authorize]
     [HttpGet("me")]
     public async Task<ActionResult<UserDTO>> GetCurrentUser() =>
-        Ok(await _userService.GetByIdAsync(User.GetUserId()));
+        Ok(await _userService.GetCurrentAsync(User));
 
-    [Authorize]
     [HttpPut("me")]
     public async Task<ActionResult<UserDTO>> UpdateCurrentUser(UserUpdateDTO dto) =>
-        Ok(await _userService.UpdateProfileAsync(User.GetUserId(), dto));
-
-    [Authorize]
-    [HttpPut("me/password")]
-    public async Task<IActionResult> ChangePassword(UserPasswordDTO dto)
-    {
-        await _userService.ChangePasswordAsync(User.GetUserId(), dto);
-        return NoContent();
-    }
+        Ok(await _userService.UpdateCurrentAsync(User, dto));
 
     [Authorize(Roles = Roles.Admin)]
     [HttpGet]
@@ -70,7 +53,7 @@ public class UsersController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteUser(int id)
     {
-        await _userService.DeleteAsync(id, User.GetUserId());
+        await _userService.DeleteAsync(id, User);
         return NoContent();
     }
 }

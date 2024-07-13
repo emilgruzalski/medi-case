@@ -11,7 +11,6 @@ public static class ServiceExtensions
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<ISessionRepository, SessionRepository>();
         services.AddScoped<IEntityTypeRepository, EntityTypeRepository>();
         services.AddScoped<IEntityLanguageRepository, EntityLanguageRepository>();
         services.AddScoped<IEntityRepository, EntityRepository>();
@@ -27,7 +26,8 @@ public static class ServiceExtensions
     {
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<ISessionService, SessionService>();
+        services.AddScoped<ICognitoUserAdmin, CognitoUserAdmin>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IEntityLanguageService, EntityLanguageService>();
         services.AddScoped<IEntityTranslationService, EntityTranslationService>();
         services.AddScoped<IEntityDictionaryService, EntityDictionaryService>();

@@ -1,8 +1,6 @@
 using Amazon.Polly;
 using Amazon.Translate;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
-using MediCaseAPI.Authentication;
 using MediCaseAPI.Extensions;
 using MediCaseAPI.Middleware;
 using MediCaseAPI.Models;
@@ -19,7 +17,6 @@ builder.Services.AddDbContext<MedicalContext>(options =>
 builder.Services.AddSingleton<IPublishedContextFactory>(
     new PublishedContextFactory(builder.Configuration.GetConnectionString("PublishedDatabase")!));
 builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.Configure<SessionTokenOptions>(builder.Configuration.GetSection(SessionTokenOptions.SectionName));
 builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection(FileStorageOptions.SectionName));
 builder.Services.Configure<SpeechOptions>(builder.Configuration.GetSection(SpeechOptions.SectionName));
 builder.Services.AddRepositories();
@@ -28,8 +25,7 @@ builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSService<IAmazonTranslate>();
 builder.Services.AddAWSService<IAmazonPolly>();
 builder.Services.AddFileStorage(builder.Configuration);
-builder.Services.AddAuthentication(SessionAuthenticationDefaults.Scheme)
-    .AddScheme<AuthenticationSchemeOptions, SessionAuthenticationHandler>(SessionAuthenticationDefaults.Scheme, null);
+builder.Services.AddCognitoAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<MedicalContext>();
@@ -43,7 +39,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerWithSessionAuth();
+builder.Services.AddSwaggerWithBearerAuth();
 
 var app = builder.Build();
 
