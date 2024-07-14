@@ -1,13 +1,13 @@
 import { Outlet } from 'react-router-dom';
 import { Alert, Container } from '@mui/material';
 import LoggedOutInfo from '../user/LoggedOutInfo';
-import useStore from '../../state/store';
+import useStore, { selectIsSignedIn } from '../../state/store';
 
 function ProtectedRoute({ allow }) {
-  const token = useStore((state) => state.token);
+  const isSignedIn = useStore(selectIsSignedIn);
   const user = useStore((state) => state.user);
 
-  if (!token) {
+  if (!isSignedIn) {
     return <LoggedOutInfo />;
   }
   if (allow && !allow(user)) {

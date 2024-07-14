@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Alert, Box, Button, TextField, Typography } from '@mui/material';
-import { changePassword } from '../../network/lib/user';
+import { changePassword } from '../../network/cognito';
+import { getValidAccessToken } from '../../lib/auth';
 import { getErrorMessage } from '../../lib/errors';
 import { validatePassword } from '../../lib/validation';
 
@@ -20,7 +21,7 @@ function ChangePassword() {
       return;
     }
     try {
-      await changePassword({ currentPassword: form.currentPassword, newPassword: form.newPassword });
+      await changePassword(await getValidAccessToken(), form.currentPassword, form.newPassword);
       setForm(EMPTY_FORM);
       setMessage({ severity: 'success', text: 'Hasło zostało zmienione.' });
     } catch (err) {

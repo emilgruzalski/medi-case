@@ -1,4 +1,5 @@
 import { getAiErrorMessage, getErrorMessage } from './errors';
+import { CognitoError } from '../network/cognito';
 
 describe('getErrorMessage', () => {
   it('uses the API message', () => {
@@ -11,6 +12,11 @@ describe('getErrorMessage', () => {
 
   it('reports missing connection', () => {
     expect(getErrorMessage({ request: {} })).toBe('Brak połączenia z serwerem.');
+  });
+
+  it('translates Cognito errors', () => {
+    expect(getErrorMessage(new CognitoError('NotAuthorizedException', 'Incorrect username or password.')))
+      .toBe('Nieprawidłowy e-mail lub hasło.');
   });
 
   it('explains when the AI service is unavailable', () => {

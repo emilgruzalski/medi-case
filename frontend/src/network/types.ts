@@ -16,24 +16,6 @@ export interface GroupSummary {
   name: string;
 }
 
-export interface Session {
-  token: string;
-  expiresAt: string;
-  user: User;
-}
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface RegisterRequest {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-}
-
 export interface Language {
   id: number;
   langValue: string;
@@ -100,14 +82,8 @@ export interface CreateTranslationRequest extends TranslationContent {
 }
 
 export interface UpdateUserRequest {
-  email: string;
   firstName: string;
   lastName: string;
-}
-
-export interface ChangePasswordRequest {
-  currentPassword: string;
-  newPassword: string;
 }
 
 export interface DictionaryEntry {

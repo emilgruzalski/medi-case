@@ -5,7 +5,7 @@ import TranslateIcon from '@mui/icons-material/Translate';
 import UserBar from './UserBar';
 import NavMenu from './NavMenu';
 import Logo from '../common/Logo';
-import useStore from '../../state/store';
+import useStore, { selectIsSignedIn } from '../../state/store';
 import { canModerate, isAdmin } from '../../lib/roles';
 
 const ACTIVE_LINK_STYLE = { '&.active': { bgcolor: 'rgba(255, 255, 255, 0.15)' } };
@@ -20,7 +20,7 @@ function NavButton({ to, children }) {
 
 function Navbar() {
   const user = useStore((state) => state.user);
-  const isLoggedIn = useStore((state) => Boolean(state.token));
+  const isLoggedIn = useStore(selectIsSignedIn);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 

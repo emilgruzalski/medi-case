@@ -3,15 +3,13 @@ import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { Alert, Box, Button, Link, TextField, Typography } from '@mui/material';
 import FormCard from '../common/FormCard';
 import { isValidEmail } from '../../lib/validation';
-import { getErrorMessage } from '../../lib/errors';
-import useStore from '../../state/store';
-import { login } from '../../network/lib/session';
+import { getSignInErrorMessage } from '../../lib/errors';
+import { signIn } from '../../lib/auth';
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const setSession = useStore((state) => state.setSession);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,10 +24,14 @@ function Login() {
 
     setLoading(true);
     try {
-      setSession(await login(form));
+      await signIn(form.email, form.password);
       navigate('/learning', { replace: true });
     } catch (err) {
-      setError(getErrorMessage(err));
+      if (err.code === 'UserNotConfirmedException') {
+        navigate('/confirm', { state: { email: form.email } });
+        return;
+      }
+      setError(getSignInErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -38,8 +40,8 @@ function Login() {
   return (
     <FormCard title="Logowanie">
       <Box component="form" onSubmit={handleSubmit} noValidate>
-        {location.state?.registered && !error && (
-          <Alert severity="success" sx={{ mb: 2 }}>Konto zostało utworzone. Możesz się zalogować.</Alert>
+        {location.state?.confirmed && !error && (
+          <Alert severity="success" sx={{ mb: 2 }}>Konto zostało potwierdzone. Możesz się zalogować.</Alert>
         )}
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         <TextField label="E-mail" name="email" type="email" value={form.email} onChange={handleChange}

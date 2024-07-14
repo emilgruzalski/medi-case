@@ -5,6 +5,7 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 import Home from './components/landing/Home';
 import Login from './components/user/Login';
 import Register from './components/user/Register';
+import ConfirmAccount from './components/user/ConfirmAccount';
 import SetLanguage from './components/user/SetLanguage';
 import Profile from './components/user/Profile';
 import Learning from './components/learning/Learning';
@@ -19,6 +20,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="confirm" element={<ConfirmAccount />} />
         <Route element={<ProtectedRoute />}>
           <Route path="language" element={<SetLanguage />} />
           <Route path="learning" element={<Learning />} />

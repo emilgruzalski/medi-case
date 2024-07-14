@@ -1,15 +1,22 @@
-import { isValidEmail, validatePassword, validateRegistration } from './validation';
+import { isStrongPassword, isValidEmail, validatePassword, validateRegistration } from './validation';
 
-const form = { firstName: 'Jan', lastName: 'Kowalski', email: 'jan@example.com', password: 'tajnehaslo', confirmPassword: 'tajnehaslo' };
+const form = {
+  firstName: 'Jan', lastName: 'Kowalski', email: 'jan@example.com', password: 'Tajne-haslo1', confirmPassword: 'Tajne-haslo1',
+};
 
 describe('validation', () => {
   it('accepts a correct registration form', () => {
     expect(validateRegistration(form)).toBe('');
   });
 
-  it('rejects short or different passwords', () => {
-    expect(validatePassword('krotkie', 'krotkie')).not.toBe('');
-    expect(validatePassword('tajnehaslo', 'innehaslo')).toBe('Hasła nie są takie same.');
+  it('requires the password policy of the user pool', () => {
+    expect(isStrongPassword('tajnehaslo')).toBe(false);
+    expect(isStrongPassword('Tajnehaslo1')).toBe(false);
+    expect(isStrongPassword('Tajne-haslo1')).toBe(true);
+  });
+
+  it('rejects different passwords', () => {
+    expect(validatePassword('Tajne-haslo1', 'Inne-haslo1')).toBe('Hasła nie są takie same.');
   });
 
   it('checks e-mail addresses', () => {

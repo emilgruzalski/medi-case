@@ -60,8 +60,6 @@ function Profile() {
               onChange={(e) => setForm({ ...form, firstName: e.target.value })} />
             <TextField label="Nazwisko" value={form.lastName} fullWidth margin="dense"
               onChange={(e) => setForm({ ...form, lastName: e.target.value })} />
-            <TextField label="E-mail" value={form.email} fullWidth margin="dense"
-              onChange={(e) => setForm({ ...form, email: e.target.value })} />
             <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
               <Button variant="contained" onClick={handleSave}>Zapisz</Button>
               <Button onClick={() => setForm(null)}>Anuluj</Button>
@@ -73,7 +71,7 @@ function Profile() {
             <Typography color="text.secondary">Konto utworzone: {formatDate(user.createdAt)}</Typography>
             <Typography color="text.secondary">Ostatnie logowanie: {formatDate(user.lastLoginAt)}</Typography>
             <Button sx={{ mt: 2 }} variant="outlined"
-              onClick={() => setForm({ firstName: user.firstName, lastName: user.lastName, email: user.email })}>
+              onClick={() => setForm({ firstName: user.firstName, lastName: user.lastName })}>
               Edytuj dane
             </Button>
           </Box>

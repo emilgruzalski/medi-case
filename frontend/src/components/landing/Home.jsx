@@ -3,12 +3,12 @@ import { Box, Button, Container, Stack, Typography } from '@mui/material';
 import Logo from '../common/Logo';
 import Features from './Features';
 import HowItWorks from './HowItWorks';
-import useStore from '../../state/store';
+import useStore, { selectIsSignedIn } from '../../state/store';
 
 const LOGO_SIZE = 120;
 
 function Home() {
-  const isLoggedIn = useStore((state) => Boolean(state.token));
+  const isLoggedIn = useStore(selectIsSignedIn);
 
   return (
     <>

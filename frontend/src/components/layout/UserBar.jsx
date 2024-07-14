@@ -5,20 +5,18 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import LogoutIcon from '@mui/icons-material/Logout';
 import useStore from '../../state/store';
-import { logout } from '../../network/lib/session';
+import { signOut } from '../../lib/auth';
 
 function UserBar() {
   const user = useStore((state) => state.user);
-  const clearSession = useStore((state) => state.clearSession);
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     setAnchorEl(null);
     try {
-      await logout();
+      await signOut();
     } finally {
-      clearSession();
       navigate('/login');
     }
   };

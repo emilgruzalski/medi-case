@@ -4,7 +4,7 @@ import { Alert, Box, Button, Link, TextField, Typography } from '@mui/material';
 import FormCard from '../common/FormCard';
 import { validateRegistration } from '../../lib/validation';
 import { getErrorMessage } from '../../lib/errors';
-import { register } from '../../network/lib/user';
+import { signUp } from '../../network/cognito';
 
 const EMPTY_FORM = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
@@ -26,9 +26,9 @@ function Register() {
 
     setLoading(true);
     try {
-      const { email, password, firstName, lastName } = form;
-      await register({ email, password, firstName, lastName });
-      navigate('/login', { state: { registered: true } });
+      const email = form.email.trim().toLowerCase();
+      await signUp(email, form.password, form.firstName.trim(), form.lastName.trim());
+      navigate('/confirm', { state: { email } });
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {
