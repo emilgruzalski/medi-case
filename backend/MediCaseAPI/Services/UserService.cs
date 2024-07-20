@@ -13,21 +13,21 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IGroupRepository _groupRepository;
-    private readonly IPasswordHasher _passwordHasher;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ICognitoUserAdmin _cognitoUserAdmin;
     private readonly IMapper _mapper;
 
     public UserService(
         IUserRepository userRepository,
         IGroupRepository groupRepository,
-        IPasswordHasher passwordHasher,
         ICurrentUserService currentUserService,
+        ICognitoUserAdmin cognitoUserAdmin,
         IMapper mapper)
     {
         _userRepository = userRepository;
         _groupRepository = groupRepository;
-        _passwordHasher = passwordHasher;
         _currentUserService = currentUserService;
+        _cognitoUserAdmin = cognitoUserAdmin;
         _mapper = mapper;
     }
 
@@ -39,6 +39,7 @@ public class UserService : IUserService
         var user = await _currentUserService.GetOrCreateAsync(principal);
         user.FirstName = dto.FirstName.Trim();
         user.LastName = dto.LastName.Trim();
+        await _cognitoUserAdmin.UpdateUserAsync(user.CognitoUsername!, user.Email, user.FirstName, user.LastName);
         await _userRepository.SaveChangesAsync();
 
         return _mapper.Map<UserDTO>(user);
@@ -64,12 +65,12 @@ public class UserService : IUserService
         if (await _userRepository.EmailExistsAsync(email))
             throw new ConflictException("User with this email already exists.");
 
-        var user = new User
-        {
-            PasswordHash = _passwordHasher.Hash(dto.Password),
-            CreatedAt = DateTime.UtcNow
-        };
+        var user = new User { CreatedAt = DateTime.UtcNow };
         await ApplyAdminChangesAsync(user, dto, email);
+
+        var profile = await _cognitoUserAdmin.InviteUserAsync(user.Email, user.FirstName, user.LastName);
+        user.CognitoUsername = profile.Username;
+        await _cognitoUserAdmin.SetRoleAsync(profile.Username, user.Role);
 
         _userRepository.Add(user);
         await _userRepository.SaveChangesAsync();
@@ -84,6 +85,12 @@ public class UserService : IUserService
             throw new ConflictException("User with this email already exists.");
 
         await ApplyAdminChangesAsync(user, dto, email);
+        if (user.CognitoUsername is not null)
+        {
+            await _cognitoUserAdmin.UpdateUserAsync(user.CognitoUsername, user.Email, user.FirstName, user.LastName);
+            await _cognitoUserAdmin.SetRoleAsync(user.CognitoUsername, user.Role);
+        }
+
         await _userRepository.SaveChangesAsync();
         return _mapper.Map<UserDTO>(user);
     }
@@ -95,6 +102,9 @@ public class UserService : IUserService
             throw new BadRequestException("You cannot delete your own account.");
 
         var user = await GetUserOrThrowAsync(id);
+        if (user.CognitoUsername is not null)
+            await _cognitoUserAdmin.DeleteUserAsync(user.CognitoUsername);
+
         _userRepository.Remove(user);
         await _userRepository.SaveChangesAsync();
     }

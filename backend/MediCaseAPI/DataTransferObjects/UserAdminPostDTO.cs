@@ -1,10 +1,6 @@
-using System.ComponentModel.DataAnnotations;
-using MediCaseAPI.Authentication;
-
 namespace MediCaseAPI.DataTransferObjects;
 
+/// <summary>New accounts get an invitation e-mail with a temporary password from Cognito.</summary>
 public class UserAdminPostDTO : UserAdminUpdateDTO
 {
-    [Required, MinLength(PasswordRules.MinLength), MaxLength(PasswordRules.MaxLength)]
-    public string Password { get; set; } = null!;
 }
