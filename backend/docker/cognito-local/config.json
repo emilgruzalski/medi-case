@@ -1,0 +1,5 @@
+{
+  "TokenConfig": {
+    "IssuerDomain": "http://cognito:9229"
+  }
+}

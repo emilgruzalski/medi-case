@@ -10,10 +10,24 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  cognito:
+    image: jagregory/cognito-local:3.23.3
+    # The user pool and the app client come from docker/cognito-local, created users are kept in a volume.
+    entrypoint:
+      - sh
+      - -c
+      - "[ -f /app/.cognito/.seeded ] || (cp -r /seed/. /app/.cognito/ && touch /app/.cognito/.seeded); exec node /app/start.js"
+    ports:
+      - "9229:9229"
+    volumes:
+      - ./docker/cognito-local:/seed:ro
+      - cognito:/app/.cognito
+
   api:
     build: .
     depends_on:
       - db
+      - cognito
     # The API exits when the database is not ready yet, so let Docker start it again.
     restart: on-failure
     environment:
@@ -25,8 +39,14 @@ services:
       Seed__SampleContent: ${SEED_SAMPLE_CONTENT:-true}
       Cors__AllowedOrigins__0: ${FRONTEND_ORIGIN:-http://localhost:3000}
       FileStorage__RootPath: /home/app/files
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      Cognito__UserPoolId: local_medicase
+      Cognito__ClientId: medicaselocalclient000001
+      Cognito__Issuer: http://cognito:9229/local_medicase
+      Cognito__ServiceUrl: http://cognito:9229
+      # cognito-local accepts any credentials, real ones are needed only for AI translations and speech.
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-local}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-local}
+      AWS_REGION: eu-central-1
     ports:
       - "8080:8080"
     volumes:
@@ -35,3 +55,4 @@ services:
 volumes:
   pgdata:
   files:
+  cognito:
