@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using MediCaseAPI.Authentication;
 using MediCaseAPI.Models;
 using MediCaseAPI.Services.Interfaces;
 
@@ -30,7 +29,7 @@ public class DataSeeder
 
     private readonly MedicalContext _context;
     private readonly IPublishedContextFactory _publishedContextFactory;
-    private readonly IPasswordHasher _passwordHasher;
+    private readonly CognitoAdminSeeder _cognitoAdminSeeder;
     private readonly SampleContentSeeder _sampleContentSeeder;
     private readonly ISynchronizationService _synchronizationService;
     private readonly IConfiguration _configuration;
@@ -39,7 +38,7 @@ public class DataSeeder
     public DataSeeder(
         MedicalContext context,
         IPublishedContextFactory publishedContextFactory,
-        IPasswordHasher passwordHasher,
+        CognitoAdminSeeder cognitoAdminSeeder,
         SampleContentSeeder sampleContentSeeder,
         ISynchronizationService synchronizationService,
         IConfiguration configuration,
@@ -47,7 +46,7 @@ public class DataSeeder
     {
         _context = context;
         _publishedContextFactory = publishedContextFactory;
-        _passwordHasher = passwordHasher;
+        _cognitoAdminSeeder = cognitoAdminSeeder;
         _sampleContentSeeder = sampleContentSeeder;
         _synchronizationService = synchronizationService;
         _configuration = configuration;
@@ -104,20 +103,6 @@ public class DataSeeder
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             return;
 
-        email = email.Trim().ToLowerInvariant();
-        if (await _context.Users.AnyAsync(u => u.Email == email))
-            return;
-
-        _context.Users.Add(new User
-        {
-            Email = email,
-            PasswordHash = _passwordHasher.Hash(password),
-            FirstName = "Admin",
-            LastName = "MediCase",
-            Role = Roles.Admin,
-            CreatedAt = DateTime.UtcNow
-        });
-        await _context.SaveChangesAsync();
-        _logger.LogInformation("Seeded administrator account {Email}", email);
+        await _cognitoAdminSeeder.SeedAsync(email.Trim().ToLowerInvariant(), password);
     }
 }

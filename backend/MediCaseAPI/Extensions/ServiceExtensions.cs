@@ -24,7 +24,6 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICognitoUserAdmin, CognitoUserAdmin>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -42,6 +41,7 @@ public static class ServiceExtensions
         services.AddScoped<IGroupService, GroupService>();
         services.AddScoped<DataSeeder>();
         services.AddScoped<SampleContentSeeder>();
+        services.AddScoped<CognitoAdminSeeder>();
         return services;
     }
 }

@@ -25,8 +25,6 @@ public partial class MedicalContext : DbContext
 
     public virtual DbSet<Group> Groups { get; set; }
 
-    public virtual DbSet<Session> Sessions { get; set; }
-
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -121,16 +119,6 @@ public partial class MedicalContext : DbContext
                         j.HasKey("GroupId", "UserId");
                         j.ToTable("UserGroups");
                     });
-        });
-
-        modelBuilder.Entity<Session>(entity =>
-        {
-            entity.HasIndex(e => e.Token).IsUnique();
-            entity.Property(e => e.Token).HasMaxLength(FieldLengths.SessionToken);
-
-            entity.HasOne(d => d.User).WithMany(p => p.Sessions)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<User>(entity =>

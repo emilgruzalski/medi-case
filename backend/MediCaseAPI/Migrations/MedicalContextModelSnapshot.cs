@@ -242,38 +242,6 @@ namespace MediCaseAPI.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("MediCaseAPI.Models.Session", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Token")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Sessions");
-                });
-
             modelBuilder.Entity("MediCaseAPI.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -306,9 +274,6 @@ namespace MediCaseAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -415,17 +380,6 @@ namespace MediCaseAPI.Migrations
                     b.Navigation("Translation");
                 });
 
-            modelBuilder.Entity("MediCaseAPI.Models.Session", b =>
-                {
-                    b.HasOne("MediCaseAPI.Models.User", "User")
-                        .WithMany("Sessions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("UserGroup", b =>
                 {
                     b.HasOne("MediCaseAPI.Models.Group", null)
@@ -467,11 +421,6 @@ namespace MediCaseAPI.Migrations
             modelBuilder.Entity("MediCaseAPI.Models.EntityType", b =>
                 {
                     b.Navigation("Entities");
-                });
-
-            modelBuilder.Entity("MediCaseAPI.Models.User", b =>
-                {
-                    b.Navigation("Sessions");
                 });
 #pragma warning restore 612, 618
         }

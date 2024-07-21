@@ -6,8 +6,6 @@ public partial class User
 
     public string Email { get; set; } = null!;
 
-    public string? PasswordHash { get; set; }
-
     public string? CognitoUsername { get; set; }
 
     public string FirstName { get; set; } = null!;
@@ -21,6 +19,4 @@ public partial class User
     public DateTime? LastLoginAt { get; set; }
 
     public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
-
-    public virtual ICollection<Session> Sessions { get; set; } = new List<Session>();
 }

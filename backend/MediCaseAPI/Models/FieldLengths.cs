@@ -5,7 +5,6 @@ public static class FieldLengths
     public const int Email = 256;
     public const int PersonName = 100;
     public const int Role = 20;
-    public const int SessionToken = 128;
     public const int CognitoUsername = 128;
     public const int LanguageCode = 10;
     public const int Name = 50;
