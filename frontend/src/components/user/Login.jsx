@@ -43,6 +43,9 @@ function Login() {
         {location.state?.confirmed && !error && (
           <Alert severity="success" sx={{ mb: 2 }}>Konto zostało potwierdzone. Możesz się zalogować.</Alert>
         )}
+        {location.state?.passwordReset && !error && (
+          <Alert severity="success" sx={{ mb: 2 }}>Hasło zostało zmienione. Zaloguj się nowym hasłem.</Alert>
+        )}
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         <TextField label="E-mail" name="email" type="email" value={form.email} onChange={handleChange}
           fullWidth margin="normal" autoComplete="email" autoFocus />
@@ -53,6 +56,9 @@ function Login() {
         </Button>
       </Box>
       <Typography variant="body2" sx={{ mt: 2 }}>
+        <Link component={RouterLink} to="/forgot-password">Nie pamiętasz hasła?</Link>
+      </Typography>
+      <Typography variant="body2" sx={{ mt: 1 }}>
         Nie masz konta? <Link component={RouterLink} to="/register">Zarejestruj się</Link>
       </Typography>
     </FormCard>

@@ -79,3 +79,8 @@ export const changePassword = (accessToken: string, previousPassword: string, pr
   call('ChangePassword', { AccessToken: accessToken, PreviousPassword: previousPassword, ProposedPassword: proposedPassword });
 
 export const revokeToken = (refreshToken: string) => call('RevokeToken', { ClientId: CLIENT_ID, Token: refreshToken });
+
+export const forgotPassword = (email: string) => call('ForgotPassword', { ClientId: CLIENT_ID, Username: email });
+
+export const confirmForgotPassword = (email: string, code: string, password: string) =>
+  call('ConfirmForgotPassword', { ClientId: CLIENT_ID, Username: email, ConfirmationCode: code, Password: password });
