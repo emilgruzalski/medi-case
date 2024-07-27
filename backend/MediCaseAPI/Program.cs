@@ -1,5 +1,6 @@
 using Amazon.Polly;
 using Amazon.Translate;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using MediCaseAPI.Extensions;
 using MediCaseAPI.Middleware;
@@ -8,14 +9,23 @@ using MediCaseAPI.Options;
 using MediCaseAPI.Seeders;
 
 const string FrontendCorsPolicy = "Frontend";
+const string MigrateOnlyArgument = "--migrate-only";
+const string MigrateOnStartupKey = "Database:MigrateOnStartup";
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (!builder.Environment.IsDevelopment())
+{
+    // One JSON object per line is easy to search in CloudWatch Logs.
+    builder.Logging.ClearProviders();
+    builder.Logging.AddJsonConsole();
+}
+
 // Add services to the container.
 builder.Services.AddDbContext<MedicalContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("MedicalDatabase")));
+    options.UseNpgsql(DatabaseConnection.Get(builder.Configuration, "MedicalDatabase")));
 builder.Services.AddSingleton<IPublishedContextFactory>(
-    new PublishedContextFactory(builder.Configuration.GetConnectionString("PublishedDatabase")!));
+    new PublishedContextFactory(DatabaseConnection.Get(builder.Configuration, "PublishedDatabase")));
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection(FileStorageOptions.SectionName));
 builder.Services.Configure<SpeechOptions>(builder.Configuration.GetSection(SpeechOptions.SectionName));
@@ -27,6 +37,13 @@ builder.Services.AddAWSService<IAmazonPolly>();
 builder.Services.AddFileStorage(builder.Configuration);
 builder.Services.AddCognitoAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    // The API runs behind CloudFront and an Application Load Balancer.
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<MedicalContext>();
 builder.Services.AddCors(options =>
@@ -43,10 +60,17 @@ builder.Services.AddSwaggerWithBearerAuth();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+var migrateOnly = args.Contains(MigrateOnlyArgument);
+if (migrateOnly || app.Configuration.GetValue(MigrateOnStartupKey, true))
 {
+    using var scope = app.Services.CreateScope();
     await scope.ServiceProvider.GetRequiredService<DataSeeder>().SeedAsync();
 }
+
+if (migrateOnly)
+    return;
+
+app.UseForwardedHeaders();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
@@ -56,8 +80,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 
 app.UseCors(FrontendCorsPolicy);
 app.UseAuthentication();
