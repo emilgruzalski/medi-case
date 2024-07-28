@@ -9,7 +9,7 @@ import { getErrorMessage } from '../../lib/errors';
 import { GROUP_OPTIONS_LIMIT, ROLE_LABELS } from '../../lib/admin';
 import { Roles } from '../../lib/roles';
 
-const EMPTY_USER = { firstName: '', lastName: '', email: '', role: Roles.User, groupIds: [], password: '' };
+const EMPTY_USER = { firstName: '', lastName: '', email: '', role: Roles.User, groupIds: [] };
 
 function toForm(user) {
   return user
@@ -42,11 +42,10 @@ function UserModal({ open, user, onClose, onSaved }) {
 
   const handleSave = async () => {
     try {
-      const { password, ...data } = form;
       if (user) {
-        await updateUser(user.id, data);
+        await updateUser(user.id, form);
       } else {
-        await createUser({ ...data, password });
+        await createUser(form);
       }
       onSaved();
     } catch (err) {
@@ -56,7 +55,7 @@ function UserModal({ open, user, onClose, onSaved }) {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>{user ? 'Edytuj użytkownika' : 'Nowy użytkownik'}</DialogTitle>
+      <DialogTitle>{user ? 'Edytuj użytkownika' : 'Zaproś użytkownika'}</DialogTitle>
       <DialogContent>
         <Stack spacing={2} sx={{ mt: 1 }}>
           {error && <Alert severity="error">{error}</Alert>}
@@ -65,7 +64,11 @@ function UserModal({ open, user, onClose, onSaved }) {
             <TextField label="Nazwisko" {...field('lastName')} />
           </Stack>
           <TextField label="E-mail" type="email" {...field('email')} />
-          {!user && <TextField label="Hasło" type="password" autoComplete="new-password" {...field('password')} />}
+          {!user && (
+            <Alert severity="info">
+              Użytkownik dostanie e-mail z hasłem tymczasowym i ustawi własne hasło przy pierwszym logowaniu.
+            </Alert>
+          )}
           <FormControl fullWidth>
             <InputLabel>Rola</InputLabel>
             <Select label="Rola" {...field('role')}>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { Alert, Box, Button, Link, TextField, Typography } from '@mui/material';
 import FormCard from '../common/FormCard';
+import NewPasswordForm from './NewPasswordForm';
 import { isValidEmail } from '../../lib/validation';
 import { getSignInErrorMessage } from '../../lib/errors';
 import { signIn } from '../../lib/auth';
@@ -10,6 +11,7 @@ function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [challenge, setChallenge] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,7 +26,11 @@ function Login() {
 
     setLoading(true);
     try {
-      await signIn(form.email, form.password);
+      const newPasswordChallenge = await signIn(form.email, form.password);
+      if (newPasswordChallenge) {
+        setChallenge(newPasswordChallenge);
+        return;
+      }
       navigate('/learning', { replace: true });
     } catch (err) {
       if (err.code === 'UserNotConfirmedException') {
@@ -36,6 +42,14 @@ function Login() {
       setLoading(false);
     }
   };
+
+  if (challenge) {
+    return (
+      <FormCard title="Ustaw nowe hasło">
+        <NewPasswordForm challenge={challenge} onDone={() => navigate('/learning', { replace: true })} />
+      </FormCard>
+    );
+  }
 
   return (
     <FormCard title="Logowanie">

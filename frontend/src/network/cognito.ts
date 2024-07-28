@@ -84,3 +84,11 @@ export const forgotPassword = (email: string) => call('ForgotPassword', { Client
 
 export const confirmForgotPassword = (email: string, code: string, password: string) =>
   call('ConfirmForgotPassword', { ClientId: CLIENT_ID, Username: email, ConfirmationCode: code, Password: password });
+
+export const respondToNewPasswordChallenge = (email: string, newPassword: string, session: string) =>
+  call<InitiateAuthResponse>('RespondToAuthChallenge', {
+    ClientId: CLIENT_ID,
+    ChallengeName: 'NEW_PASSWORD_REQUIRED',
+    Session: session,
+    ChallengeResponses: { USERNAME: email, NEW_PASSWORD: newPassword },
+  });

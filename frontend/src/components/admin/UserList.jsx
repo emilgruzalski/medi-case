@@ -46,7 +46,7 @@ function UserList() {
   return (
     <>
       <Button startIcon={<AddIcon />} variant="contained" sx={{ mb: 2 }} onClick={() => setEditing(null)}>
-        Dodaj użytkownika
+        Zaproś użytkownika
       </Button>
       <AdminSearch value={search} onChange={setSearch} placeholder="Szukaj po imieniu, nazwisku lub e-mailu" />
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}

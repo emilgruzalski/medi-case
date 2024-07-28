@@ -142,7 +142,6 @@ export interface UserAdminRequest {
   lastName: string;
   role: Role;
   groupIds: number[];
-  password?: string;
 }
 
 export interface GroupRequest {

@@ -1,12 +1,23 @@
 import useStore, { Tokens } from '../state/store';
-import { AuthenticationResult, CognitoError, initiatePasswordAuth, initiateRefreshAuth, revokeToken } from '../network/cognito';
+import {
+  AuthenticationResult, CognitoError, InitiateAuthResponse, initiatePasswordAuth, initiateRefreshAuth,
+  respondToNewPasswordChallenge, revokeToken,
+} from '../network/cognito';
 import { getCurrentUser } from '../network/lib/user';
 
 // Tokens are refreshed shortly before they expire.
 const REFRESH_MARGIN_MS = 60_000;
 const MS_IN_SECOND = 1000;
 
+const NEW_PASSWORD_REQUIRED = 'NEW_PASSWORD_REQUIRED';
+
 let refreshing: Promise<string | null> | null = null;
+
+/** Returned when an invited user signs in with the temporary password and has to choose a new one. */
+export interface NewPasswordChallenge {
+  email: string;
+  session: string;
+}
 
 function tokenExpiry(token: string): number {
   const payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
@@ -21,8 +32,7 @@ function toTokens(result: AuthenticationResult, previousRefreshToken: string | n
   };
 }
 
-export async function signIn(email: string, password: string) {
-  const response = await initiatePasswordAuth(email.trim().toLowerCase(), password);
+async function finishSignIn(response: InitiateAuthResponse) {
   if (!response.AuthenticationResult) {
     throw new CognitoError(response.ChallengeName ?? 'UnknownError', 'Additional sign-in step is required');
   }
@@ -35,6 +45,21 @@ export async function signIn(email: string, password: string) {
     clearSession();
     throw error;
   }
+}
+
+export async function signIn(email: string, password: string): Promise<NewPasswordChallenge | null> {
+  const normalizedEmail = email.trim().toLowerCase();
+  const response = await initiatePasswordAuth(normalizedEmail, password);
+  if (response.ChallengeName === NEW_PASSWORD_REQUIRED && response.Session) {
+    return { email: normalizedEmail, session: response.Session };
+  }
+
+  await finishSignIn(response);
+  return null;
+}
+
+export async function completeNewPassword(challenge: NewPasswordChallenge, newPassword: string) {
+  await finishSignIn(await respondToNewPasswordChallenge(challenge.email, newPassword, challenge.session));
 }
 
 export async function signOut() {
