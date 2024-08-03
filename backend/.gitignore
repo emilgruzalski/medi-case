@@ -481,3 +481,10 @@ MediCaseAPI/Files/
 
 # Local environment variables
 .env
+
+# Terraform
+infra/.terraform/
+*.tfstate
+*.tfstate.*
+infra/terraform.tfvars
+infra/backend.hcl

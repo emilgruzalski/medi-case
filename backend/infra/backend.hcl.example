@@ -1,0 +1,5 @@
+bucket         = "medicase-terraform-state-<account-id>"
+key            = "prod/terraform.tfstate"
+region         = "eu-central-1"
+dynamodb_table = "medicase-terraform-locks"
+encrypt        = true
