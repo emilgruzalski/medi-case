@@ -27,3 +27,27 @@ variable "availability_zone_count" {
   type        = number
   default     = 2
 }
+
+variable "db_instance_class" {
+  description = "Instance class of the PostgreSQL database."
+  type        = string
+  default     = "db.t4g.micro"
+}
+
+variable "db_allocated_storage_gb" {
+  description = "Initial storage of the database in GB."
+  type        = number
+  default     = 20
+}
+
+variable "db_max_allocated_storage_gb" {
+  description = "Upper limit for storage autoscaling in GB."
+  type        = number
+  default     = 100
+}
+
+variable "db_backup_retention_days" {
+  description = "Number of days automated backups are kept."
+  type        = number
+  default     = 7
+}
