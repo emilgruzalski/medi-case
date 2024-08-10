@@ -17,3 +17,13 @@ output "files_bucket" {
   description = "S3 bucket with uploaded files."
   value       = aws_s3_bucket.files.bucket
 }
+
+output "cognito_user_pool_id" {
+  description = "ID of the Cognito user pool."
+  value       = aws_cognito_user_pool.main.id
+}
+
+output "cognito_client_id" {
+  description = "ID of the Cognito app client used by the frontend."
+  value       = aws_cognito_user_pool_client.web.id
+}

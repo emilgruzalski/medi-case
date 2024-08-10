@@ -51,3 +51,15 @@ variable "db_backup_retention_days" {
   type        = number
   default     = 7
 }
+
+variable "cognito_password_min_length" {
+  description = "Minimum password length in the user pool."
+  type        = number
+  default     = 8
+}
+
+variable "cognito_temporary_password_days" {
+  description = "Validity of temporary passwords sent with invitations."
+  type        = number
+  default     = 7
+}
