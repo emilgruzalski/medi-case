@@ -63,3 +63,33 @@ variable "cognito_temporary_password_days" {
   type        = number
   default     = 7
 }
+
+variable "api_cpu" {
+  description = "CPU units of one API task (1024 = 1 vCPU)."
+  type        = number
+  default     = 512
+}
+
+variable "api_memory" {
+  description = "Memory of one API task in MiB."
+  type        = number
+  default     = 1024
+}
+
+variable "api_desired_count" {
+  description = "Number of running API tasks."
+  type        = number
+  default     = 1
+}
+
+variable "api_image_tag" {
+  description = "Image tag used when the task definition is created. Later deployments come from CI."
+  type        = string
+  default     = "latest"
+}
+
+variable "log_retention_days" {
+  description = "Retention of the API logs in CloudWatch."
+  type        = number
+  default     = 30
+}

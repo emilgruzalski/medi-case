@@ -7,3 +7,16 @@ locals {
   private_subnet_offset  = 10
   database_subnet_offset = 20
 }
+
+locals {
+  api_container_name = "api"
+  api_container_port = 8080
+  http_port          = 80
+  postgres_port      = 5432
+  health_check_path  = "/health"
+
+  # CloudFront sends this header to the load balancer, other requests are rejected.
+  origin_verify_header = "X-Origin-Verify"
+
+  ecr_images_to_keep = 20
+}
