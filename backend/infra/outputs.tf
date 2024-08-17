@@ -57,3 +57,18 @@ output "api_security_group_id" {
   description = "Security group of the API tasks."
   value       = aws_security_group.api.id
 }
+
+output "app_url" {
+  description = "Address of the application (frontend and API)."
+  value       = "https://${aws_cloudfront_distribution.main.domain_name}"
+}
+
+output "cloudfront_distribution_id" {
+  description = "ID of the CloudFront distribution."
+  value       = aws_cloudfront_distribution.main.id
+}
+
+output "frontend_bucket" {
+  description = "S3 bucket with the frontend build."
+  value       = aws_s3_bucket.frontend.bucket
+}
