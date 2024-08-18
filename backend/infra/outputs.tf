@@ -72,3 +72,13 @@ output "frontend_bucket" {
   description = "S3 bucket with the frontend build."
   value       = aws_s3_bucket.frontend.bucket
 }
+
+output "deploy_backend_role_arn" {
+  description = "Role assumed by the backend deployment workflow (AWS_DEPLOY_ROLE_ARN variable)."
+  value       = aws_iam_role.deploy_backend.arn
+}
+
+output "deploy_frontend_role_arn" {
+  description = "Role assumed by the frontend deployment workflow (AWS_DEPLOY_ROLE_ARN variable)."
+  value       = aws_iam_role.deploy_frontend.arn
+}

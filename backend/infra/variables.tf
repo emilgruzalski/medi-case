@@ -93,3 +93,21 @@ variable "log_retention_days" {
   type        = number
   default     = 30
 }
+
+variable "github_backend_repository" {
+  description = "GitHub repository (owner/name) allowed to deploy the API."
+  type        = string
+  default     = "emilgruzalski/MediCase-Backend"
+}
+
+variable "github_frontend_repository" {
+  description = "GitHub repository (owner/name) allowed to deploy the frontend."
+  type        = string
+  default     = "emilgruzalski/MediCase-Frontend"
+}
+
+variable "github_deploy_branch" {
+  description = "Branch whose workflows may deploy."
+  type        = string
+  default     = "main"
+}
