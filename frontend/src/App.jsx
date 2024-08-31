@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Layout from './components/layout/Layout';
@@ -10,9 +11,12 @@ import ForgotPassword from './components/user/ForgotPassword';
 import SetLanguage from './components/user/SetLanguage';
 import Profile from './components/user/Profile';
 import Learning from './components/learning/Learning';
-import Moderator from './components/moderator/Moderator';
-import BoardAdmin from './components/admin/BoardAdmin';
+import PageLoader from './components/common/PageLoader';
 import { canModerate, isAdmin } from './lib/roles';
+
+// Moderator and admin pages (with the rich text editor) are loaded only for users who open them.
+const Moderator = lazy(() => import('./components/moderator/Moderator'));
+const BoardAdmin = lazy(() => import('./components/admin/BoardAdmin'));
 
 function App() {
   return (
@@ -30,10 +34,10 @@ function App() {
           <Route path="profile" element={<Profile />} />
         </Route>
         <Route element={<ProtectedRoute allow={canModerate} />}>
-          <Route path="moderator" element={<Moderator />} />
+          <Route path="moderator" element={<Suspense fallback={<PageLoader />}><Moderator /></Suspense>} />
         </Route>
         <Route element={<ProtectedRoute allow={isAdmin} />}>
-          <Route path="admin" element={<BoardAdmin />} />
+          <Route path="admin" element={<Suspense fallback={<PageLoader />}><BoardAdmin /></Suspense>} />
         </Route>
       </Route>
     </Routes>

@@ -10,6 +10,17 @@ export default defineConfig({
   server: {
     port: DEV_SERVER_PORT,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Libraries change less often than the app, so browsers can keep them cached between releases.
+        manualChunks: {
+          react: ['react', 'react-dom', 'react-router-dom'],
+          mui: ['@mui/material', '@emotion/react', '@emotion/styled'],
+        },
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,
