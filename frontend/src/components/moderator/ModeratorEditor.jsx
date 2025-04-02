@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import { Alert, Box, Button, Chip, Divider, Paper, Snackbar, Stack, Tab, Tabs, TextField, Typography } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import Content from '../learning/Content';

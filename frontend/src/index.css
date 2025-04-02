@@ -25,3 +25,12 @@ code {
   overflow-wrap: break-word;
   line-height: 1.6;
 }
+
+/* Quill 2 saves both kinds of lists as <ol>; bullet items are marked with data-list. */
+.content-html li[data-list='bullet'] {
+  list-style-type: disc;
+}
+
+.content-html .ql-ui {
+  display: none;
+}
