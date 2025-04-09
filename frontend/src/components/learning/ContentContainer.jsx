@@ -19,7 +19,7 @@ function CategoryView({ node }) {
       </Typography>
       <Grid container spacing={2}>
         {node.children.map((child) => (
-          <Grid item xs={12} sm={6} key={child.id}>
+          <Grid size={{ xs: 12, sm: 6 }} key={child.id}>
             <Card>
               <CardActionArea component={RouterLink} to={`/learning/${child.id}`}>
                 <CardContent>

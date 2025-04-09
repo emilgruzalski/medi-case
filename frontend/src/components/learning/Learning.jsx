@@ -43,7 +43,7 @@ function Learning() {
       {tree && (
         <Grid container spacing={3}>
           {isMobile ? (
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Button startIcon={<MenuIcon />} variant="outlined" onClick={() => setDrawerOpen(true)}>
                 Spis treści
               </Button>
@@ -57,12 +57,12 @@ function Learning() {
               </Drawer>
             </Grid>
           ) : (
-            <Grid item md={4} lg={3}>
+            <Grid size={{ md: 4, lg: 3 }}>
               <SearchBox />
               <Sidebar tree={tree} selectedId={entityId} />
             </Grid>
           )}
-          <Grid item xs={12} md={8} lg={9}>
+          <Grid size={{ xs: 12, md: 8, lg: 9 }}>
             {node ? (
               <>
                 <ContentContainer node={node} />

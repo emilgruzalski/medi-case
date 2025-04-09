@@ -109,13 +109,13 @@ function Moderator() {
       )}
       <Grid container spacing={3}>
         {showTree && (
-          <Grid item xs={12} md={5} lg={4}>
+          <Grid size={{ xs: 12, md: 5, lg: 4 }}>
             <ModeratorTree tree={tree} types={types} langId={moderatorLangId} selectedId={selectedId}
               onSelect={handleSelect} onChanged={handleChanged} onDeleted={handleDeleted} />
           </Grid>
         )}
         {showEditor && (
-          <Grid item xs={12} md={7} lg={8}>
+          <Grid size={{ xs: 12, md: 7, lg: 8 }}>
             {selectedId && moderatorLangId ? (
               <ModeratorEditor entityId={selectedId} langId={moderatorLangId} languages={languages} onSaved={loadTree} />
             ) : (

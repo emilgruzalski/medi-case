@@ -32,7 +32,7 @@ function Features() {
     <Container maxWidth="lg" sx={{ py: 8 }}>
       <Grid container spacing={3}>
         {FEATURES.map((feature) => (
-          <Grid item xs={12} sm={6} md={3} key={feature.title}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }} key={feature.title}>
             <Card sx={{ height: '100%' }}>
               <CardContent>
                 {feature.icon}
