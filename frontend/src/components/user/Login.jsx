@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router';
 import { Alert, Box, Button, Link, TextField, Typography } from '@mui/material';
 import FormCard from '../common/FormCard';
 import NewPasswordForm from './NewPasswordForm';

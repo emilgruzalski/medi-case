@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { Alert, Box, Button, TextField, Typography } from '@mui/material';
 import FormCard from '../common/FormCard';
 import { confirmSignUp } from '../../network/cognito';

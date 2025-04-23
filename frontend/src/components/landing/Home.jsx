@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router';
 import { Box, Button, Container, Stack, Typography } from '@mui/material';
 import Logo from '../common/Logo';
 import Features from './Features';

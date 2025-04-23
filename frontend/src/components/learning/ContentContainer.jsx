@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router';
 import { Alert, Card, CardActionArea, CardContent, CircularProgress, Grid, Stack, Typography } from '@mui/material';
 import ContentComponent from './ContentComponent';
 import Glossary from './Glossary';

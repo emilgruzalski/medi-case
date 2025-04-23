@@ -15,7 +15,7 @@ export default defineConfig({
       output: {
         // Libraries change less often than the app, so browsers can keep them cached between releases.
         manualChunks: {
-          react: ['react', 'react-dom', 'react-router-dom'],
+          react: ['react', 'react-dom', 'react-router'],
           mui: ['@mui/material', '@emotion/react', '@emotion/styled'],
         },
       },

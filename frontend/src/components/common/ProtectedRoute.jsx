@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { Alert, Container } from '@mui/material';
 import LoggedOutInfo from '../user/LoggedOutInfo';
 import useStore, { selectIsSignedIn } from '../../state/store';
