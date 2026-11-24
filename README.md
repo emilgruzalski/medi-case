@@ -1,11 +1,74 @@
 # MediCase
 
-**MediCase** is a multilingual web application for learning emergency medicine communication. Learners go through
-a tree of content cards, patient interview questions with audio recordings, glossaries and tests. Moderators edit
-the content in many languages and administrators review and publish it.
+**MediCase** is a web application for learning how to talk to a patient in a foreign language. It combines emergency
+medicine content, interview questions with pronunciation recordings, a glossary and tests. Moderators prepare the
+content in many languages and administrators review and publish it.
 
 The application was created during the *Programowanie zespołowe* (team programming) course in the 2022/2023
 academic year, in cooperation with Collegium Medicum UMK, and was first presented in May 2023.
+
+![Landing page](docs/screenshots/home.png)
+
+## What the application does
+
+The user interface is in Polish and the learning content can be in any language added by moderators. The screenshots
+show the sample content and fictional users.
+
+### Learning
+
+The learner chooses two languages: the one they learn and their own. Content is shown in the language they learn, and
+the translation can be turned on when it is needed. Topics are grouped into sections and can be searched.
+
+![Topics grouped into sections](docs/screenshots/topics.png)
+
+**Patient interview** – one question at a time, with a recording of the pronunciation and the translation on demand:
+
+![Patient interview question with the translation and the listen button](docs/screenshots/interview.png)
+
+**Content cards** – knowledge in the learned language, with the translation below:
+
+![Content card in English with the Polish translation turned on](docs/screenshots/card.png)
+
+**Tests** – every answer is checked right away, and the test ends with a score and can be repeated:
+
+![Test with a correct and a wrong answer and the final score](docs/screenshots/test.png)
+
+**Glossary** – short definitions from all sections in one place, with search:
+
+![Glossary with definitions](docs/screenshots/glossary.png)
+
+The application is designed for phones first, with large buttons and a bottom menu:
+
+<img src="docs/screenshots/mobile.png" alt="Patient interview on a phone" width="260">
+
+### Preparing content
+
+Moderators build the content tree and edit each element in a rich text editor with a preview. The editor can translate
+an element from another language (Amazon Translate) and generate its recording (Amazon Polly). Files can be attached
+to every translation, and an unfinished element can be hidden from learners.
+
+![Moderator panel with the content tree and the editor](docs/screenshots/moderator.png)
+
+### Review and publishing
+
+Moderators work on their own copy of the content, so learners do not see unfinished changes. The administrator sees
+what is new, changed or removed, can preview it and publishes everything at once.
+
+![List of changes waiting for publication](docs/screenshots/admin-publish.png)
+
+### Users and groups
+
+Users sign in with Amazon Cognito. They can register on their own or be invited by an administrator, who also assigns
+roles and groups.
+
+![List of users with roles and groups](docs/screenshots/admin-users.png)
+
+| | User | Moderator | Administrator |
+| --- | :---: | :---: | :---: |
+| Learning, glossary and tests | ✓ | ✓ | ✓ |
+| Editing content, languages and files, AI tools | | ✓ | ✓ |
+| Reviewing and publishing changes | | | ✓ |
+| Managing users and groups | | | ✓ |
 
 ## Repository structure
 
