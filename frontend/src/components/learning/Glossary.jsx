@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, List, ListItem, ListItemText, Typography } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
+import { Box, Typography } from '@mui/material';
+import GlossaryEntries from './GlossaryEntries';
 import { getLearningDictionary } from '../../network/lib/learning';
 
-function Glossary({ entityId, langId }) {
+/** Glossary of a single category; nothing is shown when it is empty. */
+function Glossary({ entityId, langId, title }) {
   const [entries, setEntries] = useState([]);
 
   useEffect(() => {
+    let active = true;
+    setEntries([]);
     getLearningDictionary(entityId, langId)
-      .then(setEntries)
-      .catch(() => setEntries([]));
+      .then((loaded) => active && setEntries(loaded))
+      .catch(() => active && setEntries([]));
+    return () => {
+      active = false;
+    };
   }, [entityId, langId]);
 
   if (entries.length === 0) {
@@ -18,22 +23,10 @@ function Glossary({ entityId, langId }) {
   }
 
   return (
-    <Accordion sx={{ mt: 3 }}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <MenuBookOutlinedIcon sx={{ mr: 1 }} color="secondary" />
-        <Typography>Słownik ({entries.length})</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <List dense>
-          {entries.map((entry) => (
-            <ListItem key={entry.id} disableGutters>
-              <ListItemText primary={entry.term} secondary={entry.definition}
-                primaryTypographyProps={{ fontWeight: 'bold' }} />
-            </ListItem>
-          ))}
-        </List>
-      </AccordionDetails>
-    </Accordion>
+    <Box component="section" sx={{ mt: 4 }}>
+      <Typography variant="h5" component="h2" sx={{ mb: 1.5 }}>{title}</Typography>
+      <GlossaryEntries entries={entries} />
+    </Box>
   );
 }
 

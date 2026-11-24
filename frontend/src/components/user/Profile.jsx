@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { Alert, Box, Button, Chip, CircularProgress, Container, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
 import ChangePassword from './ChangePassword';
 import useStore from '../../state/store';
 import { getCurrentUser, updateCurrentUser } from '../../network/lib/user';
+import { signOut } from '../../lib/auth';
 import { getErrorMessage } from '../../lib/errors';
 
 const ROLE_LABELS = { User: 'Użytkownik', Moderator: 'Moderator', Admin: 'Administrator' };
@@ -14,6 +16,7 @@ function Profile() {
   const [user, setProfile] = useState(null);
   const [form, setForm] = useState(null);
   const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getCurrentUser()
@@ -33,6 +36,14 @@ function Profile() {
       setMessage({ severity: 'success', text: 'Dane zostały zapisane.' });
     } catch (err) {
       setMessage({ severity: 'error', text: getErrorMessage(err) });
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } finally {
+      navigate('/login');
     }
   };
 
@@ -78,6 +89,8 @@ function Profile() {
         )}
         <Divider sx={{ my: 3 }} />
         <ChangePassword />
+        <Divider sx={{ my: 3 }} />
+        <Button variant="outlined" color="error" onClick={handleLogout}>Wyloguj</Button>
       </Paper>
     </Container>
   );

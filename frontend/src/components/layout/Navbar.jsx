@@ -1,22 +1,17 @@
 import { Link as RouterLink, NavLink } from 'react-router';
-import { AppBar, Box, Button, IconButton, Toolbar, Tooltip, Typography, useMediaQuery } from '@mui/material';
+import { AppBar, Box, Button, Toolbar, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import TranslateIcon from '@mui/icons-material/Translate';
 import UserBar from './UserBar';
-import NavMenu from './NavMenu';
 import Logo from '../common/Logo';
 import useStore, { selectIsSignedIn } from '../../state/store';
-import { canModerate, isAdmin } from '../../lib/roles';
+import { navLinks } from './navLinks';
 
-const ACTIVE_LINK_STYLE = { '&.active': { bgcolor: 'rgba(255, 255, 255, 0.15)' } };
-
-function NavButton({ to, children }) {
-  return (
-    <Button color="inherit" component={NavLink} to={to} sx={ACTIVE_LINK_STYLE}>
-      {children}
-    </Button>
-  );
-}
+const LINK_STYLE = {
+  display: 'flex', alignItems: 'center', px: 2, color: '#d3deea', fontWeight: 500, textDecoration: 'none',
+  '&:hover': { color: '#ffffff' },
+  '&.active': { color: '#ffffff', boxShadow: (theme) => `inset 0 -4px 0 ${theme.palette.secondary.main}` },
+};
 
 function Navbar() {
   const user = useStore((state) => state.user);
@@ -24,38 +19,36 @@ function Navbar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const links = [
-    { to: '/learning', label: 'Nauka' },
-    canModerate(user) && { to: '/moderator', label: 'Moderator' },
-    isAdmin(user) && { to: '/admin', label: 'Administracja' },
-  ].filter(Boolean);
-
   return (
-    <AppBar position="sticky" elevation={1}>
-      <Toolbar>
-        <Box sx={{ mr: 1 }}>
-          <Logo size={32} />
+    <AppBar position="sticky">
+      <Toolbar sx={{ gap: 1 }}>
+        <Box component={RouterLink} to="/"
+          sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mr: 2, color: 'inherit', textDecoration: 'none' }}>
+          <Logo size={34} />
+          <Typography variant="h6" component="span">MediCase</Typography>
         </Box>
-        <Typography variant="h6" component={RouterLink} to="/"
-          sx={{ color: 'inherit', textDecoration: 'none', mr: 3, display: { xs: 'none', sm: 'block' } }}>
-          MediCase
-        </Typography>
-        {isLoggedIn && isMobile && <NavMenu links={links} />}
-        {isLoggedIn && !isMobile && links.map((link) => <NavButton key={link.to} to={link.to}>{link.label}</NavButton>)}
+        {isLoggedIn && !isMobile && (
+          <Box component="nav" aria-label="Główna nawigacja" sx={{ display: 'flex', alignSelf: 'stretch' }}>
+            {navLinks(user).map((link) => (
+              <Box key={link.to} component={NavLink} to={link.to} sx={LINK_STYLE}>{link.label}</Box>
+            ))}
+          </Box>
+        )}
         <Box sx={{ flexGrow: 1 }} />
         {isLoggedIn ? (
           <>
-            <Tooltip title="Zmień język">
-              <IconButton color="inherit" component={RouterLink} to="/language">
-                <TranslateIcon />
-              </IconButton>
-            </Tooltip>
-            <UserBar />
+            <Button color="inherit" component={RouterLink} to="/language" startIcon={<TranslateIcon />}>
+              Języki
+            </Button>
+            {!isMobile && <UserBar />}
           </>
         ) : (
           <>
-            <NavButton to="/login">Zaloguj</NavButton>
-            <NavButton to="/register">Załóż konto</NavButton>
+            <Button color="inherit" component={RouterLink} to="/login">Zaloguj</Button>
+            <Button color="secondary" variant="contained" component={RouterLink} to="/register"
+              sx={{ display: { xs: 'none', sm: 'inline-flex' } }}>
+              Załóż konto
+            </Button>
           </>
         )}
       </Toolbar>

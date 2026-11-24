@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import '@fontsource-variable/lexend';
 import theme from './theme';
 import './index.css';
 import App from './App';

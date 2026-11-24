@@ -14,10 +14,10 @@ The REST API lives in the [`backend`](../backend) directory.
 
 ## Features
 
-- Learning view with the content tree, search, previous/next navigation and a drawer on phones
+- Learning view with topics, search, previous/next navigation and a bottom menu on phones
 - Content cards with an optional translation into the learner's language
-- Patient interview questions and pronunciation recordings
-- Glossary for every section
+- Patient interview with one question at a time, pronunciation recordings and translations
+- Glossary for every section and one page with all glossaries
 - Tests with immediate feedback, final score and retry
 - Moderator panel: tree editor that allows only valid element types, rich text editor (Quill) with live preview,
   file uploads, glossary editor, language list, hiding elements from learners

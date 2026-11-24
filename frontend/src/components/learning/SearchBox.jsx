@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { InputAdornment, List, ListItemButton, ListItemIcon, ListItemText, Paper, TextField, Typography } from '@mui/material';
+import { Box, InputAdornment, List, ListItemButton, ListItemIcon, ListItemText, Paper, TextField, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import useStore from '../../state/store';
 import useDebouncedValue from '../../lib/useDebouncedValue';
@@ -33,12 +33,14 @@ function SearchBox({ onSelected }) {
   };
 
   return (
-    <Paper sx={{ p: 1, mb: 2 }}>
-      <TextField fullWidth size="small" placeholder="Szukaj w materiałach" value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment> }} />
+    <Box sx={{ mb: 2 }}>
+      <TextField fullWidth placeholder="Szukaj w materiałach" value={query} onChange={(e) => setQuery(e.target.value)}
+        slotProps={{
+          htmlInput: { 'aria-label': 'Szukaj w materiałach' },
+          input: { startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment> },
+        }} />
       {debouncedQuery.length >= MIN_QUERY_LENGTH && (
-        <List dense>
+        <Paper component={List} dense sx={{ mt: 1 }}>
           {results.length === 0 && (
             <Typography variant="body2" color="text.secondary" sx={{ px: 1, pt: 1 }}>Brak wyników.</Typography>
           )}
@@ -48,9 +50,9 @@ function SearchBox({ onSelected }) {
               <ListItemText primary={result.title} secondary={result.path.join(' › ')} />
             </ListItemButton>
           ))}
-        </List>
+        </Paper>
       )}
-    </Paper>
+    </Box>
   );
 }
 

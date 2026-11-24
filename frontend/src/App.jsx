@@ -11,6 +11,7 @@ import ForgotPassword from './components/user/ForgotPassword';
 import SetLanguage from './components/user/SetLanguage';
 import Profile from './components/user/Profile';
 import Learning from './components/learning/Learning';
+import GlossaryPage from './components/learning/GlossaryPage';
 import PageLoader from './components/common/PageLoader';
 import { canModerate, isAdmin } from './lib/roles';
 
@@ -31,6 +32,7 @@ function App() {
           <Route path="language" element={<SetLanguage />} />
           <Route path="learning" element={<Learning />} />
           <Route path="learning/:entityId" element={<Learning />} />
+          <Route path="glossary" element={<GlossaryPage />} />
           <Route path="profile" element={<Profile />} />
         </Route>
         <Route element={<ProtectedRoute allow={canModerate} />}>

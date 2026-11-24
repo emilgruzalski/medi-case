@@ -1,83 +1,86 @@
-import { useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router';
-import { Alert, Box, Button, CircularProgress, Drawer, Grid, Typography, useMediaQuery } from '@mui/material';
+import { Link as RouterLink, Navigate, useParams } from 'react-router';
+import { Alert, Box, Button, Container, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import MenuIcon from '@mui/icons-material/Menu';
-import Sidebar from './Sidebar';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ContentContainer from './ContentContainer';
 import ContentNavigation from './ContentNavigation';
 import SearchBox from './SearchBox';
+import TopicSections from './TopicSections';
+import PageLoader from '../common/PageLoader';
 import useStore from '../../state/store';
-import { getLearningTree } from '../../network/lib/learning';
-import { getErrorMessage } from '../../lib/errors';
+import useLearningTree from '../../lib/useLearningTree';
 import { findNode } from '../../lib/utility';
+
+const SIDEBAR_WIDTH = 340;
+
+function Topics({ tree }) {
+  return (
+    <Container maxWidth="lg" sx={{ py: { xs: 2.5, md: 5 } }}>
+      <Typography variant="h4" component="h1" sx={{ mb: 2 }}>Tematy</Typography>
+      <Box sx={{ maxWidth: 560, mb: 3 }}><SearchBox /></Box>
+      {tree.length === 0
+        ? <Typography color="text.secondary">Nie ma jeszcze opublikowanych materiałów.</Typography>
+        : <TopicSections tree={tree} columns={2} />}
+    </Container>
+  );
+}
+
+function Topic({ tree, node }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  if (!node) {
+    return (
+      <Container maxWidth="sm" sx={{ py: 5 }}>
+        <Alert severity="info" action={<Button color="inherit" component={RouterLink} to="/learning">Tematy</Button>}>
+          Tego tematu nie ma w wybranym języku.
+        </Alert>
+      </Container>
+    );
+  }
+
+  const content = (
+    <>
+      <ContentContainer node={node} />
+      <ContentNavigation tree={tree} node={node} />
+    </>
+  );
+
+  if (isMobile) {
+    return (
+      <Box sx={{ px: 2, pt: 1, pb: 3 }}>
+        <Button component={RouterLink} to="/learning" startIcon={<ArrowBackIcon />} sx={{ mb: 1 }}>Tematy</Button>
+        {content}
+      </Box>
+    );
+  }
+
+  return (
+    <Box sx={{ display: 'grid', gridTemplateColumns: `${SIDEBAR_WIDTH}px minmax(0, 1fr)`, gap: 4, p: 4, alignItems: 'start' }}>
+      <Box component="nav" aria-label="Tematy">
+        <SearchBox />
+        <TopicSections tree={tree} selectedId={node.id} dense />
+      </Box>
+      <Box sx={{ maxWidth: 1040 }}>{content}</Box>
+    </Box>
+  );
+}
 
 function Learning() {
   const { entityId } = useParams();
   const learningLangId = useStore((state) => state.learningLangId);
-  const [tree, setTree] = useState(null);
-  const [error, setError] = useState('');
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
-  useEffect(() => {
-    if (!learningLangId) {
-      return;
-    }
-    getLearningTree(learningLangId)
-      .then(setTree)
-      .catch((err) => setError(getErrorMessage(err)));
-  }, [learningLangId]);
+  const { tree, error } = useLearningTree();
 
   if (!learningLangId) {
     return <Navigate to="/language" replace />;
   }
-
-  const node = tree ? findNode(tree, entityId) : undefined;
-
-  return (
-    <Box sx={{ p: { xs: 2, md: 3 } }}>
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      {!tree && !error && <CircularProgress />}
-      {tree && (
-        <Grid container spacing={3}>
-          {isMobile ? (
-            <Grid size={12}>
-              <Button startIcon={<MenuIcon />} variant="outlined" onClick={() => setDrawerOpen(true)}>
-                Spis treści
-              </Button>
-              <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-                <Box sx={{ width: 300, p: 1 }}>
-                  <SearchBox onSelected={() => setDrawerOpen(false)} />
-                  <Box onClick={() => setDrawerOpen(false)}>
-                    <Sidebar tree={tree} selectedId={entityId} />
-                  </Box>
-                </Box>
-              </Drawer>
-            </Grid>
-          ) : (
-            <Grid size={{ md: 4, lg: 3 }}>
-              <SearchBox />
-              <Sidebar tree={tree} selectedId={entityId} />
-            </Grid>
-          )}
-          <Grid size={{ xs: 12, md: 8, lg: 9 }}>
-            {node ? (
-              <>
-                <ContentContainer node={node} />
-                <ContentNavigation tree={tree} node={node} />
-              </>
-            ) : (
-              <Typography color="text.secondary">
-                {isMobile ? 'Otwórz spis treści, aby wybrać temat.' : 'Wybierz temat z listy po lewej stronie.'}
-              </Typography>
-            )}
-          </Grid>
-        </Grid>
-      )}
-    </Box>
-  );
+  if (error) {
+    return <Container sx={{ py: 4 }}><Alert severity="error">{error}</Alert></Container>;
+  }
+  if (!tree) {
+    return <PageLoader />;
+  }
+  return entityId ? <Topic tree={tree} node={findNode(tree, entityId)} /> : <Topics tree={tree} />;
 }
 
 export default Learning;

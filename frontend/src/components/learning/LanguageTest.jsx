@@ -1,43 +1,49 @@
 import { useState } from 'react';
-import { Alert, Box, Button, LinearProgress, Paper, Stack, Typography } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import ReplayIcon from '@mui/icons-material/Replay';
+import { Box, Button, Paper, Stack, Typography } from '@mui/material';
 import { calculateScore } from '../../lib/testScore';
 
-function answerColor(answer, chosenId) {
+const ANSWER = {
+  justifyContent: 'space-between', gap: 2, minHeight: 52, px: 2, textAlign: 'left', fontWeight: 500,
+  // Answers stay readable after the question is answered.
+  '&.Mui-disabled': { color: 'text.secondary', borderColor: 'divider' },
+};
+
+function answerState(answer, chosenId) {
   if (chosenId === undefined) {
-    return 'inherit';
+    return { sx: { color: 'text.primary', borderColor: '#8b9bad' } };
   }
   if (answer.isCorrect) {
-    return 'success';
+    return {
+      note: answer.id === chosenId ? 'dobrze' : 'poprawna',
+      sx: { '&.Mui-disabled': { bgcolor: 'success.main', color: '#ffffff', borderColor: 'success.main' } },
+    };
   }
-  return answer.id === chosenId ? 'error' : 'inherit';
+  return answer.id === chosenId
+    ? { note: 'Twoja odpowiedź', sx: { '&.Mui-disabled': { color: 'error.main', border: 2, borderColor: 'error.main' } } }
+    : { sx: {} };
 }
 
 function TestQuestion({ number, question, chosenId, onAnswer }) {
   const answered = chosenId !== undefined;
 
   return (
-    <Paper sx={{ p: 2 }}>
-      <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+    <Paper component="section" sx={{ p: { xs: 2.5, md: 4 } }}>
+      <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
         {number}. {question.title}
       </Typography>
       <Stack spacing={1}>
         {question.children
           .filter((answer) => answer.hasTranslation)
-          .map((answer) => (
-            <Button
-              key={answer.id}
-              variant={answered && (answer.isCorrect || answer.id === chosenId) ? 'contained' : 'outlined'}
-              color={answerColor(answer, chosenId)}
-              onClick={() => !answered && onAnswer(question.id, answer.id)}
-              endIcon={answered && answer.isCorrect ? <CheckIcon /> : answered && answer.id === chosenId ? <CloseIcon /> : null}
-              sx={{ justifyContent: 'space-between', textTransform: 'none' }}
-            >
-              {answer.title}
-            </Button>
-          ))}
+          .map((answer) => {
+            const state = answerState(answer, chosenId);
+            return (
+              <Button key={answer.id} variant="outlined" color="inherit" disabled={answered}
+                onClick={() => onAnswer(question.id, answer.id)} sx={[ANSWER, state.sx]}>
+                <span>{answer.title}</span>
+                {state.note && <Typography component="span" variant="body2" sx={{ flex: 'none' }}>{state.note}</Typography>}
+              </Button>
+            );
+          })}
       </Stack>
     </Paper>
   );
@@ -52,14 +58,11 @@ function LanguageTest({ test }) {
 
   return (
     <>
-      <Typography variant="h4" component="h1" gutterBottom>
-        {test.title}
-      </Typography>
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="body2" color="text.secondary">
+      <Box sx={{ mb: 2, p: { xs: 2.5, md: 4 }, bgcolor: 'primary.main', color: 'primary.contrastText', borderRadius: 2 }}>
+        <Typography variant="h4" component="h1">{test.title}</Typography>
+        <Typography sx={{ mt: 0.5, color: '#d3deea' }} aria-live="polite">
           Odpowiedzi: {answeredCount} / {questions.length}
         </Typography>
-        <LinearProgress variant="determinate" value={questions.length ? (answeredCount / questions.length) * 100 : 0} />
       </Box>
       <Stack spacing={2}>
         {questions.map((question, index) => (
@@ -68,10 +71,11 @@ function LanguageTest({ test }) {
         ))}
       </Stack>
       {finished && (
-        <Alert severity={score.percent >= 50 ? 'success' : 'warning'} sx={{ mt: 3 }}
-          action={<Button color="inherit" startIcon={<ReplayIcon />} onClick={() => setAnswers({})}>Spróbuj ponownie</Button>}>
-          Twój wynik: {score.correct} / {score.total} ({score.percent}%)
-        </Alert>
+        <Stack role="status" direction="row" spacing={2} useFlexGap
+          sx={{ mt: 3, alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+          <Typography variant="h5" component="p">Twój wynik: {score.correct} / {score.total} ({score.percent}%)</Typography>
+          <Button size="large" variant="contained" color="secondary" onClick={() => setAnswers({})}>Spróbuj ponownie</Button>
+        </Stack>
       )}
     </>
   );
