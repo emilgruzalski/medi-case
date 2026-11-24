@@ -1,0 +1,59 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { Box, Button, Divider, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import LogoutIcon from '@mui/icons-material/Logout';
+import useStore from '../../state/store';
+import { signOut } from '../../lib/auth';
+
+function UserBar() {
+  const user = useStore((state) => state.user);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    setAnchorEl(null);
+    try {
+      await signOut();
+    } finally {
+      navigate('/login');
+    }
+  };
+
+  return (
+    <>
+      <Button color="inherit" startIcon={<AccountCircleIcon />} onClick={(e) => setAnchorEl(e.currentTarget)}
+        sx={{ minWidth: 0 }}>
+        <Box component="span" sx={{ display: { xs: 'none', md: 'inline' } }}>
+          {user.firstName} {user.lastName}
+        </Box>
+      </Button>
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
+        <Typography variant="body2" color="text.secondary" sx={{ px: 2, py: 1 }}>
+          {user.email}
+        </Typography>
+        <Divider />
+        <MenuItem
+          onClick={() => {
+            setAnchorEl(null);
+            navigate('/profile');
+          }}
+        >
+          <ListItemIcon>
+            <PersonOutlineIcon fontSize="small" />
+          </ListItemIcon>
+          Profil
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon>
+            <LogoutIcon fontSize="small" />
+          </ListItemIcon>
+          Wyloguj
+        </MenuItem>
+      </Menu>
+    </>
+  );
+}
+
+export default UserBar;
