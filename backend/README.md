@@ -8,7 +8,7 @@ The application was created during the *Programowanie zespołowe* (team programm
 academic year, in cooperation with Collegium Medicum UMK, and was first presented in May 2023.
 In 2024 it moved to AWS-native services.
 
-The React client lives in the [MediCase-Frontend](https://github.com/emilgruzalski/MediCase-Frontend) repository.
+The React client lives in the [`frontend`](../frontend) directory.
 
 ## Features
 
@@ -98,10 +98,10 @@ export Cognito__Issuer=http://cognito:9229/local_medicase Cognito__ServiceUrl=ht
    ```
 
 3. Set these repository variables in GitHub (values come from `terraform output`): `AWS_REGION`,
-   `AWS_DEPLOY_ROLE_ARN`, `ECR_REPOSITORY_URL`, `ECS_CLUSTER`, `ECS_SERVICE`, `ECS_TASK_DEFINITION`,
+   `AWS_DEPLOY_BACKEND_ROLE_ARN`, `ECR_REPOSITORY_URL`, `ECS_CLUSTER`, `ECS_SERVICE`, `ECS_TASK_DEFINITION`,
    `ECS_SUBNETS` (comma separated) and `ECS_SECURITY_GROUP`.
-4. Every push to `main` builds the image, runs the migrations as a one-off ECS task (`--migrate-only`)
-   and deploys the new version. Without `AWS_DEPLOY_ROLE_ARN` the workflow only builds and tests.
+4. Every push to `main` that changes `backend/` builds the image, runs the migrations as a one-off ECS task
+   (`--migrate-only`) and deploys the new version. Without `AWS_DEPLOY_BACKEND_ROLE_ARN` the workflow only builds and tests.
 
 The first administrator can be created by running the migration task once with `Seed__AdminEmail` and
 `Seed__AdminPassword` overrides.

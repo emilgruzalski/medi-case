@@ -8,8 +8,9 @@ administrators review and publish it.
 The application was created during the *Programowanie zespołowe* (team programming) course in the 2022/2023
 academic year, in cooperation with Collegium Medicum UMK, and was first presented in May 2023.
 In 2024 it moved to Vite and AWS: sign-in with Amazon Cognito and hosting on S3 with CloudFront.
+In 2025 it was updated to React 19 and Material UI 7.
 
-The REST API lives in the [MediCase-Backend](https://github.com/emilgruzalski/MediCase-Backend) repository.
+The REST API lives in the [`backend`](../backend) directory.
 
 ## Features
 
@@ -27,13 +28,13 @@ The REST API lives in the [MediCase-Backend](https://github.com/emilgruzalski/Me
 
 ## Tech stack
 
-React 18, Vite, TypeScript (store and network layer), Material UI 5, React Router 6, zustand, axios,
-React Quill, DOMPurify, Amazon Cognito, Vitest, React Testing Library and ESLint.
+React 19, Vite 6, TypeScript (store and network layer), Material UI 7, React Router 7, zustand, axios,
+Quill 2 (react-quill-new), DOMPurify, Amazon Cognito, Vitest 3, React Testing Library and ESLint 9.
 
 ## Getting started
 
-Requirements: Node.js 20 and the backend started with `docker compose up` in
-[MediCase-Backend](https://github.com/emilgruzalski/MediCase-Backend) (API and a local Cognito emulator).
+Requirements: Node.js 22 and the backend started with `docker compose up` in
+[`backend`](../backend) (API and a local Cognito emulator).
 
 ```bash
 npm install
@@ -58,10 +59,11 @@ npm run lint
 
 ## Deployment
 
-The GitHub Actions workflow in `.github/workflows` lints, tests and builds the app on every push and pull request.
-On `main` it uploads the build to S3 and invalidates CloudFront. The infrastructure is created with Terraform in
-the backend repository; set these repository variables from its outputs: `AWS_REGION`, `AWS_DEPLOY_ROLE_ARN`,
-`COGNITO_CLIENT_ID`, `FRONTEND_BUCKET` and `CLOUDFRONT_DISTRIBUTION_ID`.
+The GitHub Actions workflow in [`.github/workflows/frontend.yml`](../.github/workflows/frontend.yml) lints, tests and
+builds the app when a push to `main` or a pull request changes `frontend/`. On `main` it uploads the build to S3 and
+invalidates CloudFront. The infrastructure is created with Terraform in [`backend/infra`](../backend/infra); set these
+repository variables from its outputs: `AWS_REGION`, `AWS_DEPLOY_FRONTEND_ROLE_ARN`, `COGNITO_CLIENT_ID`,
+`FRONTEND_BUCKET` and `CLOUDFRONT_DISTRIBUTION_ID`.
 
 ## Project structure
 

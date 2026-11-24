@@ -3,7 +3,9 @@ name: Backend
 on:
   push:
     branches: [main]
+    paths: ['backend/**', '.github/workflows/backend.yml']
   pull_request:
+    paths: ['backend/**', '.github/workflows/backend.yml']
 
 permissions:
   contents: read
@@ -11,6 +13,9 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     steps:
       - uses: actions/checkout@v4
 
@@ -28,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: infra
+        working-directory: backend/infra
     steps:
       - uses: actions/checkout@v4
 
@@ -40,10 +45,10 @@ jobs:
       - run: terraform init -backend=false
       - run: terraform validate
 
-  # Runs only when the repository is connected to AWS (see infra/ and README).
+  # Runs only when the repository is connected to AWS (see backend/infra and backend/README.md).
   deploy:
     needs: [test, terraform]
-    if: github.event_name == 'push' && vars.AWS_DEPLOY_ROLE_ARN != ''
+    if: github.event_name == 'push' && vars.AWS_DEPLOY_BACKEND_ROLE_ARN != ''
     runs-on: ubuntu-latest
     environment: production
     permissions:
@@ -58,14 +63,14 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          role-to-assume: ${{ vars.AWS_DEPLOY_BACKEND_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
 
       - uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and push the image
         run: |
-          docker build -t "$IMAGE" .
+          docker build -t "$IMAGE" backend
           docker push "$IMAGE"
 
       - name: Download the current task definition
