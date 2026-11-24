@@ -17,19 +17,27 @@ show the sample content and fictional users.
 ### Learning
 
 The learner chooses two languages: the one they learn and their own. Content is shown in the language they learn, and
-the translation can be turned on for every card. Topics are organized in a tree with search.
+the translation can be turned on when it is needed. Topics are grouped into sections and can be searched.
 
-![Content card in English with the Polish translation turned on](docs/screenshots/learning-card.png)
+![Topics grouped into sections](docs/screenshots/topics.png)
 
-**Patient interview** – ready questions to ask a patient, with a recording of the pronunciation and the translation:
+**Patient interview** – one question at a time, with a recording of the pronunciation and the translation on demand:
 
-![List of patient interview questions with recordings](docs/screenshots/patient-interview.png)
+![Patient interview question with the translation and the listen button](docs/screenshots/interview.png)
+
+**Content cards** – knowledge in the learned language, with the translation below:
+
+![Content card in English with the Polish translation turned on](docs/screenshots/card.png)
 
 **Tests** – every answer is checked right away, and the test ends with a score and can be repeated:
 
 ![Test with a correct and a wrong answer and the final score](docs/screenshots/test.png)
 
-Sections can also have a **glossary** with short definitions. Everything works on a phone as well:
+**Glossary** – short definitions from all sections in one place, with search:
+
+![Glossary with definitions](docs/screenshots/glossary.png)
+
+The application is designed for phones first, with large buttons and a bottom menu:
 
 <img src="docs/screenshots/mobile.png" alt="Patient interview on a phone" width="260">
 
