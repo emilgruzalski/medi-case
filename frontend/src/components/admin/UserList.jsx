@@ -45,10 +45,12 @@ function UserList() {
 
   return (
     <>
-      <Button startIcon={<AddIcon />} variant="contained" sx={{ mb: 2 }} onClick={() => setEditing(null)}>
-        Zaproś użytkownika
-      </Button>
-      <AdminSearch value={search} onChange={setSearch} placeholder="Szukaj po imieniu, nazwisku lub e-mailu" />
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }}>
+        <Button startIcon={<AddIcon />} variant="contained" onClick={() => setEditing(null)}>
+          Zaproś użytkownika
+        </Button>
+        <AdminSearch value={search} onChange={setSearch} placeholder="Szukaj po imieniu, nazwisku lub e-mailu" />
+      </Stack>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <TableContainer component={Paper}>
         <Table size="small">
