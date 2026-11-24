@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import {
+  Alert, Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import GroupModal from './GroupModal';
 import RowActions from './RowActions';
@@ -43,10 +45,12 @@ function GroupList() {
 
   return (
     <>
-      <Button startIcon={<AddIcon />} variant="contained" sx={{ mb: 2 }} onClick={() => setEditing(null)}>
-        Dodaj grupę
-      </Button>
-      <AdminSearch value={search} onChange={setSearch} placeholder="Szukaj grupy" />
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }}>
+        <Button startIcon={<AddIcon />} variant="contained" onClick={() => setEditing(null)}>
+          Dodaj grupę
+        </Button>
+        <AdminSearch value={search} onChange={setSearch} placeholder="Szukaj grupy" />
+      </Stack>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <TableContainer component={Paper}>
         <Table size="small">
